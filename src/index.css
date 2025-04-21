@@ -1,0 +1,22 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+*{
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: "Ubuntu", sans-serif; 
+  }
+
+  .card-base {
+    @apply rounded-lg border-[1px] bg-white border-gray-300 shadow-lg;
+  }
+
+  .carousel-container::-webkit-scrollbar {
+    display: none;
+  }
+  .carousel-container {
+    -ms-overflow-style: none;  /* For Internet Explorer and Edge */
+    scrollbar-width: none;  /* For Firefox */
+  }
