@@ -81,8 +81,8 @@ const Carousel=()=>{
          <div className='flex mr-[10px]'><p className='text-[1.5rem] w-fit whitespace-nowrap'>Progress Tracker</p><button onClick={addTopic} className='flex items-center justify-cente ml-[5px]  text-[1.5rem] text-gray-700 hover:text-blue-500'>+</button></div>
          <div className="h-[1px] w-full bg-gray-500"></div>
          <div className='ml-[10px] min-w-[60px]'>
-         <button onClick={scrollLeft} className='border-[1px] border-gray-500 shadow-lg w-[25px] rounded-full bg-gray-300 mr-[5px] hover:bg-gray-600 hover:text-white transition-colors duration-400'>&lt;</button>
-         <button onClick={scrollRight} className='border-[1px] border-gray-500 shadow-lg w-[25px] rounded-full bg-gray-300 hover:bg-gray-600 hover:text-white transition-colors duration-400'>&gt;</button>
+         <button onClick={scrollLeft} className='border-[1px] border-gray-500 shadow-lg w-[25px] rounded-full bg-gray-300 mr-[5px] hover:bg-blue-500 hover:border-none hover:text-white transition-colors duration-400'>&lt;</button>
+         <button onClick={scrollRight} className='border-[1px] border-gray-500 shadow-lg w-[25px] rounded-full bg-gray-300 hover:bg-blue-500 hover:border-none hover:text-white transition-colors duration-400'>&gt;</button>
          </div>
        </div>
        <div ref={carouselRef} data-label='carouselContainer'className='carousel-container overflow-x-auto scrollbar-hide flex w-full h-full py-[10px]'>

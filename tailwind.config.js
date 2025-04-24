@@ -14,6 +14,7 @@ export default {
       },
       colors:{
         mainBlue:"#4E7FD6",
+        bluePurple:"#8953ff",
       },
       fontFamily: {
         ubuntu: ['Ubuntu', 'sans-serif'],

@@ -18,33 +18,33 @@ const RightSide=()=>{
   ));
 
 return(
-<div data-label='rightSide' className="flex flex-col w-[25%] h-fit min-w-[200px] items-center">
+<div data-label='rightSide' className="flex flex-col w-[25%] h-fit min-w-[250px] items-center">
 
       {/*Progress Bar*/}
-      <div data-label='progressOuterDiv' className='w-full h-[30%] px-[15px] py-[0px] flex rounded-lg'>
-        <div className='flex flex-col w-full h-full rounded-lg bg-white shadow-lg border-[1px] border-gray-300 p-[10px]'>
-        <p className='text-gray-500 mb-[5px]'>Your Progress</p>
+      <div data-label='progressOuterDiv' className='w-full h-[110px] px-[15px] py-[0px] flex rounded-lg'>
+        <div className='flex flex-col w-full h-full rounded-lg bg-white shadow-lg border-[1px] border-gray-400 p-[10px]'>
+        <p className='text-blue-500 mb-[5px] text-[0.9rem]'>Your Progress</p>
         <div>
           <p className='text-[1.2rem] mb-[5px]'>55% Completed</p>
           <div className='w-full h-[20px] rounded-full bg-gray-100 overflow-hidden border-[1px] border-gray-400'>
-            <div className='w-[60%] h-full bg-gradient-to-r from-purple-600 to-blue-500 rounded-full'></div>
+            <div className='w-[60%] h-full bg-gradient-to-r from-blue-300 to-bluePurple rounded-full'></div>
           </div>
         </div>
        </div>
       </div>
 
-     <div className='w-full h-[70%] p-[15px] pb-[0px]'>
-        <article data-label='calendarContainer' className='flex flex-col w-full h-full rounded-lg bg-white shadow-lg border-[1px] border-gray-300 items-center p-[10px]'>  
-           <div data-label='weekContainer' className='mb-[5px] grid grid-cols-7 w-full h-[15%] bg-gray-800 rounded-md p-[5px]'>
+     <div className='w-full h-[225px] p-[15px] pb-[0px]'>
+        <article data-label='calendarContainer' className='flex flex-col w-full h-full rounded-lg bg-white shadow-lg border-[1px] border-gray-400 items-center p-[5px] pb-[15px]'>  
+           <div data-label='weekContainer' className='mb-[5px] grid grid-cols-7 w-full h-[15%] bg-purple-100 text-purple-500 border-[1px] border-purple-500 rounded-md p-[5px]'>
                        {["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].map((day, i) => (
-                                   <p key={i} className='text-white text-[0.8rem] text-center flex items-center justify-center'>
+                                   <p key={i} className='text-[0.8rem] text-center flex items-center justify-center'>
                                      {day}
                                    </p>
                          ))
                       }
       </div>
 
-      <div data-label='daysContainer' className='p-[5px] pt-[0px] grid grid-cols-7 grid-rows-5 gap-2 w-full h-[85%] rounded-lg'>
+      <div data-label='daysContainer' className='px-[5px] pt-[0px] grid grid-cols-7 grid-rows-5 gap-2 w-full h-[85%] rounded-lg'>
         {  
           //(() => { ... })()
           //This is a fancy way to write a function and run it immediately. 
@@ -78,7 +78,7 @@ return(
                      today.getMonth() === currentMonth &&
                      today.getFullYear() === currentYear;
                      return( //this return is for map
-                     <div key={i} className={`h-fit flex items-center justify-center rounded-sm ${isToday ? 'bg-blue-500 text-white' : '' }`}>
+                     <div key={i} className={`py-[2px] h-fit flex items-center justify-center rounded-sm ${isToday ? 'bg-bluePurple text-white' : '' }`}>
                           {dayNum}
                      </div>
                      );
@@ -99,6 +99,14 @@ return(
              </div>
 
          </article>
+      </div>
+
+      <div data-label='deadlineContainer' className='w-full h-[160px] p-[15px]'>
+        <div data-label='innerDeadlineContainer' className='w-full min-h-[50px] rounded-lg bg-white shadow-lg border-[1px] border-purple-400  overflow-hidden'>
+           <section data-label='' className='w-full h-[50px] bg-gray-800 text-white flex items-center justify-between px-[10px]'>
+            <p>Upcoming Events</p><button className='text-[1.5rem]'>+</button>
+            </section>
+        </div>
       </div>
 
     </div>
