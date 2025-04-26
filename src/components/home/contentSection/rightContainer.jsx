@@ -1,4 +1,5 @@
-import React from 'react'
+import React, { useState } from 'react';
+
 
 const RightSide=()=>{
   const daysInMonth = 31; // Adjust this for the month
@@ -16,6 +17,13 @@ const RightSide=()=>{
       {i + 1}
     </div>
   ));
+
+
+  //adding deadline events
+  const [events,setEvents]=useState([]);
+  const createEvent=()=>{
+    setEvents([...events,{}]);
+  };
 
 return(
 <div data-label='rightSide' className="flex flex-col w-[25%] h-fit min-w-[250px] items-center">
@@ -35,7 +43,7 @@ return(
 
      <div className='w-full h-[225px] p-[15px] pb-[0px]'>
         <article data-label='calendarContainer' className='flex flex-col w-full h-full rounded-lg bg-white shadow-lg border-[1px] border-gray-400 items-center p-[5px] pb-[15px]'>  
-           <div data-label='weekContainer' className='mb-[5px] grid grid-cols-7 w-full h-[15%] bg-purple-100 text-purple-500 border-[1px] border-purple-500 rounded-md p-[5px]'>
+           <div data-label='weekContainer' className='mb-[5px] grid grid-cols-7 w-full h-[15%] bg-mainBlue text-white rounded-md p-[5px]'>
                        {["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].map((day, i) => (
                                    <p key={i} className='text-[0.8rem] text-center flex items-center justify-center'>
                                      {day}
@@ -78,7 +86,7 @@ return(
                      today.getMonth() === currentMonth &&
                      today.getFullYear() === currentYear;
                      return( //this return is for map
-                     <div key={i} className={`py-[2px] h-fit flex items-center justify-center rounded-sm ${isToday ? 'bg-bluePurple text-white' : '' }`}>
+                     <div key={i} className={`py-[2px] h-fit flex items-center justify-center rounded-sm ${isToday ? ' text-mainBlue font-bold' : '' }`}>
                           {dayNum}
                      </div>
                      );
@@ -101,11 +109,18 @@ return(
          </article>
       </div>
 
-      <div data-label='deadlineContainer' className='w-full h-[160px] p-[15px]'>
-        <div data-label='innerDeadlineContainer' className='w-full min-h-[50px] rounded-lg bg-white shadow-lg border-[1px] border-purple-400  overflow-hidden'>
-           <section data-label='' className='w-full h-[50px] bg-gray-800 text-white flex items-center justify-between px-[10px]'>
-            <p>Upcoming Events</p><button className='text-[1.5rem]'>+</button>
-            </section>
+      <div data-label='deadlineContainer' className='w-full h-fit p-[15px]'>
+        <div data-label='innerDeadlineContainer' className='w-full min-h-[50px] h-fit rounded-lg bg-white shadow-lg border-[1px] border-b-[0px] border-gray-400 overflow-hidden'>
+           <section data-label='headingSection' className='w-full h-[50px] bg-gray-800 text-white flex items-center justify-between px-[10px]'>
+            <p>Upcoming Events</p><button onClick={createEvent} className='text-[1.5rem]'>+</button>
+           </section>
+           <section data-label='eventsSection' className='flex flex-col h-fit'>
+             {
+              events.map((_,index)=>(
+               <div key={index} className='w-full h-[47px] border-b-[1px] border-gray-400 bg-white'></div>
+              ))
+             }
+           </section>
         </div>
       </div>
 

@@ -1,9 +1,32 @@
-import React from 'react'
+import { useEffect, useState } from 'react';
 
-const MotivationDiv=()=>{
-  return(
-    <div className="h-[50%] w-full bg-gray-500 rounded-xl mb-[20px]">
-        <p className='text-white text-[2rem]'>HELOO</p>
+const MotivationDiv = () => {
+  const [quote, setQuote] = useState("");
+
+  useEffect(() => {
+    // Using allorigins proxy with correct headers
+    fetch('https://api.allorigins.win/get?url=https://zenquotes.io/api/quotes')
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not OK');
+        }
+        return response.json();
+      })
+      .then(data => {
+        const quotes = JSON.parse(data.contents); // Parse the response body
+        console.log("Fetched data:", quotes); // Check in console
+        const random = Math.floor(Math.random() * quotes.length);
+        setQuote(quotes[random].q); // Set random quote
+      })
+      .catch(error => {
+        console.error("Fetching error:", error);
+        setQuote("Could not load quote. Try refreshing!");
+      });
+  }, []);
+
+  return (
+    <div className="h-[50%] w-full bg-gray-500 rounded-xl mb-[20px] flex items-center justify-center p-4">
+      <p className="text-white text-[1.5rem] text-center">{quote || "Loading quote..."}</p>
     </div>
   );
 };
