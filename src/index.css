@@ -10,7 +10,7 @@
   }
 
   .card-base {
-    @apply rounded-lg border-[1px] bg-white border-gray-300 shadow-lg;
+    @apply rounded-lg border-[1px] bg-white border-gray-400 shadow-lg;
   }
 
   .carousel-container::-webkit-scrollbar {

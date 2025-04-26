@@ -15,12 +15,12 @@ const TopBar=() =>{
         {/*label and date*/}
         <div className="flex flex-col justify-center">
             <h1 className="text-[1.5rem]">Welcome back Sohan 👋</h1>
-            <p clasName="text-[1rem] text-gry-500">{day} <span className="text-gray-500 text-[0.9rem]">{date}</span></p>
+            <p className="text-[1rem] text-gry-500">{day} <span className="text-gray-500 text-[0.9rem]">{date}</span></p>
         </div>
 
         {/*profile*/}
         <div className="h-full w-10% flex items-center">
-        <i class="fa-solid fa-bell text-gray-400  text-[1.4rem]"></i>
+        <i className="fa-solid fa-bell text-gray-400  text-[1.4rem]"></i>
             <div className="w-[50px] h-[50px] rounded-full bg-white m-[5px] ml-[40px]"></div>
         </div>
     </div>
