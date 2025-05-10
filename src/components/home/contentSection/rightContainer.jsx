@@ -19,10 +19,20 @@ const RightSide=()=>{
   ));
 
 
-  //adding deadline events
+  
   const [events,setEvents]=useState([]);
+
+  //adding deadline events
   const createEvent=()=>{
     setEvents([...events,{}]);
+  };
+
+  //delete deadline event
+  //filter syntax array.filter((element, index, array)=>{});
+  //return true to keep the element
+  //return false to remove it
+  const deleteEvent=(indexDelete)=>{
+    setEvents(events.filter((_,index)=>{return index!=indexDelete;}));
   };
 
 return(
@@ -116,8 +126,15 @@ return(
            </section>
            <section data-label='eventsSection' className='flex flex-col h-fit'>
              {
-              events.map((_,index)=>(
-               <div key={index} className='w-full h-[47px] border-b-[1px] border-gray-400 bg-white'></div>
+              /*onClick={deleteEvent(index)}
+              This immediately calls deleteEvent(index) during rendering—
+              which you don’t want because it isnt created yet (the deadline div)
+              
+              You need to pass a function, not call it:
+              onClick={() => deleteEvent(index)}
+              */
+              events.map((_,index)=>(                                                                                                                                                                                                                  
+               <div key={index} className='w-full h-[47px] border-b-[1px] border-gray-400 bg-white p-[5px] flex items-center'><section data-label='contentOfDeadine' className='h-full w-[95%]'></section><button className='hover:text-red-700 p-[5px]'  onClick={()=>deleteEvent(index)}>x</button></div>
               ))
              }
            </section>
