@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 
 
 const RightSide=()=>{
@@ -17,23 +17,112 @@ const RightSide=()=>{
       {i + 1}
     </div>
   ));
-
-
   
-  const [events,setEvents]=useState([]);
 
-  //adding deadline events
-  const createEvent=()=>{
-    setEvents([...events,{}]);
+  const [events,setEvents]=useState([]);
+  const [show,setShow]=useState(false);
+
+  const openPopup=()=>{
+    setShow(true);
+  };
+  
+  const closePopup=()=>{
+    setShow(false);
   };
 
-  //delete deadline event
+  //VISUALLY ADD EVENT DEADLINE
+  const createEvent=()=>{
+    setEvents([...events,{}]);
+    setShow(false);
+  };
+
+  const renderPopup=()=>{
+    if(show){
+      return (
+        <div className='fixed inset-0 bg-gray-800 bg-opacity-50 backdrop-blur-sm flex justify-center items-center z-50'>
+          <div className='bg-white h-[70%] w-[40%] max-h-[400px] max-w-[700px] rounded shadow-lg overflow-hidden'>
+            
+            <div className='bg-gradient-to-r from-blue-500 to-bluePurple px-[12px] h-[15%] flex items-center justify-between border-b-gray-500 border-b-[1px]'>
+                  <div className='flex'>
+                  <div>
+                  <p className='text-[1.2rem] text-white font-bold'>Add a Deadline</p>
+                  <p className='text-[0.8rem] text-gray-100'>Deadlines track what your brain drops</p>
+                  </div>
+                  </div>
+                  <button onClick={closePopup} className='text-white text-[1.6rem]'>x</button>
+            </div>
+            <div data-label='DeadlineEventInputContainer' className='bg-gray-100 px-[10px] py-[20px] w-full h-[70%] flex flex-col justify-around'>
+              <div className='flex flex-col'>
+                <label>event name:</label>
+                <input type='text' placeholder='e.g exam' className='px-[5px] border-[1px] border-gray-500 rounded'></input>
+              </div>
+
+              <div className='flex flex-col'>
+                 <label>event details:</label>
+                 <textarea className='border-[1px] px-[5px] border-gray-500 rounded'></textarea> 
+              </div>
+
+              <div className='flex justify-between'>
+                  <div className='flex'>
+                     <label>date:</label>
+                     <input type='date' className='ml-[5px] px-[5px] border-[1px] border-gray-500 rounded'></input>
+                  </div>
+                  <div className='flex'>
+                    <label for="my-dropdown">Category:</label>
+                    <select id="my-dropdown" name="fruits" className=' ml-[5px] border-[1px] border-gray-500 rounded'>
+                           <option value="academic">Academic</option>
+                           <option value="health">Health & Wellness</option>
+                           <option value="career">Work & Career</option>
+                           <option value="personal">Personal Life</option>
+                           <option value="finance">Other</option>
+                     </select>
+                  </div>
+              </div>
+            </div>
+            <div className='bg-gray-100 flex px-[12px] h-[15%] text-[1.1rem] space-x-5 justify-center items-center border-t-gray-500 border-t-[1px]'>
+                <button onClick={createEvent} className='bg-blue-500 w-full text-white px-4 py-2 rounded'>Create</button>
+                <button onClick={closePopup} className='bg-gray-300 w-full text-gray-600 px-4 py-2 rounded border-[1px] border-gray-600 hover:text-white hover:bg-gray-800'>Cancel</button>
+            </div>
+
+          </div>
+        </div>
+      );
+    }
+    
+    else{
+      return null;
+    }
+  };
+
+  //used usEffect to remove scroll feature from body when overlay present
+  //syntax useEffect(,[]);
+  useEffect(()=>{
+  if(show){
+     document.body.style.overflowY='hidden';
+  }
+  else{
+    document.body.style.overflowY='auto';
+  }
+
+  //cleanup!!!!!!
+  /*With cleanup: FIXED
+  Open overlay → scroll is locked
+  Close overlay → cleanup runs → scroll is restored
+  */
+  return () => {
+    document.body.style.overflowY= 'auto';
+  };
+  },[show]);
+
+  //DELETE EVENT DEADLINE
   //filter syntax array.filter((element, index, array)=>{});
   //return true to keep the element
   //return false to remove it
   const deleteEvent=(indexDelete)=>{
     setEvents(events.filter((_,index)=>{return index!=indexDelete;}));
   };
+
+ 
 
 return(
 <div data-label='rightSide' className="flex flex-col w-[25%] h-fit min-w-[250px] items-center">
@@ -120,11 +209,12 @@ return(
       </div>
 
       <div data-label='deadlineContainer' className='w-full h-fit p-[15px]'>
+        {renderPopup()}
         <div data-label='innerDeadlineContainer' className='w-full min-h-[50px] h-fit rounded-lg bg-white shadow-lg border-[1px] border-b-[0px] border-gray-400 overflow-hidden'>
            <section data-label='headingSection' className='w-full h-[50px] bg-gray-800 text-white flex items-center justify-between px-[10px]'>
-            <p>Upcoming Events</p><button onClick={createEvent} className='text-[1.5rem]'>+</button>
+            <p>Upcoming Events</p><button onClick={openPopup} className='text-[1.5rem]'>+</button>
            </section>
-           <section data-label='eventsSection' className='flex flex-col h-fit'>
+           <section data-label='eventsSection' className='flex flex-col h-fit max-h-[200px] overflow-x-hidden overflow-y-auto'>
              {
               /*onClick={deleteEvent(index)}
               This immediately calls deleteEvent(index) during rendering—
@@ -134,12 +224,32 @@ return(
               onClick={() => deleteEvent(index)}
               */
               events.map((_,index)=>(                                                                                                                                                                                                                  
-               <div key={index} className='w-full h-[47px] border-b-[1px] border-gray-400 bg-white p-[5px] flex items-center'><section data-label='contentOfDeadine' className='h-full w-[95%]'></section><button className='hover:text-red-700 p-[5px]'  onClick={()=>deleteEvent(index)}>x</button></div>
+               <div key={index} className='w-full min-h-[50px] border-b-[1px] border-gray-400 p-[5px] flex items-center'>
+                  <section data-label='contentOfDeadine' className='h-full w-[95%] flex'>
+                     
+                      <div data-label='categoryIcon' className="w-[40px] h-[40px] bg-blue-500 rounded flex justify-center items-center text-white">
+                          <i class="fa-regular fa-heart"></i>
+                      </div>
+                      <div data-label='date&Event' className='w-full h-[40px] flex'>
+                        <div className='w-[40px] h-[40px] flex flex-col justify-center items-center border-r-[1.5px] border-r-blue-500 '>
+                          <div className='text-[0.9rem]'>Sun</div>
+                          <p className='text-[0.6rem] text-black'>11th</p>
+                        </div>
+                        <div className='pl-[10px]'>
+                          <p className='h-fit'>IDS exam</p>
+                          <p className='text-[0.6rem] text-gray-500'>AI summary</p>
+                        </div> 
+                      </div>
+
+                  </section>
+                  <button className='hover:text-bluePurple text-[1.2rem]'  onClick={()=>deleteEvent(index)}>x</button>
+              </div>
               ))
              }
            </section>
         </div>
       </div>
+
 
     </div>
 
