@@ -21,6 +21,12 @@ export default {
       }
     },
   },
+  safelist: [
+    'border-r-[1.5px]',
+    'border-r-pink-500',
+    'border-r-blue-500',
+    'border-r-green-500'
+  ],  
   plugins: [],
 }
 
