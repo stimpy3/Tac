@@ -18,7 +18,10 @@ const TopBar=() =>{
             <p className="text-[1rem] text-gry-500">{day} <span className="text-gray-500 text-[0.9rem]">{date}</span></p>
         </div>
 
-        {/*profile*/}
+        {/*profile
+        <i class="fa-regular fa-heart"></i> <i class="fa-solid fa-graduation-cap"></i> <i class="fa-solid fa-laptop-file"></i> <i class="fa-solid fa-person-rays"></i> <i class="fa-solid fa-hashtag"></i>
+        */
+        }
         <div className="h-full w-10% flex items-center">
         <i className="fa-solid fa-bell text-gray-400  text-[1.4rem]"></i>
             <div className="w-[50px] h-[50px] rounded-full bg-white m-[5px] ml-[40px]"></div>
