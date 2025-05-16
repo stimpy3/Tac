@@ -1,4 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
+/*Older React (before React 17)
+You always had to import React, because:
+JSX (<div>) gets compiled to React.createElement(...)
+So without React, your code would throw an error. */
 
 const TopBar=() =>{
    const today=new Date();
@@ -10,8 +14,13 @@ const TopBar=() =>{
     month: "long", // Optional: makes it "Apr"
     day: "numeric",
   });;
+  const randomColor=["bg-blue-500","bg-[#863ec9]","bg-[#84868a]","bg-[#cf9c3e]","bg-[#3e51cf]","bg-[#c33ecf]"];
+  const[userColor,setUserColor]=useState([randomColor[Math.floor(Math.random() * 6)]]);
+ 
+
+
    return(
-    <div className="w-100% h-[100px] bg-gray-200 flex pb-[0px] py-[15px] px-[15px] pl-[0px] justify-between">
+    <div className="w-100% h-[100px] bg-gray-200 flex py-[0px] px-[15px] pl-[0px] justify-between">
         {/*label and date*/}
         <div className="flex flex-col justify-center">
             <h1 className="text-[1.5rem]">Welcome back Sohan 👋</h1>
@@ -19,12 +28,12 @@ const TopBar=() =>{
         </div>
 
         {/*profile
-        <i class="fa-regular fa-heart"></i> <i class="fa-solid fa-graduation-cap"></i> <i class="fa-solid fa-laptop-file"></i> <i class="fa-solid fa-person-rays"></i> <i class="fa-solid fa-hashtag"></i>
+         <i class="fa-solid fa-laptop-file"></i> <i class="fa-solid fa-person-rays"></i> <i class="fa-solid fa-hashtag"></i>
         */
         }
         <div className="h-full w-10% flex items-center">
         <i className="fa-solid fa-bell text-gray-400  text-[1.4rem]"></i>
-            <div className="w-[50px] h-[50px] rounded-full bg-white m-[5px] ml-[40px]"></div>
+            <div data-label="UserIcon" className={`flex overflow-hidden items-center justify-center text-[1.4rem] shadow-lg text-white w-[50px] h-[50px] ${userColor} rounded-full  m-[5px] ml-[20px]`}>S</div>
         </div>
     </div>
    );
