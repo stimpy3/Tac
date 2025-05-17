@@ -79,8 +79,26 @@ If you left this DEPENEDENCY ARRAY empty ([]), it would
 run only once — when the component first mounts. But we
  want it to re-run every time show changes.
 ---------------------------------------------------------
+
 USEEFFECT CLEANUP
 useEffect runs after the component renders. Sometimes, you want to do something when the component unmounts or when the effect needs to be cleaned up.
 
 To handle this, React allows you to return a cleanup function from within useEffect
---------------------------------------------------------------------------------------------------   
+Cleanup Flow:
+useEffect runs when the component mounts (or when dependencies change).
+The cleanup function runs when the component unmounts.
+
+SYNTAX-----------------------
+return function cleanup() {
+  // Cleanup logic here
+};
+
+OR
+
+return () => {
+  // Cleanup logic here
+};
+------------------------------
+--------------------------------------------------------------------------------------------------
+
+-----
