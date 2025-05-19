@@ -6,10 +6,10 @@ import Carousel from './carousel.jsx';
 
 const Content=()=>{
 return(
-<section className=" w-[calc(100%-160px)] h-screen bg-gray-200 ml-[160px] "> 
+<section className=" w-[calc(100%-100px)] h-screen ml-[100px] "> 
    <TopBar></TopBar>
-   <div className="flex w-full h-fit">
-      <div className="flex flex-col w-[75%] h-[600px]">   
+   <div className="flex w-full min-h-[calc(100%-120px)]">
+      <div className="flex flex-col w-[75%] h-fit">   
         <MotivationDiv/>
         <Carousel/>
       </div>

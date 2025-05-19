@@ -1,3 +1,8 @@
+Areas to explore more:-
+-react routers
+-use effect hook
+-------------------------------------------------------------------------------------------------
+
 BASICALLY EXPLAINING WHY/WHEN WE NEED USESTATE IN REACT------------------------------------------
 🧠 React's "Declarative UI" System
 React works with a declarative approach to building UIs. This means that:
