@@ -9,12 +9,12 @@ const TopBar=() =>{
    const today=new Date();
    const day=today.toLocaleDateString("en-US", {
     weekday: "short",
-  });;
+  });
    const date=today.toLocaleDateString("en-US", {
     year: "numeric",
     month: "long", // Optional: makes it "Apr"
     day: "numeric",
-  });;
+  });
   const randomColor=["bg-blue-500","bg-[#a1cbcf]","bg-[#8ca3dc]","bg-[#b4b4e4]","bg-[#9d91c2]"];
   const[userColor,setUserColor]=useState([randomColor[Math.floor(Math.random() * 5)]]);
  
@@ -37,7 +37,7 @@ const TopBar=() =>{
             <div className="h-[60px] w-[220px] bg-white flex ml-[20px] items-center rounded-full pl-[5px] border-[1px] border-gray-400">
                 <div data-label="UserIcon" className={`flex overflow-hidden items-center justify-center text-[1.4rem] shadow-lg text-white w-[50px] h-[50px] ${userColor} rounded-full 
                  border-[1px] border-gray-400 shadow-lg `}>
-                    {username[0].toUpperCase()}
+                    {username?.[0]?.toUpperCase() || "U"}
                 </div>
                 <section className="w-[150px] h-full flex justify-center items-center">
                      <section className="pl-[5px] w-full h-full flex flex-col justify-center items-start overflow-hidden"> 
