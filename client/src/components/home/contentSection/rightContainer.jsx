@@ -1,7 +1,29 @@
 import React, { useState,useEffect,useRef } from 'react';
 
 
+
 const RightSide=()=>{
+  const today=new Date();
+  const year = today.getFullYear();
+  const monthsArray = [
+    "January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December"
+  ];
+  const [month,setMonthState]=useState(today.toLocaleString("en-US", { month: "long" }));
+  const fwdBtnCalendar=()=>{
+    let index=monthsArray.indexOf(month);
+    let nextIndex = (index + 1) % 12;
+    setMonthState(monthsArray[nextIndex]);
+  };
+   const revBtnCalendar=()=>{
+    let index=monthsArray.indexOf(month);
+    let prevIndex = index-1;
+    if(prevIndex==-1){
+      prevIndex=11;
+    }
+    setMonthState(monthsArray[prevIndex])
+   };
+
   const daysInMonth = 31; // Adjust this for the month
   const startDay = 2; // 0 = Monday, so 2 = Wednesday
   const blanks = Array.from({ length: startDay }).map((_, i) => (
@@ -55,6 +77,7 @@ const RightSide=()=>{
     };
     const monthName=monthMap[selectedMonth];
     let daysArray = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+    let monthsArray=["January", "February", "March", "April", "May", "June","July", "August", "September", "October", "November", "December"];
     const date=new Date(dateRef.current.value);//convert dte string to date object
     const dayName=daysArray[date.getDay()];
     const newEvent = {
@@ -201,23 +224,30 @@ return(
        </div>
       </div>
 
-     <div className='w-full h-[225px] p-[15px] pb-[0px]'>
-        <article data-label='calendarContainer' className='flex flex-col w-full h-full rounded-lg bg-white shadow-lg border-[1px] border-gray-400 items-center p-[5px] pb-[15px]'>  
-           <div data-label='weekContainer' className='mb-[5px] grid grid-cols-7 w-full h-[15%] bg-mainBlue text-white rounded-md p-[5px]'>
+     <div className='w-full h-[275px] p-[15px] pb-[0px]'>
+        <article data-label='calendarContainer' className='flex flex-col w-full h-full rounded-lg bg-white shadow-lg border-[1px] border-gray-400 items-center pb-[5px] overflow-hidden'>  
+           <div className="w-full h-[1000px] flex justify-between px-[10px]  mb-[5px] bg-gray-800">
+             <p className="h-full flex items-center font-bold text-[1.2rem] text-white">{month}, {year}</p>
+             <section data-label="leftRightButtonContainer" className="w-[30px] h-full flex justify-between text-white">
+                <button onClick={revBtnCalendar}>&lt;</button>
+                <button onClick={fwdBtnCalendar}>&gt;</button>
+             </section>
+           </div>
+           <div data-label='weekContainer' className='mb-[5px] grid grid-cols-7 w-full h-[15%] text-blue-500 font-bold rounded-md p-[5px]'>
                        {["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].map((day, i) => (
                                    <p key={i} className='text-[0.8rem] text-center flex items-center justify-center'>
                                      {day}
                                    </p>
                          ))
                       }
-      </div>
+           </div>
 
-      <div data-label='daysContainer' className='px-[5px] pt-[0px] grid grid-cols-7 grid-rows-5 gap-2 w-full h-[85%] rounded-lg'>
-        {  
-          //(() => { ... })()
-          //This is a fancy way to write a function and run it immediately. 
-          // It's called an Immediately Invoked Function Expression (IIFE).
-            (() => {
+           <div data-label='daysContainer' className='px-[5px] pt-[0px] grid grid-cols-7 grid-rows-5 gap-2 w-full h-[85%] rounded-lg'>
+            {  
+              //(() => { ... })()
+              //This is a fancy way to write a function and run it immediately. 
+              // It's called an Immediately Invoked Function Expression (IIFE).
+               (() => {
                      const today = new Date();
                      const currentDay = today.getDate();
                      const currentMonth = today.getMonth(); // 0 to 11 months
@@ -225,7 +255,6 @@ return(
        
                       //example:- April 0, 2025, which means March 31, 2025 — the last day of March.
                      const daysInMonth =  new Date(currentYear, currentMonth + 1, 0).getDate();
-
                      const startDay = (new Date(currentYear, currentMonth, 1).getDay() + 6) % 7;
 
 
@@ -276,7 +305,7 @@ return(
            <section data-label='headingSection' className='w-full h-[50px] bg-gray-800 text-white flex items-center justify-between px-[10px]'>
             <p>Upcoming Events</p><button onClick={openPopup} className='text-[1.5rem]'>+</button>
            </section>
-           <section data-label='eventsSection' className='flex flex-col h-fit max-h-[200px] overflow-x-hidden overflow-y-auto'>
+           <section data-label='eventsSection' className='flex flex-col h-fit max-h-[150px] overflow-x-hidden overflow-y-auto'>
              {
               /*onClick={deleteEvent(index)}
               This immediately calls deleteEvent(index) during rendering—

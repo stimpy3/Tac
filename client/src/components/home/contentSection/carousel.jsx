@@ -81,24 +81,25 @@ const Carousel=()=>{
     <div className="flex flex-col h-[40%] w-full p-0">{/* heading(buttons and headin)+items */}
       <div className='flex items-center w-full h-fit justify-between'>
          <div className='flex mr-[10px] h-[50px]'><p className='flex items-center text-[1.5rem] w-fit h-full whitespace-nowrap'>Progress Tracker</p><button onClick={addTopic} className='flex items-center justify-cente ml-[5px]  h-full text-[1.5rem] text-gray-700 hover:text-blue-500'>+</button></div>
-         <div className="h-[2px] w-full bg-gray-500"></div> {/* partition line */}
+         <div className="h-[2px] w-full bg-gray-300"></div> {/* partition line */}
          <div className='ml-[10px] min-w-[60px]'> {/* left right button container */}
          <button onClick={scrollLeft} className='border-[1px] border-gray-500 shadow-lg w-[25px] rounded-full bg-gray-300 mr-[5px] hover:bg-blue-500 hover:border-none hover:text-white transition-colors duration-400'>&lt;</button>
          <button onClick={scrollRight} className='border-[1px] border-gray-500 shadow-lg w-[25px] rounded-full bg-gray-300 hover:bg-blue-500 hover:border-none hover:text-white transition-colors duration-400'>&gt;</button>
          </div>
        </div>
-       <div ref={carouselRef} data-label='carouselContainer'className='carousel-container overflow-x-auto scrollbar-hide flex w-full h-[calc(100vh-325px)] py-[10px]'>
+       <div ref={carouselRef} data-label='carouselContainer'className='carousel-container overflow-x-auto scrollbar-hide flex w-full h-[calc(100vh-320px)]'>
            {topics.length === 0 ? (
-             <div className="text-gray-500 p-[10px] flex items-center justify-center w-full">
+             <div className="text-gray-500 pt-[0px] p-[10px] flex items-start justify-center w-full">
               <EmptyPlaceholder />
               </div> ) 
               : ( topics.map((topic, index) => (
-                           <div data-label='progresspage' key={index} className="flex flex-col card-base bg-white min-w-[150px] text-black p-4 mr-[20px] h-full rounded">
+                           <div data-label='progresspage' key={index} className="flex flex-col card-base bg-white min-w-[150px] text-black p-4 mr-[20px] h-[210px] rounded">
                                 <p className="w-full h-fit">{topic.title}</p>
                            <div className="w-full h-fit"></div>
              </div> ))
            )}
-      </div>  
+      </div>
+       <div className="h-[2px] w-full bg-gray-300"></div> {/* partition line */}  
     </div>
   );
 };
