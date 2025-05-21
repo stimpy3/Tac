@@ -58,7 +58,7 @@ const Carousel=()=>{
   const scrollLeft = () => {
     if (carouselRef.current) {
       carouselRef.current.scrollBy({
-        left: -160, //scrollBy() method requires an object with left, top theres no such right or bottom
+        left: -360, //scrollBy() method requires an object with left, top theres no such right or bottom
         behavior: 'smooth', // Smooth scrolling effect
       });
     }
@@ -70,7 +70,7 @@ const Carousel=()=>{
       React has updated carouselRef.current (i.e., before the component is mounted), 
       it will be null, and trying to call methods on null would result in an error. */
       carouselRef.current.scrollBy({
-        left: 160, // Adjust this value to control how much it scrolls
+        left: 360, // Adjust this value to control how much it scrolls
         behavior: 'smooth', // Smooth scrolling effect
       });
     }
@@ -80,21 +80,36 @@ const Carousel=()=>{
   return(
     <div className="flex flex-col h-[40%] w-full p-0">{/* heading(buttons and headin)+items */}
       <div className='flex items-center w-full h-fit justify-between'>
-         <div className='flex mr-[10px] h-[50px]'><p className='flex items-center text-[1.5rem] w-fit h-full whitespace-nowrap'>Progress Tracker</p><button onClick={addTopic} className='flex items-center justify-cente ml-[5px]  h-full text-[1.5rem] text-gray-700 hover:text-blue-500'>+</button></div>
+         <div className='flex mr-[10px] h-[30px]'><p className='flex items-center text-[1.5rem] w-fit h-full whitespace-nowrap'>Progress Tracker</p><button onClick={addTopic} className='flex items-center justify-cente ml-[5px]  h-full text-[1.5rem] text-gray-700 hover:text-blue-500'>+</button></div>
          <div className="h-[2px] w-full bg-gray-300"></div> {/* partition line */}
          <div className='ml-[10px] min-w-[60px]'> {/* left right button container */}
          <button onClick={scrollLeft} className='border-[1px] border-gray-500 shadow-lg w-[25px] rounded-full bg-gray-300 mr-[5px] hover:bg-blue-500 hover:border-none hover:text-white transition-colors duration-400'>&lt;</button>
          <button onClick={scrollRight} className='border-[1px] border-gray-500 shadow-lg w-[25px] rounded-full bg-gray-300 hover:bg-blue-500 hover:border-none hover:text-white transition-colors duration-400'>&gt;</button>
          </div>
        </div>
-       <div ref={carouselRef} data-label='carouselContainer'className='carousel-container overflow-x-auto scrollbar-hide flex w-full h-[calc(100vh-320px)]'>
+       <div ref={carouselRef} data-label='carouselContainer'className='carousel-container overflow-x-auto scrollbar-hide flex items-center w-full h-[calc(100vh-280px)] pb-[20px]'>
            {topics.length === 0 ? (
              <div className="text-gray-500 pt-[0px] p-[10px] flex items-start justify-center w-full">
               <EmptyPlaceholder />
               </div> ) 
               : ( topics.map((topic, index) => (
-                           <div data-label='progresspage' key={index} className="flex flex-col card-base bg-white min-w-[150px] text-black p-4 mr-[20px] h-[210px] rounded">
-                                <p className="w-full h-fit">{topic.title}</p>
+                           <div data-label='progresspage' key={index} className="flex flex-col card-base bg-white min-w-[350px] text-black p-[10px] mr-[20px] h-[210px] rounded">
+                                <section  data-label="badge&TitleContainer" className="flex h-[55%] pb-[10px]">
+                                   <div data-label="badgeContainer" className="h-full aspect-square bg-gray-500 rounded"></div>
+                                   <div data-label="badgeContainer" className="h-full w-full p-[10px]">
+                                      <p className="w-full h-fit text-[1.5rem]">Weight</p>
+                                      <p className="w-full h-fit  text-gray-400 text-[0.9rem]">Goal: 70kg</p>
+                                   </div>
+                                </section>
+                                 <section  data-label="GrowthInfoContainer" className="flex w-full h-[20%] justify-between">
+                                   <div data-label="StartTime" className="w-[90px] h-[30px] bg-gray-200 text-gray-700 rounded text-[0.8rem] flex justify-center items-center">179 days</div>
+                                   <div data-label="StartTime" className="w-[90px] h-[30px] bg-gray-200 text-gray-700 rounded text-[0.8rem] flex justify-center items-center">Avg: 1.56</div>
+                                   <div data-label="StartTime" className="w-[90px] h-[30px] bg-gray-200 text-gray-700 rounded text-[0.8rem] flex justify-center items-center">Max Avg: 1.79</div>
+                                 </section>
+                                <section data-label="progressBarContainer" className="w-full h-[25%]  flex flex-col justify-center items-center">
+                                   <div  data-label="progressBarForTask" className="w-full h-[10px] rounded-full bg-gray-200 border-[1px] border-gray-400 "> </div>
+                                   <p className="mt-[5px] w-full text-gray-500 text-[0.9rem]">Completed 50%</p>
+                                </section>
                            <div className="w-full h-fit"></div>
              </div> ))
            )}
