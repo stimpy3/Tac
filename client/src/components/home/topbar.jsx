@@ -5,7 +5,7 @@ JSX (<div>) gets compiled to React.createElement(...)
 So without React, your code would throw an error. */
 
 const TopBar=() =>{
-    const username = localStorage.getItem("username");
+    const username = localStorage.getItem("username")||"";
    const today=new Date();
    const day=today.toLocaleDateString("en-US", {
     weekday: "short",
@@ -37,7 +37,7 @@ const TopBar=() =>{
             <div className="h-[60px] w-[220px] bg-white flex ml-[20px] items-center rounded-full pl-[5px] border-[1px] border-gray-400">
                 <div data-label="UserIcon" className={`flex overflow-hidden items-center justify-center text-[1.4rem] shadow-lg text-white w-[50px] h-[50px] ${userColor} rounded-full 
                  border-[1px] border-gray-400 shadow-lg `}>
-                    {username?.[0]?.toUpperCase() || "U"}
+                 {username && username[0] ? username[0].toUpperCase() : <i className="fa-solid fa-user"></i>}
                 </div>
                 <section className="w-[150px] h-full flex justify-center items-center">
                      <section className="pl-[5px] w-full h-full flex flex-col justify-center items-start overflow-hidden"> 
