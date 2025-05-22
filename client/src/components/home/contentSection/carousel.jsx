@@ -75,6 +75,38 @@ const Carousel=()=>{
       });
     }
   };
+  let start=56; let current=58;  let max=70;
+  let currentString=current+"Kg"
+  let per=100-((((max-current)*1.0)/(max-start))*100)
+  const[percentage,setPercentage]=useState(Number(per.toFixed(0)));
+  const badges={
+    1: "./badges/bronze.png",
+
+    2:"./badges/silver.png",
+
+    3: "./badges/frost.png",
+
+    4:"./badges/orilith.png",
+
+    5: "./badges/solite.png",
+  };
+  let badgeIndex=-1;
+  if(percentage>=0 && percentage<20){
+    badgeIndex=1;
+  }
+  else if(percentage>=20 && percentage<40){
+    badgeIndex=2;
+  }
+  else if(percentage>=40 && percentage<60){
+    badgeIndex=3;
+  }
+  else if(percentage>=60 && percentage<80){
+    badgeIndex=4;
+  }
+  else if(percentage>=80 && percentage<100){
+     badgeIndex=5;
+  }
+  
 
 
   return(
@@ -93,12 +125,14 @@ const Carousel=()=>{
               <EmptyPlaceholder />
               </div> ) 
               : ( topics.map((topic, index) => (
-                           <div data-label='progresspage' key={index} className="flex flex-col card-base bg-white min-w-[350px] text-black p-[10px] mr-[20px] h-[210px] rounded">
+                           <div data-label='progresspage' key={index} className="flex flex-col card-base bg-white w-[350px] text-black p-[10px] mr-[20px] h-[210px] rounded">
                                 <section  data-label="badge&TitleContainer" className="flex h-[55%] pb-[10px]">
-                                   <div data-label="badgeContainer" className="h-full aspect-square bg-gray-500 rounded"></div>
-                                   <div data-label="badgeContainer" className="h-full w-full p-[10px]">
+                                    <div data-label="contentContainer" className="h-full w-full p-[10px] flex flex-col justify-center"> 
                                       <p className="w-full h-fit text-[1.5rem]">Weight</p>
                                       <p className="w-full h-fit  text-gray-400 text-[0.9rem]">Goal: 70kg</p>
+                                   </div>
+                                   <div data-label="badgeContainer" className={`h-full aspect-square rounded flex items-center justify-center`}> 
+                                       <div className="h-[60%] w-[60%] bg-contain bg-center" style={{ backgroundImage: `url(${badges[badgeIndex]})` }}></div>
                                    </div>
                                 </section>
                                  <section  data-label="GrowthInfoContainer" className="flex w-full h-[20%] justify-between">
@@ -107,8 +141,14 @@ const Carousel=()=>{
                                    <div data-label="StartTime" className="w-[90px] h-[30px] bg-gray-200 text-gray-700 rounded text-[0.8rem] flex justify-center items-center">Max Avg: 1.79</div>
                                  </section>
                                 <section data-label="progressBarContainer" className="w-full h-[25%]  flex flex-col justify-center items-center">
-                                   <div  data-label="progressBarForTask" className="w-full h-[10px] rounded-full bg-gray-200 border-[1px] border-gray-400 "> </div>
-                                   <p className="mt-[5px] w-full text-gray-500 text-[0.9rem]">Completed 50%</p>
+                                   <div data-label="progressBarForTask" className="w-full h-[10px] rounded-full bg-gray-200 border-[1px] border-gray-400"> 
+                                      <div data-label="completed" className="group  relative h-full rounded-full bg-gradient-to-r from-blue-400 to-bluePurple"  style={{ width: `${percentage}%` }}>
+                                            <div className="absolute hidden group-hover:flex bg-gray-800 text-white h-[25px] w-[100px] text-xs px-2 py-1  -top-[30px] left-[0%] rounded items-center justify-center z-10 ">
+                                             current: {currentString}
+                                            </div>
+                                      </div>
+                                   </div>
+                                   <p className="mt-[5px] w-full text-gray-500 text-[0.9rem]">Completed {percentage}%</p>
                                 </section>
                            <div className="w-full h-fit"></div>
              </div> ))

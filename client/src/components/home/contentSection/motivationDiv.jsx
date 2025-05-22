@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-
 const MotivationDiv = () => {
   const [quote, setQuote] = useState("");
 

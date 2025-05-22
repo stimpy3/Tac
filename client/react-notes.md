@@ -105,5 +105,14 @@ return () => {
 };
 ------------------------------
 --------------------------------------------------------------------------------------------------
+REACT GROUPS
 
------
+Common states with group:
+1. group-hover: → when parent is hovered
+2. group-focus: → when parent is focused
+3. group-active: → when parent is active
+4. group-disabled: → when parent is disabled
+
+And more...
+
+--------------------------------------------------------------------------------------------------
