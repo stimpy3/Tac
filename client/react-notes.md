@@ -112,7 +112,8 @@ Common states with group:
 2. group-focus: → when parent is focused
 3. group-active: → when parent is active
 4. group-disabled: → when parent is disabled
+etc....
 
-And more...
+It allows child elements to react to parent states, which is not normally possible with regular CSS unless you write custom selectors.
 
 --------------------------------------------------------------------------------------------------

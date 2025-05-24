@@ -6,18 +6,17 @@ import axios from "axios";
 
 const RegisterForm=()=>{
  const navigate= useNavigate();//hook in react
-    const handleRegister=()=>{
-      navigate("/home");
-    };
 
     const handleLogin=()=>{
-      navigate("/");
+      navigate("/login");
     }
 
     const [username,setUsername]=useState("");
     const [email,setEmail]=useState("");
     const [password,setPassword]=useState("");
+    const [confirmPassword,setConfirmPassword]=useState("");
     const [showFlag,setShowFlag]=useState(false);
+    const [paswdFlag,setPaswdFlag]=useState(false);
   const handleShowPass=(e)=>{
     e.preventDefault();
     setShowFlag(!showFlag);
@@ -26,6 +25,9 @@ const RegisterForm=()=>{
 
   const handleSubmit = (e) => {
   e.preventDefault();
+  if(password!==confirmPassword){
+   setPaswdFlag(!paswdFlag);
+  }
   //Axios is a JavaScript library (a helper tool) that makes it easy to send HTTP 
   // requests from your frontend (browser) to your backend (server).
 
@@ -34,7 +36,13 @@ Not directly, but it’s common to use the same naming for clarity.
 React Router /register is the frontend page URL — the URL your user visits to see the registration form.
 Backend /register is the API endpoint — where the frontend sends registration data.
  */
-  axios.post('http://localhost:3001/register', { username, password })
+  else{
+  if(password=="" && email=="" && username=="" && confirmPassword==""){
+
+  }
+
+  else{
+  axios.post('http://localhost:3001/register', { username,email,password })
     .then((result) => {
       localStorage.setItem("username",result.data.username);
       navigate("/home");  // Navigate only after successful registration
@@ -42,6 +50,7 @@ Backend /register is the API endpoint — where the frontend sends registration 
     .catch((err) => {
       console.log(err);
     });
+  }}
 };
 
     /*Why pevent default??
@@ -63,6 +72,7 @@ Backend /register is the API endpoint — where the frontend sends registration 
              placeholder="e.g jack" name="username"
              className="max-mobXL:p-1 max-mobXL:mt-[0px] w-full p-[2px] px-[5px] mt-[2px] rounded border-[2px] border-gray-400 bg-gray-300 text-black outline-none focus:outline-none"
              onChange={(e)=>{setUsername(e.target.value)}}
+             required
              />
         </div>
         
@@ -70,21 +80,23 @@ Backend /register is the API endpoint — where the frontend sends registration 
             <label>enter email:</label>
             <input
              type="email"
-             placeholder="e.g john@gmail.com" name="email"
+             placeholder="e.g jack@gmail.com" name="email"
              className="max-mobXL:p-1 max-mobXL:mt-[0px] w-full p-[2px] px-[5px] mt-[2px] rounded border-[2px] border-gray-400 bg-gray-300 text-black outline-none focus:outline-none"
              onChange={(e)=>{setEmail(e.target.value)}}
+             required
              />
         </div>
 
         <div className="max-mobL:text-[.9rem] mb-[10px] w-full ">
               <label>enter password:</label>
-               <div className="flex border-[2px] border-gray-400  bg-gray-300  p-[2px] pl-[5px] rounded">
+               <div className= {(paswdFlag)?"flex border-[2px] border-red-500  bg-gray-300  p-[2px] pl-[5px] rounded":"flex border-[2px] border-gray-400  bg-gray-300  p-[2px] pl-[5px] rounded"}>
               <input
                type={(showFlag)?"text":"password"}
                name="password"
                placeholder="Password"
                className="w-full bg-gray-300 text-black outline-none focus:outline-none"
                onChange={(e)=>{setPassword(e.target.value)}}
+               required
               />
               <button className="w-[30px] text-gray-500"onClick={handleShowPass}>{(showFlag)?<Eye/>:<EyeOff/>}</button>
               </div>
@@ -92,16 +104,19 @@ Backend /register is the API endpoint — where the frontend sends registration 
 
         <div className="max-mobL:text-[.9rem] mb-[10px] w-full ">
               <label>confirm password:</label>
-               <div className="flex border-[2px] border-gray-400  bg-gray-300  p-[2px] pl-[5px] rounded">
+               <div className= {(paswdFlag)?"flex border-[2px] border-red-500  bg-gray-300  p-[2px] pl-[5px] rounded":"flex border-[2px] border-gray-400  bg-gray-300  p-[2px] pl-[5px] rounded"}>
               <input
                type={(showFlag)?"text":"password"}
                name="password"
                placeholder="Password"
                className="w-full bg-gray-300 text-black outline-none focus:outline-none"
+                onChange={(e)=>{setConfirmPassword(e.target.value)}}
+              required
               />
               <button className="w-[30px] text-gray-500"onClick={handleShowPass}>{(showFlag)?<Eye/>:<EyeOff/>}</button>
               </div>
-        </div>
+              {(paswdFlag)?<p className="text-[0.7rem] text-red-500 font-medium">Passwords do not match</p>:<p className="text-[0.7rem] hidden text-red-500 font-medium">Passwords do not match</p>}
+        </div>    
 
         <button  type="submit" className="max-mobXL:py-2 mb-[10px] w-full py-3 bg-gray-600 text-white text-[1rem] font-bold transition-colors duration-200 hover:bg-mainBlue rounded">
           Register

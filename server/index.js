@@ -2,6 +2,7 @@
 const express=require("express")
 const mongoose=require("mongoose")
 const cors=require("cors")
+const cookieParser = require("cookie-parser");//cookies for fetching user name
 const employeeModel=require('./models/employee') //LOOK AT ./models/employee.js file for explantion on this
 /*require() is a built-in function in Node.js.
 => It is used to import code from:
@@ -12,7 +13,7 @@ Because require() returns an object or a function, or a class — depending on w
 this is stored it in a variable to use its features.
 */
 
-const app=express()
+const app=express();
 /*app is just a variable name you gave 
 and when you wrote const express = require("express"), express became a function.
 Now you're calling that function using express()
@@ -47,23 +48,58 @@ router.get('/', (req, res) => {
 
 module.exports = router;
 
-WE haven't use drouter yet as project is small 
+WE haven't use router yet as project is small 
 you can see we used app.post and not router.post
 */
 
-app.use(express.json())
+app.use(express.json());
 // express.json() is built-in middleware that tells the server:
 // "If the incoming request has JSON data (like { "username": "john" }), convert it into a JS object"
 // This process is called parsing (parse = break down the raw string into usable JS object)
 //.use() is a method on the Express app (or router) that adds middleware functions to your server(app in this case)
-// Without this, req.body will be undefined when you send JSON data from frontend
+// Without this, req.body will be undefined when you send   JSON data from frontend
 
+/* 1--------------
 app.use(cors())
+*/
+//Only allows basic CORS
+//Does NOT allow cookies or auth headers to pass between frontend & backend
+//to allow that we do
+
+/* 2----------------
+app.use(cors({
+  origin: 'http://localhost:5173', //origin tells your backend Only accept requests from this frontend for security
+  credentials: true  //The credentials: true option in cors configuration allows the server to accept cookies and
+  }));               //  authentication headers from the frontend (like Authorization, Cookie, etc.).
+
+
+*/
+
+/*3---------------*/
+
+app.use(cookieParser());//used for fetching name using cookies
+
+
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://stay-tac.netlify.app"
+];
+
+app.use(cors({
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);   //Means: ✅ “Allow this origin.”
+    } else {
+      callback(new Error("Not allowed by CORS")); //Means: ❌ “Block this origin.”
+    }
+  },
+  credentials: true
+}));
 // Allows requests from different origins (example: your frontend runs on localhost:5173 and backend on localhost:3001)
 // Without this line, your frontend would be blocked from talking to the backend due to CORS policy
 //cross origin Resource Sharing 
 
-mongoose.connect("mongodb://localhost:27017/tac")
+mongoose.connect("mongodb://localhost:27017/tac");
 // Connects your backend to a local MongoDB database named "tac"
 // mongoose.connect returns a promise, so you can also add .then()/.catch() if you want to confirm connection
 
@@ -98,6 +134,30 @@ app.post('/register',(req,res)=>{
     //    If an error happens, send the error as JSON back to the client so it knows something went wrong.
 });
 
+
+//login route
+app.post("/login",(req,res)=>{
+  const {email,password}=req.body;
+  employeeModel.findOne({email:email}).then(user=>{
+    if(user){
+      if(user.password==password){
+        res.json("Success");
+      }
+      else{
+        res.json("password Incorrect")
+        console.log("wrong password");
+      }
+    }
+    else{
+      res.json("no such record exists");
+      console.log("no record");
+    }
+  })
+})
+
+
+
+
 /*Q. Bonus: What is an API?
 Your backend Express server acts as an API (Application Programming Interface).
 An API is a set of rules and paths that allows your frontend and backend to talk by sending and receiving data.
@@ -107,8 +167,9 @@ here the path i register and rules are what to do wen we get a post request*/
 
 //login route
 
+
 app.listen(3001,()=>{
-    console.log("server is running")
+    console.log("server is running");
     //app.listen:- It starts your Express server and tells it to listen for incoming requests.
     /*3001 → This is the port number your backend server will use. TOO KNOW MORE ON PORTS SEE backend.md file
       The function () => { console.log("server is running") } runs once when the server starts. */
@@ -141,7 +202,7 @@ app.listen(3001,()=>{
             6. Express checks your route:
             /register and processes it (in your .post('/register', ...) code).
             */
-})
+});
 
 /*
 Q. Why does the client need a response back?
