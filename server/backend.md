@@ -59,6 +59,7 @@ In networking, a port is a 16-bit number (from 0 to 65535) that identifies a spe
 
 When you run a server (like an Express app), it listens on a specific port to accept incoming TCP or HTTP connections.
 
+
 Q. Why do we need ports?
 A single computer can run multiple network services (e.g. a database, a web server, a file server). The IP address tells which machine to reach, and the port number tells which service on that machine to reach.
 
@@ -66,5 +67,10 @@ For example:
 localhost:3001 → Express server
 localhost:5173 → React frontend (Vite dev server)
 localhost:27017 → MongoDB
-
 Each service listens on a unique port to avoid conflict.
+
+You can remember it like:
+IP address = building address
+Port = room number in the building
+
+Express server = person inside a specific room who responds to knocks (requests)
