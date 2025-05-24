@@ -103,6 +103,8 @@ mongoose.connect("mongodb://localhost:27017/tac");
 // Connects your backend to a local MongoDB database named "tac"
 // mongoose.connect returns a promise, so you can also add .then()/.catch() if you want to confirm connection
 
+
+
 //register route
 app.post('/register',(req,res)=>{
        // This route runs when a POST request is made to /register
@@ -137,8 +139,17 @@ app.post('/register',(req,res)=>{
 
 //login route
 app.post("/login",(req,res)=>{
-  const {email,password}=req.body;
-  employeeModel.findOne({email:email}).then(user=>{
+  const {email,password}=req.body;//req.body hold js objects (json to js object with help of app.use(epress.json()))
+  //All Mongoose query methods like findOne(), find(), save(), update(), etc., return a Promise.
+  //That’s why you use .then() or await to handle their results asynchronously.
+   employeeModel.findOne({email:email}).then(user=>{ 
+    //user is the document returned by MongoDB via Mongoose.
+    //It is a JavaScript object representing the employee record that matched the query.
+
+
+    //Both .then() and await handle asynchronous operations.
+    //When you use async/await, you don’t need .then() because await 
+    // waits for the Promise to resolve and directly gives you the result.
     if(user){
       if(user.password==password){
         res.json("Success");
@@ -156,6 +167,33 @@ app.post("/login",(req,res)=>{
 })
 
 
+/*  login route part using await and async JUST FOR REFERENCE
+app.post("/login", async (req, res) => {
+  const { email, password } = req.body; // req.body is a JS object (parsed from JSON via app.use(express.json()))
+
+  try {
+    // Await the Promise returned by findOne()
+    const user = await employeeModel.findOne({ email: email });
+
+    if (user) {
+      if (user.password === password) {
+        res.json("Success");
+      } else {
+        res.json("password Incorrect");
+        console.log("wrong password");
+      }
+    } else {
+      res.json("no such record exists");
+      console.log("no record");
+    }
+  } catch (error) {
+    // Handle any possible errors from the DB query
+    console.error(error);
+    res.status(500).json("Internal server error");
+  }
+}); */
+
+
 
 
 /*Q. Bonus: What is an API?
@@ -164,8 +202,6 @@ An API is a set of rules and paths that allows your frontend and backend to talk
 When frontend calls /register, it’s calling an API endpoint that handles registration. 
 here the path i register and rules are what to do wen we get a post request*/
 
-
-//login route
 
 
 app.listen(3001,()=>{
