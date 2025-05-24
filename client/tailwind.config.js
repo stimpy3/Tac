@@ -6,19 +6,20 @@ export default {
   ],
   theme: {
     extend: {
-      screens:{
-        mobS:"320px",
-        mobM:"375px",
-        mobL:"430px",
-        mobXL:"530px",
+      screens: {
+        mobS: "320px",
+        mobM: "375px",
+        mobL: "430px",
+        mobXL: "530px",
       },
-      colors:{
-        mainBlue:"#4E7FD6",
-        bluePurple:"#8953ff",
+      colors: {
+        mainBlue: "#4E7FD6",
+        bluePurple: "#8953ff",
       },
       fontFamily: {
         ubuntu: ['Ubuntu', 'sans-serif'],
-      }
+      },
+  
     },
   },
   safelist: [
@@ -26,7 +27,6 @@ export default {
     'border-r-pink-500',
     'border-r-blue-500',
     'border-r-green-500'
-  ],  
+  ],
   plugins: [],
 }
-
