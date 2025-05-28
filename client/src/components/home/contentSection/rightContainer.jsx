@@ -215,8 +215,8 @@ return(
               This immediately calls deleteEvent(index) during rendering—
               which you don't want because it isnt created yet (the deadline div)
               
-              You need to pass a function, not call it:
-              onClick={() => deleteEvent(index)}
+              You need to pass a function, not call it: 
+              onClick={() => deleteEvent(index)}...
               */
               events.map((event,index)=>(                                                                                                                                                                                                                  
                <div key={index} className='w-full min-h-[50px] border-b-[1px] border-gray-400 p-[5px] flex items-center'>
