@@ -26,29 +26,19 @@ outside React’s control, it could lead to unexpected behavior,like styles not 
 or DOM elements being out of sync with the state
  */
 
-import React,{useState,useRef} from 'react' //go inside one pair of curly braces, separated by commas
+import React,{useState,useRef,useEffect} from 'react' //go inside one pair of curly braces, separated by commas
 import EmptyPlaceholder from './emptyPlaceholder';
 
 
 const Carousel=()=>{
-  const [topics,setTopics]=useState([]);//default hold empty array like useState(0) sets default 0
-  const addTopic=()=>{
-    setTopics([...topics,{title:"New Topic"}]); 
-    /*Without the {}, you might be trying to add undefined or just an empty element,
-     which doesn't have the expected structure for your rendering logic (e.g., 
-     mapping over topics.map).
-     React expects something valid to update the UI correctly, 
-     so setTopics([...topics]) will not update the state properly 
-     without adding a value like {} or something valid.
+  const [showVision,setShowVision]=useState(false);
+  const [visions, setVisions] = useState([]);
+  const [tempVision, setTempVision] = useState({
+    id:"",
+    details:"",
+    image:null,
+  });
 
-     example setTopics([...topics, "New Topic"]);This would add a string
-     But using {} (an empty object) is often preferred because:
-     It's a valid object and is more flexible. You can later add properties 
-     (like title, progress, etc.) to that object.
-     Strings or other types like numbers are harder to work with because they don't
-    allow for expansion (like adding title or progress).
-  */
-   };
 
   const carouselRef=useRef(null); /*useRef(null) initializes the reference with
    null because, initially, there’s no DOM element assigned to the reference
@@ -75,86 +65,158 @@ const Carousel=()=>{
       });
     }
   };
-  let start=56; let current=58;  let max=70;
-  let currentString=current+"Kg"
-  let per=100-((((max-current)*1.0)/(max-start))*100)
-  const[percentage,setPercentage]=useState(Number(per.toFixed(0)));
-  const badges={
-    1: "./badges/bronze.png",
 
-    2:"./badges/silver.png",
-
-    3: "./badges/frost.png",
-
-    4:"./badges/orilith.png",
-
-    5: "./badges/solite.png",
+   const openVisionPopup=()=>{
+    setShowVision(true);
   };
-  let badgeIndex=-1;
-  if(percentage>=0 && percentage<20){
-    badgeIndex=1;
-  }
-  else if(percentage>=20 && percentage<40){
-    badgeIndex=2;
-  }
-  else if(percentage>=40 && percentage<60){
-    badgeIndex=3;
-  }
-  else if(percentage>=60 && percentage<80){
-    badgeIndex=4;
-  }
-  else if(percentage>=80 && percentage<100){
-     badgeIndex=5;
-  }
   
+  const closeVisionPopup=()=>{
+    setShowVision(false);
+     setTempVision({ id: "", image: null, details: "" }); //Clear it
+  };
+
+
+    //used usEffect to remove scroll feature from body when overlay present
+    //syntax useEffect(,[]);
+    /*The flow is:
+      > show is true → sets overflowY = hidden
+      > show becomes false
+      > React first runs the cleanup from the previous effect (where show was true)
+      > Then React runs the effect again with show = false and sets overflowY = auto
+      > So you're thinking: "Well, both the cleanup and the else do the same thing." 
+        That's true in this specific case. But here's the catch:
+  
+        In React, the cleanup function in useEffect runs when a component is removed
+        from the page (unmounted). It undoes side effects like scroll locking. 
+        For example, if a popup disables scrolling, the cleanup re-enables it when the popup closes.
+     */
+    useEffect(()=>{
+    if(showVision){
+       document.body.style.overflowY='hidden';
+    }
+    else{
+      document.body.style.overflowY='auto';
+    }
+  
+    //cleanup!!!!!!
+    /*With cleanup: FIXED
+    Open overlay → scroll is locked
+    Close overlay → cleanup runs → scroll is restored
+    */
+    return () => {
+      document.body.style.overflowY= 'auto';
+    };
+    },[showVision]); //useeffect will run if anything in the dependency array changes
+ 
+
+  const handleUpload=(e)=>{ //adding image to tempVision reason is we dont wanna
+    //directly update vision till e have confirmed the change after pressing create
+    const file=e.target.files[0];
+    const reader= new FileReader();
+    reader.onload=()=>{ //asynchronous operation
+       setTempVision((prev) => ({ ...prev, image: `url(${reader.result})` }));
+       //...prev is used to keep the attributes:- id and details same but change only image
+    };
+    if (file) reader.readAsDataURL(file); //SHOULD BE WRITTEN AFTER onload 
+    //if written before onload it start reading the file, then onload wont run as file already read
+    //reader.readAsDataURL(file) tells the browser to convert the uploaded file into a Base64 string. 
+    //Once done, reader.result holds that string so you can display the image instantly in an <img> tag.
+    /*If you write reader.readAsDataURL(file); before setting reader.onload, it's like saying:
+      "Clap when the video ends!" but you say this after the video has already ended — so there's no clapping.
+      Set reader.onload before reading, or the "clap" (code) won't happen. */
+  };
+
+  const handleVisionDetails=(e)=>{//adding details part to tempVision
+    setTempVision((prev) => ({ ...prev, details: e.target.value }));
+    //...prev is used to keep the attributes:- id and image same but change only details   
+  };
+
+    
+  const addVision=()=>{  //confirming changes(when create button pressed) temp vision added to visions
+    const newVision = {
+    id: Date.now(),
+    image: tempVision.image,
+    details: tempVision.details,
+  };
+   setVisions((prev) => [...prev, newVision]);
+   setTempVision({ id: "", image: null, details: "" }); //Clear it
+   setShowVision(false);
+   };
+
+   const renderVisionPopup=()=>{
+    if(showVision){
+      return (
+  
+        <div className='fixed inset-0 bg-gray-800 bg-opacity-50 backdrop-blur-sm flex justify-center items-center z-50'>
+          <div className='bg-white h-[70%] w-[40%] max-h-[400px] max-w-[700px] rounded-lg shadow-lg overflow-hidden'>
+            <div className='bg-blue-500 px-[12px] h-[15%] flex items-center justify-between border-b-gray-500 border-b-[1px]'>
+                  <div className='flex'>
+                  <div>
+                  <p className='text-[1.2rem] text-white font-bold'>Add a Vision</p>
+                  <p className='text-[0.7rem] text-gray-100'>Visualization reminds your mind where it needs to go.</p>
+                  </div>
+                  </div>
+                  <button onClick={closeVisionPopup} className='text-white text-[1.6rem]'>x</button>
+            </div>
+            <div data-label='VisonInputContainer' className='bg-gray-100 px-[10px] py-[20px] w-full h-[70%] flex flex-col justify-around'>
+               <input type="file" accept="image/*" onChange={handleUpload} />
+              <div className='flex flex-col'>
+                 <label>vision details:</label>
+                 <textarea className='border-[1px] px-[5px] border-gray-500 rounded' onChange={handleVisionDetails}></textarea> 
+              </div>
+            </div>
+            <div className='bg-gray-100 flex px-[12px] h-[15%] text-[1.1rem] space-x-5 justify-center items-center '>
+                <button onClick={addVision} className='bg-blue-500 w-full text-white px-4 py-2 rounded'>Create</button>
+                <button onClick={closeVisionPopup} className='bg-white w-full text-gray-800 px-4 py-2 rounded border-[1px] border-gray-600 hover:text-white hover:bg-gray-800'>Cancel</button>
+            </div>
+
+          </div>
+        </div>
+      );
+    }
+    
+    else{
+      return null;
+    }
+  };
+
+
 
 
   return(
     <div className="flex flex-col h-[40%] w-full p-0">{/* heading(buttons and headin)+items */}
       <div className='flex items-center w-full h-fit justify-between'>
-         <div className='flex mr-[10px] h-[30px]'><p className='flex items-center text-[1.5rem] w-fit h-full whitespace-nowrap'>Progress Tracker</p><button onClick={addTopic} className='flex items-center justify-cente ml-[5px]  h-full text-[1.5rem] text-gray-700 hover:text-blue-500'>+</button></div>
-         <div className="h-[2px] w-full bg-gray-300"></div> {/* partition line */}
+         <div className='flex mr-[10px] h-[30px]'><p className='flex items-center text-[1.5rem] w-fit h-full whitespace-nowrap'>Vision Board</p><button onClick={openVisionPopup} className='flex items-center justify-cente ml-[5px]  h-full text-[1.5rem] text-blue-500 hover:text-[2rem] hover:rotate-90 transition-all duration-300'>+</button></div>
+         <div className="h-[2px] w-full bg-gray-400"></div> {/* partition line */}
          <div className='ml-[10px] min-w-[60px]'> {/* left right button container */}
          <button onClick={scrollLeft} className='border-[1px] border-gray-500 shadow-lg w-[25px] rounded-full bg-gray-300 mr-[5px] hover:bg-blue-500 hover:border-none hover:text-white transition-colors duration-400'>&lt;</button>
          <button onClick={scrollRight} className='border-[1px] border-gray-500 shadow-lg w-[25px] rounded-full bg-gray-300 hover:bg-blue-500 hover:border-none hover:text-white transition-colors duration-400'>&gt;</button>
          </div>
        </div>
-       <div ref={carouselRef} data-label='carouselContainer'className='carousel-container overflow-x-auto scrollbar-hide flex items-center w-full h-[calc(100vh-280px)] pb-[20px]'>
-           {topics.length === 0 ? (
+       
+        {renderVisionPopup()}
+       {/*SCROLLBAR HIDE:- WE USED scroll-hide but this isnt inbuilt we defined this in our css*/}
+       <div ref={carouselRef} data-label='carouselContainer' className='overflow-x-auto scrollbar-hide flex items-center w-full h-[calc(100vh-280px)] pb-[20px]'>
+           {visions.length === 0 ? (
              <div className="text-gray-500 pt-[0px] p-[10px] flex items-start justify-center w-full">
               <EmptyPlaceholder />
               </div> ) 
-              : ( topics.map((topic, index) => (
-                           <div data-label='progresspage' key={index} className="flex flex-col card-base bg-white w-[350px] text-black p-[10px] mr-[20px] h-[210px] rounded">
-                                <section  data-label="badge&TitleContainer" className="flex h-[55%] pb-[10px]">
-                                    <div data-label="contentContainer" className="h-full w-full p-[10px] flex flex-col justify-center"> 
-                                      <p className="w-full h-fit text-[1.5rem]">Weight</p>
-                                      <p className="w-full h-fit  text-gray-400 text-[0.9rem]">Goal: 70kg</p>
-                                   </div>
-                                   <div data-label="badgeContainer" className={`h-full aspect-square rounded flex items-center justify-center`}> 
-                                       <div className="h-[60%] w-[60%] bg-contain bg-center" style={{ backgroundImage: `url(${badges[badgeIndex]})` }}></div>
-                                   </div>
-                                </section>
-                                 <section  data-label="GrowthInfoContainer" className="flex w-full h-[20%] justify-between">
-                                   <div data-label="StartTime" className="w-[90px] h-[30px] bg-gray-200 text-gray-700 rounded text-[0.8rem] flex justify-center items-center">179 days</div>
-                                   <div data-label="StartTime" className="w-[90px] h-[30px] bg-gray-200 text-gray-700 rounded text-[0.8rem] flex justify-center items-center">Avg: 1.56</div>
-                                   <div data-label="StartTime" className="w-[90px] h-[30px] bg-gray-200 text-gray-700 rounded text-[0.8rem] flex justify-center items-center">Max Avg: 1.79</div>
-                                 </section>
-                                <section data-label="progressBarContainer" className="w-full h-[25%]  flex flex-col justify-center items-center">
-                                   <div data-label="progressBarForTask" className="w-full h-[10px] rounded-full bg-gray-200 border-[1px] border-gray-400"> 
-                                      <div data-label="completed" className="group  relative h-full rounded-full bg-gradient-to-r from-blue-400 to-bluePurple"  style={{ width: `${percentage}%` }}>
-                                            <div className="absolute hidden group-hover:flex bg-gray-800 text-white h-[25px] w-[100px] text-xs px-2 py-1  -top-[30px] left-[0%] rounded items-center justify-center z-10 ">
-                                             current: {currentString}
-                                            </div>
-                                      </div>
-                                   </div>
-                                   <p className="mt-[5px] w-full text-gray-500 text-[0.9rem]">Completed {percentage}%</p>
-                                </section>
-                           <div className="w-full h-fit"></div>
-             </div> ))
+              : ( visions.map((vision) => (
+                            
+                             //You can't use template literals (`${imageSrc}`) inside Tailwind className strings like that.
+                             // Tailwind is a utility-first CSS framework that only 
+                             // works with static class names, and won't recognize or compile dynamic values in strings.
+                           <div data-label='vison' key={vision.id} className="flex flex-col card-base bg-white 
+                            min-w-[150px] text-black p-[10px] mr-[20px] h-[210px] rounded"
+                           style={{ backgroundImage: vision.image,
+                                    backgroundSize: "contain",
+                                    backgroundRepeat:"no-repeat",
+                                    backgroundPosition: "center", }}>
+                           </div> 
+                           ))
            )}
       </div>
-       <div className="h-[2px] w-full bg-gray-300"></div> {/* partition line */}  
+       <div className="h-[2px] w-full bg-gray-400"></div> {/* partition line */}  
     </div>
   );
 };
