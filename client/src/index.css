@@ -7,7 +7,16 @@
     margin: 0;
     padding: 0;
     font-family: "Ubuntu", sans-serif; 
+    user-select:none;
   }
+
+  .scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
 
   .card-base {
     @apply rounded-lg border-[1px] bg-white border-gray-400 shadow-lg;
@@ -20,6 +29,19 @@
     -ms-overflow-style: none;  /* For Internet Explorer and Edge */
     scrollbar-width: none;  /* For Firefox */
   }
+
+  .passion-one-regular {
+  font-family: "Passion One", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.bebas-neue-regular {
+  font-family: "Bebas Neue", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
 
   input,textarea {
     @apply focus:outline-none

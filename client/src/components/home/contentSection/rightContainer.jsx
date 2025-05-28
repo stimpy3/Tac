@@ -75,6 +75,7 @@ const RightSide=()=>{
     setShow(false);
   };
 
+ 
   //VISUALLY ADD EVENT DEADLINE
   const createEvent=()=>{
     const selectedCategory=categoryRef.current.value;
@@ -137,17 +138,18 @@ const RightSide=()=>{
     }
   };
 
+  
   const renderPopup=()=>{
     if(show){
       return (
   
         <div className='fixed inset-0 bg-gray-800 bg-opacity-50 backdrop-blur-sm flex justify-center items-center z-50'>
-          <div className='bg-white h-[70%] w-[40%] max-h-[400px] max-w-[700px] rounded shadow-lg overflow-hidden'>
-            <div className='bg-gradient-to-r from-blue-500 to-bluePurple px-[12px] h-[15%] flex items-center justify-between border-b-gray-500 border-b-[1px]'>
+          <div className='bg-white h-[70%] w-[40%] max-h-[400px] max-w-[700px] rounded-lg shadow-lg overflow-hidden'>
+            <div className='bg-blue-500 px-[12px] h-[15%] flex items-center justify-between border-b-gray-500 border-b-[1px]'>
                   <div className='flex'>
                   <div>
                   <p className='text-[1.2rem] text-white font-bold'>Add a Deadline</p>
-                  <p className='text-[0.8rem] text-gray-100'>Deadlines track what your brain drops</p>
+                  <p className='text-[0.7rem] text-gray-100'>Deadlines track what your brain drops</p>
                   </div>
                   </div>
                   <button onClick={closePopup} className='text-white text-[1.6rem]'>x</button>
@@ -183,9 +185,9 @@ const RightSide=()=>{
                   </div>
               </div>
             </div>
-            <div className='bg-gray-100 flex px-[12px] h-[15%] text-[1.1rem] space-x-5 justify-center items-center border-t-gray-500 border-t-[1px]'>
+            <div className='bg-gray-100 flex px-[12px] h-[15%] text-[1.1rem] space-x-5 justify-center items-center '>
                 <button onClick={createEvent} className='bg-blue-500 w-full text-white px-4 py-2 rounded'>Create</button>
-                <button onClick={closePopup} className='bg-gray-300 w-full text-gray-600 px-4 py-2 rounded border-[1px] border-gray-600 hover:text-white hover:bg-gray-800'>Cancel</button>
+                <button onClick={closePopup} className='bg-white w-full text-gray-800 px-4 py-2 rounded border-[1px] border-gray-600 hover:text-white hover:bg-gray-800'>Cancel</button>
             </div>
 
           </div>
@@ -200,6 +202,18 @@ const RightSide=()=>{
 
   //used usEffect to remove scroll feature from body when overlay present
   //syntax useEffect(,[]);
+  /*The flow is:
+    > show is true → sets overflowY = hidden
+    > show becomes false
+    > React first runs the cleanup from the previous effect (where show was true)
+    > Then React runs the effect again with show = false and sets overflowY = auto
+    > So you're thinking: "Well, both the cleanup and the else do the same thing." 
+      That's true in this specific case. But here's the catch:
+
+      In React, the cleanup function in useEffect runs when a component is removed
+      from the page (unmounted). It undoes side effects like scroll locking. 
+      For example, if a popup disables scrolling, the cleanup re-enables it when the popup closes.
+   */
   useEffect(()=>{
   if(show){
      document.body.style.overflowY='hidden';
@@ -216,7 +230,7 @@ const RightSide=()=>{
   return () => {
     document.body.style.overflowY= 'auto';
   };
-  },[show]);
+  },[show]); //useeffect will run if anything in the dependency array changes
 
   //DELETE EVENT DEADLINE
   //filter syntax array.filter((element, index, array)=>{});

@@ -68,6 +68,13 @@ You use it when:
 -Listening to scroll or keyboard events
 -Editing the document.body (like disabling scroll)
 
+
+useRef → We use useRef in React for two main reasons:
+
+-Access DOM elements directly — like focusing an input or controlling a video.
+-Store values that don’t trigger re-renders — like keeping track of a timer ID or previous state.
+-Think of useRef like a box that holds something — it doesn't change the UI when it updates, but it stays consistent across renders
+
 SYNTAX-----------------------------------------------
 
 useEffect(() => {
