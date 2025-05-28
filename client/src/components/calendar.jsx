@@ -58,7 +58,7 @@ const Calendar = () => {
 
   return (
     <div className='w-full h-[300px] p-[15px] pb-[0px]'>
-        <article data-label='calendarContainer' className='flex flex-col w-full h-full rounded-lg bg-white shadow-lg border-[1px] border-gray-400 items-center pb-[5px] overflow-hidden'>  
+        <article data-label='calendarContainer' className='flex flex-col w-[250px] h-full rounded-lg bg-white shadow-lg border-[1px] border-gray-400 items-center pb-[5px] overflow-hidden'>  
            <div className="w-full h-[1000px] flex justify-between px-[10px]  mb-[5px] bg-gray-800">
              <p className="h-full flex items-center font-bold text-[1.2rem] text-white">{month}, {year}</p>
              <section data-label="leftRightButtonContainer" className="w-[40px] h-[15%] flex text-white text-[1.2rem]">
