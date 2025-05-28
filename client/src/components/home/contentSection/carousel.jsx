@@ -148,8 +148,8 @@ const Carousel=()=>{
       return (
   
         <div className='fixed inset-0 bg-gray-800 bg-opacity-50 backdrop-blur-sm flex justify-center items-center z-50'>
-          <div className='bg-white h-[70%] w-[40%] max-h-[400px] max-w-[700px] rounded-lg shadow-lg overflow-hidden'>
-            <div className='bg-blue-500 px-[12px] h-[15%] flex items-center justify-between border-b-gray-500 border-b-[1px]'>
+           <div className='bg-gray-100 bg-opacity-85 h-[70%] w-[40%] max-h-[400px] max-w-[700px] rounded-lg shadow-lg overflow-hidden'>
+            <div className='bg-gradient-to-r  from-blue-400 to-purple-400 bg-opacity-100  px-[12px] h-[60px] flex items-center justify-between border-b-gray-500 border-b-[1px]'>
                   <div className='flex'>
                   <div>
                   <p className='text-[1.2rem] text-white font-bold'>Add a Vision</p>
@@ -158,16 +158,16 @@ const Carousel=()=>{
                   </div>
                   <button onClick={closeVisionPopup} className='text-white text-[1.6rem]'>x</button>
             </div>
-            <div data-label='VisonInputContainer' className='bg-gray-100 px-[10px] py-[20px] w-full h-[70%] flex flex-col justify-around'>
+            <div data-label='VisonInputContainer' className=' px-[10px] py-[20px] w-full h-[70%] flex flex-col justify-around'>
                <input type="file" accept="image/*" onChange={handleUpload} />
               <div className='flex flex-col'>
                  <label>vision details:</label>
-                 <textarea className='border-[1px] px-[5px] border-gray-500 rounded' onChange={handleVisionDetails}></textarea> 
+                 <textarea className='border-[1px] px-[5px ]bg-white bg-opacity-50 border-gray-500 rounded' onChange={handleVisionDetails}></textarea> 
               </div>
             </div>
-            <div className='bg-gray-100 flex px-[12px] h-[15%] text-[1.1rem] space-x-5 justify-center items-center '>
-                <button onClick={addVision} className='bg-blue-500 w-full text-white px-4 py-2 rounded'>Create</button>
-                <button onClick={closeVisionPopup} className='bg-white w-full text-gray-800 px-4 py-2 rounded border-[1px] border-gray-600 hover:text-white hover:bg-gray-800'>Cancel</button>
+            <div className= 'flex px-[12px] h-[15%] text-[1.1rem] space-x-5 justify-center items-center '>
+                <button onClick={addVision} className='bg-gradient-to-r  from-blue-400 to-purple-400 w-full text-white px-4 py-2 rounded'>Create</button>
+                <button onClick={closeVisionPopup} className='bg-white bg-opacity-50 w-full text-gray-800 px-4 py-2 rounded border-[1px] border-gray-600'>Cancel</button>
             </div>
 
           </div>

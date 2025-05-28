@@ -85,9 +85,9 @@ const RightSide=()=>{
     if(show){
       return (
   
-        <div className='fixed inset-0 bg-gray-800 bg-opacity-50 backdrop-blur-sm flex justify-center items-center z-50'>
-          <div className='bg-white h-[70%] w-[40%] max-h-[400px] max-w-[700px] rounded-lg shadow-lg overflow-hidden'>
-            <div className='bg-blue-500 px-[12px] h-[15%] flex items-center justify-between border-b-gray-500 border-b-[1px]'>
+        <div className='fixed inset-0 bg-black bg-opacity-20 backdrop-blur-sm flex justify-center items-center z-50'>
+          <div className='bg-gray-100 bg-opacity-85 h-[70%] w-[40%] max-h-[400px] max-w-[700px] rounded-lg shadow-lg overflow-hidden'>
+            <div className='bg-gradient-to-r  from-blue-400 to-purple-400 bg-opacity-100  px-[12px] h-[60px] flex items-center justify-between border-b-gray-500 border-b-[1px]'>
                   <div className='flex'>
                   <div>
                   <p className='text-[1.2rem] text-white font-bold'>Add a Deadline</p>
@@ -96,16 +96,16 @@ const RightSide=()=>{
                   </div>
                   <button onClick={closePopup} className='text-white text-[1.6rem]'>x</button>
             </div>
-            <div data-label='DeadlineEventInputContainer' className='bg-gray-100 px-[10px] py-[20px] w-full h-[70%] flex flex-col justify-around'>
+            <div data-label='DeadlineEventInputContainer' className=' px-[10px] py-[20px] w-full h-[70%] flex flex-col justify-around'>
               <div className='flex flex-col'>
                 <label>event name:</label>
-                <input type='text' placeholder='Max 15 characters' className='px-[5px] border-[1px] border-gray-500 rounded' 
+                <input type='text' placeholder='Max 15 characters' className='px-[5px] border-[1px] border-gray-500 bg-white bg-opacity-50 rounded' 
                 ref={nameRef} maxlength="16" required></input>
               </div>
 
               <div className='flex flex-col'>
                  <label>event details:</label>
-                 <textarea className='border-[1px] px-[5px] border-gray-500 rounded'></textarea> 
+                 <textarea className='border-[1px] px-[5px] border-gray-500 bg-white bg-opacity-50 rounded'></textarea> 
               </div>
 
               <div className='flex justify-between'>
@@ -127,9 +127,9 @@ const RightSide=()=>{
                   </div>
               </div>
             </div>
-            <div className='bg-gray-100 flex px-[12px] h-[15%] text-[1.1rem] space-x-5 justify-center items-center '>
-                <button onClick={createEvent} className='bg-blue-500 w-full text-white px-4 py-2 rounded'>Create</button>
-                <button onClick={closePopup} className='bg-white w-full text-gray-800 px-4 py-2 rounded border-[1px] border-gray-600 hover:text-white hover:bg-gray-800'>Cancel</button>
+            <div className='flex px-[12px] h-[15%] text-[1.1rem] space-x-5 justify-center items-center '>
+                <button onClick={createEvent} className='bg-gradient-to-r  from-blue-400 to-purple-400 w-full text-white px-4 py-2 rounded'>Create</button>
+                <button onClick={closePopup} className=' w-full text-gray-800 px-4 py-2 rounded border-[1px] border-gray-600 bg-white bg-opacity-50 '>Cancel</button>
             </div>
 
           </div>
