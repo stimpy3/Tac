@@ -13,8 +13,10 @@ export default {
         mobXL: "530px",
       },
       colors: {
-        mainBlue: "#4E7FD6",
-        bluePurple: "#8953ff",
+        accent1: "#8b3cfa",//purpleViolet
+        accent2: "#BAB3F9",//ligeter purrpleViolet
+        accent3: "#b6ab83",//ochre
+
       },
       fontFamily: {
         ubuntu: ['Ubuntu', 'sans-serif'],

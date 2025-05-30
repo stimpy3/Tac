@@ -60,14 +60,14 @@ const Calendar = () => {
   return (
     <div className='w-full h-[300px] p-[15px] pb-[0px]'>
         <article data-label='calendarContainer' className='flex flex-col w-[250px] h-full rounded-lg bg-white shadow-lg border-[1px] border-gray-400 items-center pb-[5px] overflow-hidden'>  
-           <div className="w-full h-[1000px] flex justify-between px-[10px]  mb-[5px] bg-gray-800">
+           <div className="w-full h-[1000px] flex justify-between px-[10px]  mb-[5px] bg-black">
              <p className="h-full flex items-center font-bold text-[1.2rem] text-white">{month}, {year}</p>
              <section data-label="leftRightButtonContainer" className="w-[40px] h-[15%] flex text-white text-[1.2rem]">
                 <button onClick={revBtnCalendar} className=" h-[45px] w-[50%] flex items-center justify-center "><ChevronLeft/></button>
                 <button onClick={fwdBtnCalendar} className=" h-[45px] w-[50%] flex items-center justify-center"><ChevronRight/></button>
              </section>
            </div>
-           <div data-label='weekContainer' className='mb-[5px] grid grid-cols-7 w-full h-[15%] text-blue-500 font-bold rounded-md p-[5px]'>
+           <div data-label='weekContainer' className='mb-[5px] grid grid-cols-7 w-full h-[15%] text-accent1 font-bold rounded-md p-[5px]'>
                        {["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].map((day, i) => (
                                    <p key={i} className='text-[0.8rem] text-center flex items-center justify-center'>
                                      {day}
@@ -100,7 +100,7 @@ const Calendar = () => {
                      today.getMonth() === monthNum &&
                      today.getFullYear() === currentYear;
                      return( //this return is for map
-                     <div key={i} className={`py-[2px] h-full flex items-center justify-center rounded-sm ${isToday ? ' text-mainBlue font-bold' : '' }`}>
+                     <div key={i} className={`py-[2px] h-full flex items-center justify-center rounded-sm ${isToday ? ' text-accent1 font-bold' : '' }`}>
                           {dayNum}
                      </div>
                      );

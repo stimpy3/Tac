@@ -15,7 +15,7 @@ const TopBar=() =>{
     month: "long", // Optional: makes it "Apr"
     day: "numeric",
   });
-  const randomColor=["bg-blue-500","bg-[#a1cbcf]","bg-[#8ca3dc]","bg-[#b4b4e4]","bg-[#9d91c2]"];
+  const randomColor=["bg-accent1","bg-[#a1cbcf]","bg-[#8ca3dc]","bg-[#b4b4e4]","bg-[#9d91c2]"];
   const[userColor,setUserColor]=useState([randomColor[Math.floor(Math.random() * 5)]]);
  
 

@@ -118,11 +118,11 @@ Backend /register is the API endpoint — where the frontend sends registration 
               {(paswdFlag)?<p className="text-[0.7rem] text-red-500 font-medium">Passwords do not match</p>:<p className="text-[0.7rem] hidden text-red-500 font-medium">Passwords do not match</p>}
         </div>    
 
-        <button  type="submit" className="max-mobXL:py-2 mb-[10px] w-full py-3 bg-gray-600 text-white text-[1rem] font-bold transition-colors duration-200 hover:bg-mainBlue rounded">
+        <button  type="submit" className="max-mobXL:py-2 mb-[10px] w-full py-3 bg-gray-600 text-white text-[1rem] font-bold transition-colors duration-200 hover:bg-accent1 rounded">
           Register
         </button>
 
-        <p className="w-full text-center text-gray-500 max-mobL:text-[0.7rem] ">already have an account? <button onClick={handleLogin} className="text-mainBlue hover:text-mainBlue">Login</button></p>
+        <p className="w-full text-center text-gray-500 max-mobL:text-[0.7rem] ">already have an account? <button onClick={handleLogin} className="text-accent1 hover:text-accent1">Login</button></p>
       </form>
     </div>
   );
