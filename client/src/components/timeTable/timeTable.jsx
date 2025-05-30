@@ -1,10 +1,13 @@
-import React,{useState} from 'react';
+import React,{useState,useRef,useEffect, use} from 'react';
 import Sidebar from '../home/sidebar'; 
 import Calendar from '../calendar';
-import { ChevronDown } from 'lucide-react';
+import {CalendarDays,CalendarOff,ChevronRight,ChevronLeft} from 'lucide-react';
 
 const TimeTable=()=>{
   const [showCalender,setShowCalendar]=useState(false);
+  const [leftDistance, setLeftDistance] = useState(0);
+  const contentRef=useRef(null);
+
   const handleCalender=()=>{
       setShowCalendar(prev=>!prev);
   };//pok
@@ -14,11 +17,51 @@ const TimeTable=()=>{
                      <div key={i} data-label="verticalLines" className="absolute z-[5px] min-w-[0.5px] h-[calc(100%+40px)] bg-gray-400"
                       style={{ left: `${(i+1) * width - 1}px` }}/>));
 
-  const now = new Date();
-  const hours = now.getHours();    // 0–23
-  const minutes = now.getMinutes(); // 0–59
-  const minsSinceMidnight= hours*60+minutes;
-  const leftDistance=Math.floor(minsSinceMidnight*(width/60));
+
+  const handleLeftScroll=()=>{
+    if(contentRef.current){
+      contentRef.current.scrollBy({
+        left:-360,
+        behavior:'smooth',
+      });
+    }
+  };
+
+  const handleRightScroll=()=>{
+    if(contentRef.current){
+      contentRef.current.scrollBy({
+        left:360,
+        behavior:'smooth',
+      });
+    }
+  };
+
+  useEffect(() => {
+    const now = new Date();
+    const hours = now.getHours();
+    const minutes = now.getMinutes();
+    const minsSinceMidnight = hours * 60 + minutes;
+    const left = +(minsSinceMidnight * (width / 60)).toFixed(2);
+    setLeftDistance(left); //cant just write set state in body gotta wrap it in a function or useEfect
+    /*If you do setState directly in the body of a React component (outside of hooks like useEffect),
+     it causes an infinite render loop. Here’s why:
+      -React renders your component.
+      -In the component body, you call setState.
+      -Calling setState schedules a re-render.
+      -React renders again.
+      -Again, setState is called in the component body.
+      -This repeats endlessly until React stops it with an error: "Too many re-renders."
+      useEffect(() => { ... }) runs after every render (initial + updates).
+      useEffect(() => { ... }, []) runs only once after first render. */
+  }, []);
+
+  useEffect(() => {
+  if (contentRef.current) {
+    contentRef.current.scrollLeft=leftDistance-200;
+  }
+}, [leftDistance]);
+
+  
 
 
     return(
@@ -26,8 +69,15 @@ const TimeTable=()=>{
           <Sidebar/>
           <div data-label='outerRightContainer' className=' w-[calc(100%-85px)] ml-[85px] bg-gray-200  p-[15px] flex justify-center '>
               <div data-label='timeTableContainer'  className='h-[516px] w-[98%] flex relative border-[1px] border-gray-400'>
-              <div className={`w-[${width}px] h-full  flex flex-col items-center border-r-[1px] border-gray-400`}> 
-                <section className='flex justify-center items-center w-full min-h-[40px] bg-gray-300 border-b-[1px] border-gray-400'>Calendar<button onClick={handleCalender}>{(showCalender)?<ChevronDown  className='rotate-[-180] h-full transition-transform duration-300 '/>:<ChevronDown className='rotate-180 transition-transform duration-300'/>}</button></section>
+              <div className={`min-w-[130px] h-full  flex flex-col items-center border-r-[1px] border-gray-400`}> 
+                <section className='flex justify-betweenitems-center w-full min-h-[40px] bg-gray-300 border-b-[1px] border-gray-400'>
+                   <button className='text-gray-600 w-full h-full px-[10px]' onClick={handleCalender}>{(showCalender)?<CalendarDays/>:<CalendarOff/>}</button>
+                   <section data-label='scrollContainer' className='px-[10px] border-l-[1px] border-gray-400 w-[90px] h-full flex items-center justify-around text-[1.5rem]'>
+                      <button onClick={handleLeftScroll} className='rounded-full h-[80%] aspect-square bg-gray-100 flex items-center justify-center border-[1px] border-gray-400'><ChevronLeft/></button>
+                      <button onClick={handleRightScroll} className='rounded-full h-[80%] aspect-square bg-gray-100 flex items-center justify-center border-[1px] border-gray-400'><ChevronRight/></button>
+                   </section>
+                </section>
+
                  { (showCalender)? 
                  <div className='absolute top-[40px] left-[-5px] z-10'>
                    <Calendar/>
@@ -48,8 +98,8 @@ const TimeTable=()=>{
                  </section>
               </div>
 
-              <div data-label='contentContainer' className='min-w-[900px] overflow-y-hidden overflow-x-hidden h-full bg-gray-200 flex flex-col relative'>
-                <div data-label="currentLineContainer" className="absolute z-[6px] w-fit h-[480px] bottom-0 flex flex-col items-center"   style={{ left: `${leftDistance-7}px` }}>
+              <div data-label='contentContainer' ref={contentRef} className='min-w-[900px] overflow-y-hidden overflow-x-hidden h-full bg-gray-200 flex flex-col relative'>
+                <div data-label="currentLineContainer" className="absolute z-[6px] w-fit h-[480px] bottom-0 flex flex-col items-center"   style={{ left: `${leftDistance-6}px` }}>
                    <div data-label="currentLineCircle" className="w-[12px] h-[12px] border-[3px] border-blue-500 bg-transparent rounded-full"></div>
                    <div data-label="currentLine" className="h-full w-[3px] bg-blue-500"></div>
                 </div>    
@@ -83,7 +133,7 @@ const TimeTable=()=>{
                 </section>
                 <section data-label='planContainer' className='flex flex-col w-[2400px] h-[476px] border-b-[1px]'>
                     <div className='h-[68px] w-full flex items-center border-b-[1px] border-gray-400 py-[10px]'>
-                      <div className='h-full w-[90%] bg-purple-800 rounded'></div>
+                      <div className='h-full w-[90%] bg-blue-300 rounded'></div>
                     </div>
                     <div className='h-[68px] w-full flex items-center border-b-[1px] border-gray-400 py-[10px]'>
 
@@ -98,10 +148,10 @@ const TimeTable=()=>{
 
                     </div>
                     <div className='h-[68px] w-full flex items-center border-b-[1px] border-gray-400 py-[10px]'>
-                      <div className='h-full w-[90%] bg-purple-800 rounded'></div>
+                      <div className='h-full w-[90%] bg-blue-300 rounded'></div>
                     </div>
                     <div className='h-[68px] w-full flex items-center py-[10px]'>
-                      <div className='h-full w-[90%] bg-purple-800 rounded'></div>  
+                      <div className='h-full w-[90%] bg-blue-300 rounded'></div>  
                     </div>
                     
                 </section>
