@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import {ChevronRight,ChevronLeft} from 'lucide-react';
 
 const Calendar = () => {
   const today = new Date();
@@ -62,8 +63,8 @@ const Calendar = () => {
            <div className="w-full h-[1000px] flex justify-between px-[10px]  mb-[5px] bg-gray-800">
              <p className="h-full flex items-center font-bold text-[1.2rem] text-white">{month}, {year}</p>
              <section data-label="leftRightButtonContainer" className="w-[40px] h-[15%] flex text-white text-[1.2rem]">
-                <button onClick={revBtnCalendar} className=" h-[45px] w-[50%] flex items-center justify-center ">&lt;</button>
-                <button onClick={fwdBtnCalendar} className=" h-[45px] w-[50%] flex items-center justify-center">&gt;</button>
+                <button onClick={revBtnCalendar} className=" h-[45px] w-[50%] flex items-center justify-center "><ChevronLeft/></button>
+                <button onClick={fwdBtnCalendar} className=" h-[45px] w-[50%] flex items-center justify-center"><ChevronRight/></button>
              </section>
            </div>
            <div data-label='weekContainer' className='mb-[5px] grid grid-cols-7 w-full h-[15%] text-blue-500 font-bold rounded-md p-[5px]'>
