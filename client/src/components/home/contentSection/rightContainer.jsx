@@ -190,7 +190,7 @@ return(
       {/*Progress Bar*/}
       <div data-label='progressOuterDiv' className='w-full h-[110px] px-[15px] py-[0px] flex rounded-lg'>
         <div className='flex flex-col w-full h-full rounded-lg bg-white shadow-lg border-[1px] border-gray-400 p-[10px]'>
-        <p className='text-blue-500 mb-[5px] text-[0.9rem]'>Your Progress</p>
+        <p className='text-accent1 mb-[5px] text-[0.9rem]'>Your Progress</p>
         <div>
           <p className='text-[1.2rem] mb-[5px]'>55% Completed</p>
           <div className='w-full h-[20px] rounded-full bg-gray-100 overflow-hidden border-[1px] border-gray-400'>

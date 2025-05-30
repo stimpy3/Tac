@@ -75,11 +75,11 @@ const LoginForm=() => {
         </div>
 
 
-        <button type="submit" className="max-mobXL:py-2 w-full py-3 bg-gray-600 text-white text-[1rem] font-bold transition-colors duration-200 hover:bg-mainBlue rounded">
+        <button type="submit" className="max-mobXL:py-2 w-full py-3 bg-gray-600 text-white text-[1rem] font-bold transition-colors duration-200 hover:bg-accent1 rounded">
           Login
         </button>
 
-        <p className="w-full text-center text-gray-500 max-mobL:text-[0.7rem] ">don't have an account? <button onClick={handleRegister} className="text-mainBlue hover:text-mainBlue">Register</button></p>
+        <p className="w-full text-center text-gray-500 max-mobL:text-[0.7rem] ">don't have an account? <button onClick={handleRegister} className="text-accent1 hover:text-accent1">Register</button></p>
       </form>
     </div>
   );
