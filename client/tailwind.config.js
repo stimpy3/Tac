@@ -13,9 +13,10 @@ export default {
         mobXL: "530px",
       },
       colors: {
+        accent0: "#5c1db5",
         accent1: "#8b3cfa",//purpleViolet
         accent2: "#BAB3F9",//ligeter purrpleViolet
-        accent3: "#b6ab83",//ochre
+        accent3: "#bdb697",//ochre
 
       },
       fontFamily: {
