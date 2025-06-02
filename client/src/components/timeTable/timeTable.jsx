@@ -62,6 +62,7 @@ const TimeTable=()=>{
 }, [leftDistance]);
 const[showTaskModal,setShowTaskModal]=useState(false);
 const [tasks, setTasks] = useState([]);
+const [errorModal,setErrorModal]=useState(0);
 const [tempTask, setTempTask] = useState({
     name:"",
     day:"Monday",
@@ -72,6 +73,7 @@ const [tempTask, setTempTask] = useState({
 const handleTaskModal=()=>{
   setTempTask({ name: "", day: "Monday", tstart: "", timeend:"" }); //Clear it
   setShowTaskModal(prev=>!prev);
+  setErrorModal(0);
 };
 
 const handleNameTemp=(e)=>{
@@ -88,6 +90,27 @@ const handleEndTemp=(e)=>{
 }
 
 const handleCreateTask=()=>{
+  const [starthours, startminutes] = tempTask.tstart.split(':').map(Number);
+  const startInMins = starthours * 60 + startminutes;
+  const [endhours, endminutes] = tempTask.timeend.split(':').map(Number);
+  const endInMins = endhours * 60 + endminutes;
+
+  if(tempTask.name=="" || (endInMins<startInMins) || isNaN(endInMins) || isNaN(startInMins)){//atleast 1 wrong
+     if(tempTask.name=="" && ((endInMins<startInMins)|| isNaN(endInMins) || isNaN(startInMins))){
+        setErrorModal(1);//both wrong
+     }
+     else{ //only 1 wrong
+         if(tempTask.name==""){//only name missing
+            setErrorModal(2);
+        }
+        else{//only timing wrong
+           setErrorModal(3);
+        } 
+     }
+    
+  }
+  else{ //both correct
+  setErrorModal(0);
   const newTask={
     name: tempTask.name,
     day: tempTask.day,
@@ -97,10 +120,12 @@ const handleCreateTask=()=>{
   setTasks((prev)=>[...prev,newTask]);
   setTempTask({ name: "", day: "Monday", tstart: "", timeend:"" }); //Clear it
   setShowTaskModal(prev=>!prev);
+  }   
+
 }
 
 const mondayTasks = () => {
-  const colors = ["#81c2e3","#7d7ff0","#ba7df0","#e87df0", "#f07d96","#f09f7d","#f0de7d","#b2f07d","#7df0b8"];
+  const monColors = ["#81c2e3","#7d7ff0","#ba7df0","#e87df0", "#f07d96","#f09f7d","#f0de7d","#b2f07d","#7df0b8"];
 
   return (
     <>
@@ -125,7 +150,7 @@ const mondayTasks = () => {
                          zIndex: 2,
                        }}>
             
-                   <div data-label="visual" className="h-full rounded-lg" style={{ backgroundColor: colors[index % colors.length] }}>
+                   <div data-label="visual" className="h-full rounded-lg" style={{ backgroundColor: monColors[index % monColors.length] }}>
                    </div>
                    <div data-label="tooltip" className="absolute bg-black p-[5px] text-white text-[0.5rem] flex flex-col rounded-sm
                      z-[10] opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity"
@@ -153,7 +178,8 @@ const mondayTasks = () => {
 
 
 const tuesdayTasks=()=>{
-   const colors = ["#81c2e3","#7d7ff0","#ba7df0","#e87df0", "#f07d96","#f09f7d","#f0de7d","#b2f07d","#7df0b8"];
+   const tueColors = ["#f09f7d", "#ba7df0", "#81c2e3", "#7df0b8", "#f0de7d", "#e87df0", "#b2f07d", "#7d7ff0", "#f07d96"];
+
 
   return (
     <>
@@ -178,7 +204,7 @@ const tuesdayTasks=()=>{
                          zIndex: 2,
                        }}>
             
-                   <div data-label="visual" className="h-full rounded-lg" style={{ backgroundColor: colors[index % colors.length] }}>
+                   <div data-label="visual" className="h-full rounded-lg" style={{ backgroundColor: tueColors[index % tueColors.length] }}>
                    </div>
                    <div data-label="tooltip" className="absolute bg-black p-[5px] text-white text-[0.5rem] flex flex-col rounded-sm
                      z-[10] opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity"
@@ -205,7 +231,7 @@ const tuesdayTasks=()=>{
 }
 
 const wednesdayTasks=()=>{
-   const colors = ["#81c2e3","#7d7ff0","#ba7df0","#e87df0", "#f07d96","#f09f7d","#f0de7d","#b2f07d","#7df0b8"];
+  const wedColors = ["#b2f07d", "#7d7ff0", "#f0de7d", "#81c2e3", "#f09f7d", "#ba7df0", "#7df0b8", "#e87df0", "#f07d96"];
 
   return (
     <>
@@ -230,7 +256,7 @@ const wednesdayTasks=()=>{
                          zIndex: 2,
                        }}>
             
-                   <div data-label="visual" className="h-full rounded-lg" style={{ backgroundColor: colors[index % colors.length] }}>
+                   <div data-label="visual" className="h-full rounded-lg" style={{ backgroundColor: wedColors[index % wedColors.length] }}>
                    </div>
                    <div data-label="tooltip" className="absolute bg-black p-[5px] text-white text-[0.5rem] flex flex-col rounded-sm
                      z-[10] opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity"
@@ -257,7 +283,7 @@ const wednesdayTasks=()=>{
 }
 
 const thursdayTasks=()=>{
-   const colors = ["#81c2e3","#7d7ff0","#ba7df0","#e87df0", "#f07d96","#f09f7d","#f0de7d","#b2f07d","#7df0b8"];
+  const thuColors = ["#e87df0", "#7df0b8", "#ba7df0", "#f07d96", "#81c2e3", "#f0de7d", "#7d7ff0", "#f09f7d", "#b2f07d"];
   return (
     <>
       {tasks
@@ -281,7 +307,7 @@ const thursdayTasks=()=>{
                          zIndex: 2,
                        }}>
             
-                   <div data-label="visual" className="h-full rounded-lg" style={{ backgroundColor: colors[index % colors.length] }}>
+                   <div data-label="visual" className="h-full rounded-lg" style={{ backgroundColor: thuColors[index % thuColors.length] }}>
                    </div>
                    <div data-label="tooltip" className="absolute bg-black p-[5px] text-white text-[0.5rem] flex flex-col rounded-sm
                      z-[10] opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity"
@@ -308,7 +334,7 @@ const thursdayTasks=()=>{
 }
 
 const fridayTasks=()=>{
-  const colors = ["#81c2e3","#7d7ff0","#ba7df0","#e87df0", "#f07d96","#f09f7d","#f0de7d","#b2f07d","#7df0b8"];
+  const friColors = ["#f07d96", "#b2f07d", "#7df0b8", "#7d7ff0", "#ba7df0", "#f09f7d", "#81c2e3", "#e87df0", "#f0de7d"];
 
   return (
     <>
@@ -333,7 +359,7 @@ const fridayTasks=()=>{
                          zIndex: 2,
                        }}>
             
-                   <div data-label="visual" className="h-full rounded-lg" style={{ backgroundColor: colors[index % colors.length] }}>
+                   <div data-label="visual" className="h-full rounded-lg" style={{ backgroundColor: friColors[index % friColors.length] }}>
                    </div>
                    <div data-label="tooltip" className="absolute bg-black p-[5px] text-white text-[0.5rem] flex flex-col rounded-sm
                      z-[10] opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity"
@@ -360,8 +386,7 @@ const fridayTasks=()=>{
 }
 
 const saturdayTasks=()=>{
- const colors = ["#81c2e3","#7d7ff0","#ba7df0","#e87df0", "#f07d96","#f09f7d","#f0de7d","#b2f07d","#7df0b8"];
-
+  const satColors = ["#7d7ff0", "#f0de7d", "#81c2e3", "#e87df0", "#ba7df0", "#f09f7d", "#7df0b8", "#f07d96", "#b2f07d"];
   return (
     <>
       {tasks
@@ -385,7 +410,7 @@ const saturdayTasks=()=>{
                          zIndex: 2,
                        }}>
             
-                   <div data-label="visual" className="h-full rounded-lg" style={{ backgroundColor: colors[index % colors.length] }}>
+                   <div data-label="visual" className="h-full rounded-lg" style={{ backgroundColor: satColors[index % satColors.length] }}>
                    </div>
                    <div data-label="tooltip" className="absolute bg-black p-[5px] text-white text-[0.5rem] flex flex-col rounded-sm
                      z-[10] opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity"
@@ -412,8 +437,7 @@ const saturdayTasks=()=>{
 }
 
 const sundayTasks=()=>{
- const colors = ["#81c2e3","#7d7ff0","#ba7df0","#e87df0", "#f07d96","#f09f7d","#f0de7d","#b2f07d","#7df0b8"];
-
+ const sunColors = ["#ba7df0", "#f07d96", "#e87df0", "#7d7ff0", "#f0de7d", "#b2f07d", "#f09f7d", "#81c2e3", "#7df0b8"];
   return (
     <>
       {tasks
@@ -437,7 +461,7 @@ const sundayTasks=()=>{
                          zIndex: 2,
                        }}>
             
-                   <div data-label="visual" className="h-full rounded-lg" style={{ backgroundColor: colors[index % colors.length] }}>
+                   <div data-label="visual" className="h-full rounded-lg" style={{ backgroundColor: sunColors[index % sunColors.length] }}>
                    </div>
                    <div data-label="tooltip" className="absolute bg-black p-[5px] text-white text-[0.5rem] flex flex-col rounded-sm
                      z-[10] opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity"
@@ -463,11 +487,13 @@ const sundayTasks=()=>{
   );
 }
 
-
+//PERSONALISED ERROR CODE DEFINED AS:
+  //0 for all correct
+  //1 for wrong
 const renderTaskModal=()=>{
 return (showTaskModal)?  //gotta return where called
-    <div className="absolute w-full h-full bg-gray-800 z-[50] bg-opacity-50 backdrop-blur-sm flex items-center justify-center">
-        <div className='bg-gray-100 h-[70%] w-[40%] max-h-[400px] max-w-[700px] rounded-lg shadow-lg overflow-hidden'>
+    <div className="absolute w-full h-full bg-gray-800  z-[50] bg-opacity-50 backdrop-blur-sm flex items-center justify-center">
+        <div className='bg-gray-100 min-w-[400px] h-[70%] w-[40%] max-h-[400px] max-w-[700px] rounded-lg shadow-lg overflow-hidden'>
             <div className='bg-[url("/modalBG.png")] bg-cover  bg-no-repeat  px-[12px] h-[60px] flex items-center justify-between border-b-gray-500 border-b-[1px]'>
                   <div className='flex'>
                   <div>
@@ -477,16 +503,24 @@ return (showTaskModal)?  //gotta return where called
                   </div>
                   <button onClick={handleTaskModal} className='text-white text-[1.6rem]'><X /></button>
             </div>
-            <div data-label='timetableInputContainer' className=' bg-gray-100 px-[15px] py-[15px] w-full h-[65%] flex flex-col justify-around'>
+            <div data-label='timetableInputContainer' className='bg-gray-100 px-[15px] py-[15px] w-full h-[65%] flex flex-col justify-around'>
                <div>
                  <label>Task name:</label>
-                 <input type="text" onChange={handleNameTemp} className="border-[1px] min-h-[27px] py-[2px] px-[5px] rounded-sm w-full border-gray-400"/>
+                 <input type="text" onChange={handleNameTemp}
+                  className={(errorModal === 1 || errorModal === 2)? 
+                    "border-[1.5px] min-h-[27px] py-[2px] px-[5px] placeholder-red-500 placeholder:text-[0.9rem] rounded-md w-full border-red-500"
+                    :
+                    "border-[1px] min-h-[27px] py-[2px] px-[5px] rounded-md w-full border-gray-400"
+                    }
+                    placeholder={(errorModal === 1 || errorModal === 2)?"task has have a name":"e.g. meditation"}
+                    />
+                   
                </div>
 
                <div className='flex justify-between'>
                 <div  className='flex'>
                  <label>Day:</label>
-                 <select type="text" onChange={handleDayTemp} className="ml-[5px] max-h-[27px] p-[2px] border-[1px] rounded-sm border-gray-400">
+                 <select type="text" onChange={handleDayTemp} className="ml-[5px] max-h-[27px] p-[2px] border-[1px] rounded-md border-gray-400">
                     <option>Monday</option>
                     <option>Tuesday</option>
                     <option>Wednesday</option>
@@ -500,20 +534,31 @@ return (showTaskModal)?  //gotta return where called
                 <div data-label="timeInputcontainer" className="w-fit flex flex-col h-[90px] justify-between">
                   <div className="flex justify-between">
                     <label>Start Time:</label>
-                    <input type="time" onChange={handleStartTemp} className="ml-[5px] border-[1px] rounded-sm border-gray-400"/>
+                    <input type="time" onChange={handleStartTemp} 
+                    className={(errorModal === 0 || errorModal === 2)? 
+                    "ml-[5px] border-[1px] rounded-md border-gray-400"
+                    :
+                    "ml-[5px] border-[1.5px] rounded-md border-red-500"
+                    }/>
                  </div>
                  <div className="flex justify-between">
                     <label>End time:</label>
-                    <input type="time" onChange={handleEndTemp} className="border-[1px] rounded-sm border-gray-400"/>
+                    <input type="time" onChange={handleEndTemp} 
+                    className={(errorModal === 1 || errorModal === 3)? 
+                    "ml-[5px] border-[1.5px] rounded-md border-red-500"
+                    :
+                    "ml-[5px] border-[1px] rounded-md border-gray-400"
+                    }
+                    />
                  </div>
                </div>
 
              </div>
                
             </div>
-            <div className= 'bg-gray-100 flex px-[15px] py-[15px] h-fit text-[1.1rem] space-x-5 justify-center items-center border-[1px] border-gray-300'>
+            <div className= 'bg-gray-100 flex px-[15px] py-[15px] h-fit text-[1.1rem] space-x-5 justify-center items-center border-[1px] border-gray-400'>
                 <button  onClick={handleTaskModal} className=' bg-white w-full px-4 py-2 rounded border-[1px] border-gray-400'>Cancel</button>
-                <button onClick={handleCreateTask} className='bg-accent2 w-full border-[1px] border-accent2 text-accent0 px-4 py-2 rounded '>Create</button>
+                <button onClick={handleCreateTask} className='bg-accent2 w-full border-[1px] border-accent1 text-accent0 px-4 py-2 rounded '>Create</button>
             </div>
 
           </div>
