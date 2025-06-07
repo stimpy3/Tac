@@ -1,6 +1,32 @@
 import React from 'react';
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useRef, useEffect } from "react";
 
+gsap.registerPlugin(ScrollTrigger); // ← This is required
 const Footer=()=>{
+   
+    const logoRef=useRef(null);
+    useEffect(() => {
+      const logo = logoRef.current;
+      gsap.to(logoRef.current, {
+         opacity: 1,
+         rotate:360,
+         duration: 3,
+         ease: "linear",
+         delay:0.5,
+         repeat:-1,
+         scrollTrigger: {
+           trigger: logoRef.current,
+           start: "top 80%",  // when top of text hits 80% viewport height
+           end: "top 40%",
+           toggleActions: "play pause resume pause",
+           markers: true, // optional for debugging
+         }
+       });
+   
+     }, []);
+   
    return(
    <div className="w-full h-[300px] bg-black px-[40px] py-[25px] flex items-center justify-center">
       <section data-label="leftContainer" className="w-[30%] min-w-fit flex flex-col">
@@ -13,12 +39,10 @@ const Footer=()=>{
         </div>
       </section>
       <section data-label="rightContainer" className="w-[70%] flex flex-col justify-center items-center">
-           <div className="text-white text-[3rem] h-[72px] flex justify-center items-center overflow-hidden">
+           <div className="text-white text-[2.5rem] h-[72px] flex justify-center items-center overflow-hidden">
                       <p>Built using</p>
-                      <div className="flex flex-col h-[100%]">
-                           <div className="px-[10px]">React&nbsp;<i class="fa-brands fa-react text-[#00D8FF]"></i></div>
-                           <div className="px-[10px]">tailwind&nbsp;</div> 
-                      </div>                                          
+                      <div className="px-[10px]">React&nbsp;<i ref={logoRef} class="fa-brands fa-react text-[#00D8FF]"></i></div>
+                                                               
            </div>
            <p className="text-[#6b6b6b] text-[1.5rem] w-fit">Made by Sohan Bhadalkar</p>
       </section>
