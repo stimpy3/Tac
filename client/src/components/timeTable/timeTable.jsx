@@ -512,7 +512,7 @@ return (showTaskModal)?  //gotta return where called
                     :
                     "border-[1px] min-h-[27px] py-[2px] px-[5px] rounded-md w-full border-gray-400"
                     }
-                    placeholder={(errorModal === 1 || errorModal === 2)?"task has have a name":"e.g. meditation"}
+                    placeholder={(errorModal === 1 || errorModal === 2)?"task needs to be named":"e.g. meditation"}
                     />
                    
                </div>
