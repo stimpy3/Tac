@@ -5,10 +5,9 @@ import Footer from './footer';
 
 const LandingPage=()=>{
     return(
-        <div className="flex flex-col w-full h-fit">
+        <div className="flex flex-col w-full h-fit overflow-hidden">
             <TopSection/>
             <LandingContent/>
-            <Footer/>
         </div>
     );
 };
