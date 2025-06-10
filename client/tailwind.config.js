@@ -17,6 +17,7 @@ export default {
         accent1: "#8b3cfa",//purpleViolet
         accent2: "#BAB3F9",//ligeter purrpleViolet
         accent3: "#bdb697",//ochre
+        accent4: "#421482",//dark purple
 
       },
       fontFamily: {
