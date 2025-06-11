@@ -51,12 +51,25 @@ But things like
 happen outside of React’s render system.
 
 
-useState → Stores and updates data (state)
-Think of it like memory for your component.
-You use it when:
--You want to store some value (like a number, string, object).
--You want the UI to re-render when that value changes.
+USEEFFECT CLEANUP
+useEffect runs after the component renders. Sometimes, you want to do something when the component unmounts or when the effect needs to be cleaned up.
 
+To handle this, React allows you to return a cleanup function from within useEffect
+Cleanup Flow:
+useEffect runs when the component mounts (or when dependencies change).
+The cleanup function runs when the component unmounts.
+
+SYNTAX-----------------------
+return function cleanup() {
+  // Cleanup logic here
+};
+
+OR
+
+return () => {
+  // Cleanup logic here
+};
+------------------------------
 
 useEffect → Runs code in response to something changing
 Think of it like: “when something happens, do something.”
@@ -67,6 +80,62 @@ You use it when:
 -Changing the page title
 -Listening to scroll or keyboard events
 -Editing the document.body (like disabling scroll)
+-------------------------------------------------------------------------------
+
+useState → Stores and updates data (state)
+Think of it like memory for your component.
+You use it when:
+-You want to store some value (like a number, string, object).
+-You want the UI to re-render when that value changes.
+
+
+React setState Timing – Notes
+setState() is asynchronous. It schedules a re-render; it doesn't update the state immediately.
+
+Wrong: (this sees old state)
+
+js---
+setShowModal(true);
+if (showModal) {
+  console.log("Show modal"); // ❌ Still false
+}
+Correct: (JSX checks after state update)
+
+jsx---
+{showModal && <Modal />} // ✅ Runs after re-render
+For logic after state change:
+
+js---
+useEffect(() => {
+  if (showModal) {
+    // ✅ This runs after state is updated
+    doSomething();
+  }
+}, [showModal]);
+If you want an immediate flag (without causing re-render):
+
+js---
+const modalFlag = useRef(false);
+modalFlag.current = true; // ✅ Immediate
+Summary Table:
+
+Code	Sees New State?	When It Runs
+if (showModal) after setState	❌ No	Before re-render
+{showModal && <Modal />}	✅ Yes	During re-render
+useEffect([showModal])	✅ Yes	After re-render
+ref.current	✅ Yes	Immediately (no render)
+-----------------------------------------------------------------------------
+
+useEffect → Runs code in response to something changing
+Think of it like: “when something happens, do something.”
+You use it when:
+-You want to respond to a change (like a button click, or a modal opening).
+-You need to do something outside of rendering, like:
+-Fetching data
+-Changing the page title
+-Listening to scroll or keyboard events
+-Editing the document.body (like disabling scroll)
+-----------------------------------------------------------------------------
 
 
 useRef → We use useRef in React for two main reasons:
@@ -92,25 +161,6 @@ run only once — when the component first mounts. But we
  want it to re-run every time show changes.
 ---------------------------------------------------------
 
-USEEFFECT CLEANUP
-useEffect runs after the component renders. Sometimes, you want to do something when the component unmounts or when the effect needs to be cleaned up.
-
-To handle this, React allows you to return a cleanup function from within useEffect
-Cleanup Flow:
-useEffect runs when the component mounts (or when dependencies change).
-The cleanup function runs when the component unmounts.
-
-SYNTAX-----------------------
-return function cleanup() {
-  // Cleanup logic here
-};
-
-OR
-
-return () => {
-  // Cleanup logic here
-};
-------------------------------
 --------------------------------------------------------------------------------------------------
 REACT GROUPS
 
