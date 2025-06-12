@@ -119,12 +119,12 @@ const LandingPage=()=>{
                    </div>
                     <p className="heading absolute text-[5rem] leading-none text-white text-center top-[3%] inter 
                     min-[2201px]:text-[9rem] min-[2201px]:top-[6%] max-[2200px]:top-[4%] min-[2000px]:text-[7rem] min-[1400px]:text-[6rem]
-                    max-[450px]:text-[2.5rem] max-[450px]:top-[60px] max-[830px]:text-[3rem] max-[830px]:top-[60px]">Work can be <br></br> engaging and efficient</p>
-                    <div className="h-[55%] relative w-[557px] flex justify-center items-start overflow-hidden px-[10px]
-                    2xl:w-[1244px] max-[450px]:w-[283px] max-[830px]:w-[434px]">
-                    <div className="phone absolute aspect-[1/2] w-[280px]  top-[5%] bg-[url('/phone.svg')] bg-contain bg-no-repeat 
-                    2xl:w-[700px]  max-[450px]:w-[180px] max-[830px]:w-[220px]"></div>
-                    <div className="rightDiv flex items-end absolute w-[200px] aspect-[2/1] bg-gray-200 rounded-lg right-[10px] top-[20%] shadow-lg  border-[1px] border-gray-400
+                    max-[450px]:text-[2.5rem] max-[450px]:top-[100px] max-[830px]:text-[3rem] max-[830px]:top-[60px]">Work can be <br></br> engaging and efficient</p>
+                    <div className="h-[400px] relative w-[557px] flex justify-center items-start  px-[10px]
+                    2xl:w-[1244px] max-[450px]:w-[303px] max-[830px]:w-[464px]">
+                    <div className="phone absolute aspect-[1/2] w-[280px]  bottom-[-55%] bg-[url('/phone.svg')] bg-contain bg-no-repeat 
+                     max-[450px]:w-[240px] max-[450px]:bottom-[-35%] max-[830px]:w-[250px] max-[830px]:bottom-[-35%]"></div>
+                    <div className="rightDiv flex items-end absolute w-[200px] aspect-[2/1] bg-gray-200 rounded-lg right-[10px] top-[25%] shadow-lg  border-[1px] border-gray-400
                     2xl:w-[450px] max-[450px]:w-[120px] max-[830px]:w-[160px]">
                        <div className="bg-[url('/graph.png')] bg-cover bg-no-repeat h-[50%] w-full"> </div>
                        <p className="absolute left-[5px] top-[5px] bg-black rounded-md text-white px-[6px] py-[3px] w-fit flex items-center border-[1px] border-gray-500
