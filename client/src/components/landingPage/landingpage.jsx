@@ -120,7 +120,7 @@ const LandingPage=()=>{
                      onClick={()=>{navigate("/register");}}>Signup</button>
                 </div>
                  <p className="heading absolute text-[5rem] leading-none text-white text-center top-[6%] inter">Work can be <br></br> engaging and efficient</p>
-                 <div className="phone absolute aspect-[1/2] w-[280px] bg-[url('phone.svg')] bg-contain bg-no-repeat bottom-[-45%] left-[50%] translate-x-[-50%]"></div>
+                 <div className="phone absolute aspect-[1/2] w-[280px] bg-[url('/phone.svg')] bg-contain bg-no-repeat bottom-[-45%] left-[50%] translate-x-[-50%]"></div>
                  <div className="flex items-end rightDiv absolute w-[200px] h-[100px] bg-gray-200 rounded-lg left-[58%] bottom-[30%] shadow-lg  border-[1px] border-gray-400">
                     <div className="bg-[url('graph.png')] bg-cover bg-no-repeat h-[50px] w-full"> </div>
                     <p className="absolute left-[5px] top-[5px] bg-black rounded-md text-white px-[6px] py-[3px] w-fit flex items-center border-[1px] border-gray-500">June</p>
@@ -131,7 +131,7 @@ const LandingPage=()=>{
                  </div>
                  <div className="leftDiv absolute w-[200px] h-[100px] bg-gray-200 rounded-lg left-[29%] bottom-[5%] shadow-lg p-[10px] border-[1px] border-gray-400">
                    <section className="w-full h-[40px] flex">
-                       <div className="pfp w-[40px] aspect-square rounded-full bg-gray-500 bg-[url('pfp.png')] bg-cover bg-no-repeat border-[1px] border-gray-400"></div>
+                       <div className="pfp w-[40px] aspect-square rounded-full bg-gray-500 bg-[url('/pfp.png')] bg-cover bg-no-repeat border-[1px] border-gray-400"></div>
                        <p className='flex items-center w-full text-[1.2rem] pl-[10px]'>Hello Liam!</p>
                    </section>
                    <section data-label="bar&labelcontainer" className="h-[calc(100%-40px)] w-full flex flex-col justify-evenly ">
