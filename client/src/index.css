@@ -59,6 +59,25 @@
   font-style: normal;
 }
 
+
+/*---------------CURSIVE-----------------*/
+.seaweed{
+  font-family: "Seaweed Script", cursive;
+  font-weight: 400;
+  font-style: normal;
+}
+.satisfy{
+  font-family: "Satisfy", cursive;
+  font-weight: 400;
+  font-style: normal;
+}
+.cookie{
+  font-family: "Cookie", cursive;
+  font-weight: 400;
+  font-style: normal;
+}
+/*--------------------------------------*/
+
 .inter{
   font-family: "Inter", sans-serif;
   font-optical-sizing: auto;

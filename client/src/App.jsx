@@ -11,7 +11,7 @@ function App() {
     // <LoginPage/>
     <Router>
       <Routes>
-         <Route path="/" element={<LandingPage className="overflow-hidden"/>}/>
+         <Route path="/" element={<LandingPage/>}/>
          <Route path="/login" element={<LoginPage/>}/>
          <Route path="/register" element={<RegisterPage/>}/> 
          <Route path="/home" element={<HomePage/>}/>

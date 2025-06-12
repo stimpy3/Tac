@@ -1,6 +1,6 @@
 import React from 'react';
 import { useRef, useEffect } from "react";
-import { TrendingUp } from 'lucide-react';
+import { TrendingUp,Github } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
@@ -142,8 +142,12 @@ const LandingPage=()=>{
                      </div>
                    </section>
                  </div>
+                 <div className='absolute bottom-[30px] right-[30px] flex items-center'>
+                   <button onClick={() => window.open('https://github.com/stimpy3/Tac', '_blank')} className="w-[50px] aspect-square shadow-lg flex items-center justify-center  bg-white p-[10px] rounded-full hover:bg-black hover:text-white transition-all hover:w-[55px] duration-300">
+                      <Github className='w-full h-full'/>
+                   </button>
+                 </div>
              </section>
-             <section className="redirect h-[100vh] w-full bg-black text-white snap-start"></section>
         </div>
     );
 };

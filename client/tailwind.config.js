@@ -22,6 +22,7 @@ export default {
       },
       fontFamily: {
         ubuntu: ['Ubuntu', 'sans-serif'],
+        
       },
   
     },
