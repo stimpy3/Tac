@@ -88,7 +88,7 @@ You use it when:
 -You want to store some value (like a number, string, object).
 -You want the UI to re-render when that value changes.
 
-
+ 
 React setState Timing – Notes
 setState() is asynchronous. It schedules a re-render; it doesn't update the state immediately.
 
@@ -174,3 +174,38 @@ etc....
 It allows child elements to react to parent states, which is not normally possible with regular CSS unless you write custom selectors.
 
 --------------------------------------------------------------------------------------------------
+
+GSAP WITH REACT
+
+❓ 1. Weren’t we avoiding direct DOM manipulation before? Why are we doing it now?
+Yes, we normally avoid direct DOM manipulation in React because:
+
+🧠 React has its own virtual DOM system
+React keeps a virtual copy of the real DOM
+
+If you change the real DOM directly, React doesn’t know about it
+
+This causes a desync between what React thinks is on screen vs what actually is
+
+📛 This breaks the React data flow
+That’s the word you were looking for, by the way — it ruins React’s state-driven rendering model (or “reactive state model”).
+
+✅ So why are we doing it anyway?
+Because in some special cases (like GSAP animations), you have to use direct DOM manipulation:
+
+GSAP doesn’t work with React’s virtual DOM
+
+It animates real DOM elements frame-by-frame
+
+That’s outside React’s rendering system
+
+💡 Think of it like this:
+
+“GSAP is controlling what the user sees directly — so React has to stay out of the way.”
+
+So we either:
+
+Accept that GSAP is imperative
+
+Or write a React-friendly wrapper using state — but that comes with tradeoffs like performance lag or complexity
+--------------------------------------------------------------------------------------------------------------
