@@ -17,7 +17,7 @@ const LoginVisual = () => {
 
   return (
     <div className="flex w-1/2 h-full bg-gray-900 box-border rounded-lg max-mobXL:w-full max-mobXL:h-full  max-mobXL:max-w-sm max-mobXL:bg-transparent max-mobXL:justify-center max-mobXL:items-center">
-          <div className="logo hidden max-mobXL:flex w-[100px] aspect-square rounded-[20px] bg-black items-center justify-center p-[10px]">
+          <div className="logo hidden max-mobXL:flex w-[100px] aspect-square rounded-[20px] bg-gradient-to-b from-black to-gray-800 items-center justify-center p-[10px]">
              <div className="bg-[url('/logo2white.png')] bg-contain w-[95%] aspect-square"></div>
           </div>
           <div className="hidden  min-[860px]:block w-full h-full">

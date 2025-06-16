@@ -61,17 +61,18 @@ Backend /register is the API endpoint — where the frontend sends registration 
      next after the user submits the form. */
 
   return (
-    <div className="p-[15px]  w-1/2 h-full flex flex-col justify-center items-center bg-inherit text-black max-mobXL:h-full max-mobXL:w-full
+    <div className="p-[20px]  w-1/2 h-full flex flex-col justify-center items-center bg-inherit text-black max-mobXL:h-full max-mobXL:w-full
     bg-white max-mobXL:rounded-t-[50px]">
       <p className="max-mobXL:text-[2rem] max-mobXL:pb-[20px] max-mobXL:mb-0 text-[3rem] md:text-[4rem] mb-4 font-bold inter">Register</p>
-      <form onSubmit={handleSubmit} className="flex flex-col w-full max-w-sm items-center">
+      <div className="w-full max-w-[450px]">
+      <form onSubmit={handleSubmit} className="flex flex-col w-full items-center">
         
         <div className="max-mobL:text-[.9rem] mb-[10px] w-full">
             <label className="lato">enter your first name:</label>
             <input
              type="text"
              placeholder="e.g jack" name="username"
-             className="lato max-mobXL:p-1 max-mobXL:mt-[0px] w-full p-[2px] px-[5px] mt-[2px] rounded border-[2px] border-gray-300 bg-gray-100 text-black outline-none focus:outline-none"
+             className="lato max-mobXL:mt-[0px] py-[5px] text-[1rem] w-full p-[2px] px-[5px] mt-[2px] rounded-lg border-[2px] bg-white border-gray-300 text-black outline-none focus:outline-none"
              onChange={(e)=>{setUsername(e.target.value)}}
              required
              />
@@ -82,7 +83,7 @@ Backend /register is the API endpoint — where the frontend sends registration 
             <input
              type="email"
              placeholder="e.g jack@gmail.com" name="email"
-             className="lato max-mobXL:p-1 max-mobXL:mt-[0px] w-full p-[2px] px-[5px] mt-[2px] rounded border-[2px] border-gray-300 bg-gray-100 text-black outline-none focus:outline-none"
+             className="lato  max-mobXL:mt-[0px] py-[5px] text-[1rem] w-full p-[2px] px-[5px] mt-[2px] rounded-lg border-[2px] bg-white border-gray-300 text-black outline-none focus:outline-none"
              onChange={(e)=>{setEmail(e.target.value)}}
              required
              />
@@ -90,12 +91,12 @@ Backend /register is the API endpoint — where the frontend sends registration 
 
         <div className="max-mobL:text-[.9rem] mb-[10px] w-full ">
               <label className="lato">enter password:</label>
-               <div className= {(paswdFlag)?"flex border-[2px] border-red-500  bg-gray-300  p-[2px] pl-[5px] rounded":"flex border-[2px] border-gray-300 bg-gray-100 p-[2px] pl-[5px] rounded"}>
+               <div className= {(paswdFlag)?"flex border-[2px] border-red-500 bg-white p-[2px] pl-[5px] rounded-lg":"flex border-[2px] bg-white border-gray-300 p-[2px] pl-[5px] rounded-lg"}>
               <input
                type={(showFlag)?"text":"password"}
                name="password"
                placeholder="Password"
-               className="lato w-full bg-gray-100 text-black outline-none focus:outline-none"
+               className="lato w-full bg-white py-[5px] text-[1rem] text-black outline-none focus:outline-none"
                onChange={(e)=>{setPassword(e.target.value)}}
                required
               />
@@ -105,26 +106,27 @@ Backend /register is the API endpoint — where the frontend sends registration 
 
         <div className="max-mobL:text-[.9rem] mb-[20px] w-full ">
               <label className="lato">confirm password:</label>
-               <div className= {(paswdFlag)?"flex border-[2px] border-red-500  bg-gray-300  p-[2px] pl-[5px] rounded":"flex border-[2px] border-gray-300 bg-gray-100 p-[2px] pl-[5px] rounded"}>
+               <div className= {(paswdFlag)?"flex border-[2px] border-red-500  bg-white  p-[2px] pl-[5px] rounded-lg":"flex border-[2px] bg-white border-gray-300 p-[2px] pl-[5px] rounded-lg"}>
               <input
                type={(showFlag)?"text":"password"}
                name="password"
                placeholder="Password"
-               className="lato w-full bg-gray-100 text-black outline-none focus:outline-none"
+               className="lato w-full bg-wihte text-black text-[1rem] py-[5px] outline-none focus:outline-none"
                 onChange={(e)=>{setConfirmPassword(e.target.value)}}
               required
               />
               <button className="w-[30px] text-gray-500"onClick={handleShowPass}>{(showFlag)?<Eye/>:<EyeOff/>}</button>
               </div>
-              {(paswdFlag)?<p className="text-[0.7rem] text-red-500 font-medium">Passwords do not match</p>:<p className="text-[0.7rem] hidden text-red-500 font-medium">Passwords do not match</p>}
+              {(paswdFlag)?<p className="text-[0.9rem] text-red-500 font-medium">Passwords do not match</p>:<p className="text-[0.7rem] hidden text-red-500 font-medium">Passwords do not match</p>}
         </div>    
 
-        <button  type="submit" className="lato w-full py-[5px] text-[1.5rem] bg-accent1 text-white max-mobXL:text-[1.2rem] font-bold transition-colors duration-200 hover:bg-accent0 rounded">
+        <button  type="submit" className="lato w-full py-[7px] text-[1.5rem] rounded-full bg-accent1 text-white max-mobXL:text-[1.2rem] font-bold transition-colors duration-200 hover:bg-accent0">
           Register
         </button>
 
-        <p className="lato mt-[10px] w-full text-center text-gray-500 max-mobL:text-[0.7rem] ">already have an account? <button onClick={handleLogin} className="text-accent1 hover:text-accent1">Login</button></p>
+        <p className="lato mt-[10px] w-full text-center text-gray-500 max-mobL:text-[0.9rem] ">already have an account? <button onClick={handleLogin} className="text-accent1 hover:text-accent1">Login</button></p>
       </form>
+      </div>
     </div>
   );
 };
