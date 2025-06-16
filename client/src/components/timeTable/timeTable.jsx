@@ -125,7 +125,7 @@ const handleCreateTask=()=>{
 }
 
 const mondayTasks = () => {
-  const monColors = ["#81c2e3","#7d7ff0","#ba7df0","#e87df0", "#f07d96","#f09f7d","#f0de7d","#b2f07d","#7df0b8"];
+  const monColors = ["#8B7CB6","#B084C7","#E8A5C4","#F4D1E8","#A8D0F0","#9BB5E6","#D3E4CD","#F6EAC2","#FAD9C1"];
 
   return (
     <>
@@ -150,7 +150,7 @@ const mondayTasks = () => {
                          zIndex: 2,
                        }}>
             
-                   <div data-label="visual" className="h-full rounded-lg" style={{ backgroundColor: monColors[index % monColors.length] }}>
+                   <div data-label="visual" className="h-full rounded-lg  border-[1px] border-white" style={{ backgroundColor: monColors[index % monColors.length] }}>
                    </div>
                    <div data-label="tooltip" className="absolute bg-black p-[5px] text-white text-[0.5rem] flex flex-col rounded-sm
                      z-[10] opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity"
@@ -178,7 +178,7 @@ const mondayTasks = () => {
 
 
 const tuesdayTasks=()=>{
-   const tueColors = ["#f09f7d", "#ba7df0", "#81c2e3", "#7df0b8", "#f0de7d", "#e87df0", "#b2f07d", "#7d7ff0", "#f07d96"];
+   const tueColors =  ["#D3E4CD", "#9BB5E6", "#FAD9C1", "#F6EAC2", "#8B7CB6", "#E8A5C4", "#B084C7", "#A8D0F0", "#F4D1E8"];
 
 
   return (
@@ -204,7 +204,7 @@ const tuesdayTasks=()=>{
                          zIndex: 2,
                        }}>
             
-                   <div data-label="visual" className="h-full rounded-lg" style={{ backgroundColor: tueColors[index % tueColors.length] }}>
+                   <div data-label="visual" className="h-full rounded-lg border-[1px] border-white" style={{ backgroundColor: tueColors[index % tueColors.length] }}>
                    </div>
                    <div data-label="tooltip" className="absolute bg-black p-[5px] text-white text-[0.5rem] flex flex-col rounded-sm
                      z-[10] opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity"
@@ -231,7 +231,7 @@ const tuesdayTasks=()=>{
 }
 
 const wednesdayTasks=()=>{
-  const wedColors = ["#b2f07d", "#7d7ff0", "#f0de7d", "#81c2e3", "#f09f7d", "#ba7df0", "#7df0b8", "#e87df0", "#f07d96"];
+  const wedColors =   ["#FAD9C1", "#B084C7", "#F6EAC2", "#A8D0F0", "#E8A5C4", "#F4D1E8", "#9BB5E6", "#8B7CB6", "#D3E4CD"];
 
   return (
     <>
@@ -256,7 +256,7 @@ const wednesdayTasks=()=>{
                          zIndex: 2,
                        }}>
             
-                   <div data-label="visual" className="h-full rounded-lg" style={{ backgroundColor: wedColors[index % wedColors.length] }}>
+                   <div data-label="visual" className="h-full rounded-lg border-[1px] border-white" style={{ backgroundColor: wedColors[index % wedColors.length] }}>
                    </div>
                    <div data-label="tooltip" className="absolute bg-black p-[5px] text-white text-[0.5rem] flex flex-col rounded-sm
                      z-[10] opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity"
@@ -283,7 +283,7 @@ const wednesdayTasks=()=>{
 }
 
 const thursdayTasks=()=>{
-  const thuColors = ["#e87df0", "#7df0b8", "#ba7df0", "#f07d96", "#81c2e3", "#f0de7d", "#7d7ff0", "#f09f7d", "#b2f07d"];
+  const thuColors =  ["#8B7CB6", "#A8D0F0", "#F4D1E8", "#F6EAC2", "#B084C7", "#D3E4CD", "#E8A5C4", "#9BB5E6", "#FAD9C1"];
   return (
     <>
       {tasks
@@ -307,7 +307,7 @@ const thursdayTasks=()=>{
                          zIndex: 2,
                        }}>
             
-                   <div data-label="visual" className="h-full rounded-lg" style={{ backgroundColor: thuColors[index % thuColors.length] }}>
+                   <div data-label="visual" className="h-full rounded-lg border-[1px] border-white" style={{ backgroundColor: thuColors[index % thuColors.length] }}>
                    </div>
                    <div data-label="tooltip" className="absolute bg-black p-[5px] text-white text-[0.5rem] flex flex-col rounded-sm
                      z-[10] opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity"
@@ -334,7 +334,7 @@ const thursdayTasks=()=>{
 }
 
 const fridayTasks=()=>{
-  const friColors = ["#f07d96", "#b2f07d", "#7df0b8", "#7d7ff0", "#ba7df0", "#f09f7d", "#81c2e3", "#e87df0", "#f0de7d"];
+  const friColors = ["#B084C7", "#FAD9C1", "#F4D1E8", "#9BB5E6", "#E8A5C4", "#F6EAC2", "#A8D0F0", "#D3E4CD", "#8B7CB6"];
 
   return (
     <>
@@ -359,7 +359,7 @@ const fridayTasks=()=>{
                          zIndex: 2,
                        }}>
             
-                   <div data-label="visual" className="h-full rounded-lg" style={{ backgroundColor: friColors[index % friColors.length] }}>
+                   <div data-label="visual" className="h-full rounded-lg border-[1px] border-white" style={{ backgroundColor: friColors[index % friColors.length] }}>
                    </div>
                    <div data-label="tooltip" className="absolute bg-black p-[5px] text-white text-[0.5rem] flex flex-col rounded-sm
                      z-[10] opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity"
@@ -386,7 +386,7 @@ const fridayTasks=()=>{
 }
 
 const saturdayTasks=()=>{
-  const satColors = ["#7d7ff0", "#f0de7d", "#81c2e3", "#e87df0", "#ba7df0", "#f09f7d", "#7df0b8", "#f07d96", "#b2f07d"];
+  const satColors = ["#F4D1E8", "#E8A5C4", "#D3E4CD", "#A8D0F0", "#F6EAC2", "#9BB5E6", "#FAD9C1", "#8B7CB6", "#B084C7"];
   return (
     <>
       {tasks
@@ -410,7 +410,7 @@ const saturdayTasks=()=>{
                          zIndex: 2,
                        }}>
             
-                   <div data-label="visual" className="h-full rounded-lg" style={{ backgroundColor: satColors[index % satColors.length] }}>
+                   <div data-label="visual" className="h-full rounded-lg border-[1px] border-white" style={{ backgroundColor: satColors[index % satColors.length] }}>
                    </div>
                    <div data-label="tooltip" className="absolute bg-black p-[5px] text-white text-[0.5rem] flex flex-col rounded-sm
                      z-[10] opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity"
@@ -437,7 +437,7 @@ const saturdayTasks=()=>{
 }
 
 const sundayTasks=()=>{
- const sunColors = ["#ba7df0", "#f07d96", "#e87df0", "#7d7ff0", "#f0de7d", "#b2f07d", "#f09f7d", "#81c2e3", "#7df0b8"];
+ const sunColors = ["#9BB5E6", "#FAD9C1", "#B084C7", "#D3E4CD", "#F6EAC2", "#A8D0F0", "#8B7CB6", "#E8A5C4", "#F4D1E8"];
   return (
     <>
       {tasks
@@ -461,7 +461,7 @@ const sundayTasks=()=>{
                          zIndex: 2,
                        }}>
             
-                   <div data-label="visual" className="h-full rounded-lg" style={{ backgroundColor: sunColors[index % sunColors.length] }}>
+                   <div data-label="visual" className="h-full rounded-lg border-[1px] border-white" style={{ backgroundColor: sunColors[index % sunColors.length] }}>
                    </div>
                    <div data-label="tooltip" className="absolute bg-black p-[5px] text-white text-[0.5rem] flex flex-col rounded-sm
                      z-[10] opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity"
@@ -606,11 +606,11 @@ return (showTaskModal)?  //gotta return where called
 
               <div data-label='contentContainer' ref={contentRef} className='min-w-[900px] overflow-y-hidden overflow-x-hidden h-full bg-gray-200 flex flex-col relative'>
                 <div data-label="currentLineContainer" className="absolute z-[6] w-fit h-[480px] bottom-0 flex flex-col items-center"   style={{ left: `${leftDistance-6.5}px` }}>
-                   <div data-label="currentLineCircle" className="w-[12px] h-[12px] border-[3px] border-accent1 bg-transparent rounded-full"></div>
-                   <div data-label="currentLine" className="h-full w-[3px] bg-accent1"></div>
+                   <div data-label="currentLineCircle" className="w-[12px] h-[12px] border-[3px] border-accent2 bg-transparent rounded-full"></div>
+                   <div data-label="currentLine" className="h-full w-[3px] bg-accent2"></div>
                 </div>    
                 {lines}
-                <section data-label='timeContainer' className='overflow-y-clip w-[2400px] min-h-[40px] bg-accent3 text-white flex border-black border-b-[1px]'>
+                <section data-label='timeContainer' className='overflow-y-clip w-[2400px] min-h-[40px] bg-accent4 text-white flex border-black border-b-[1px]'>
                     <div className='w-[100px] text-[1rem] flex flex-col items-center justify-center'>12-1<span className='text-[0.6rem]'>AM</span></div>
                     <div className='w-[100px] flex flex-col items-center justify-center'>1-2<span className='text-[0.6rem]'>AM</span></div>
                     <div className='w-[100px] flex flex-col items-center justify-center'>2-3<span className='text-[0.6rem]'>AM</span></div>
