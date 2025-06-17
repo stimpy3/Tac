@@ -120,7 +120,7 @@ Backend /register is the API endpoint — where the frontend sends registration 
               {(paswdFlag)?<p className="text-[0.9rem] text-red-500 font-medium">Passwords do not match</p>:<p className="text-[0.7rem] hidden text-red-500 font-medium">Passwords do not match</p>}
         </div>    
 
-        <button  type="submit" className="lato w-full py-[7px] text-[1.5rem] rounded-full bg-accent1 text-white max-mobXL:text-[1.2rem] font-bold transition-colors duration-200 hover:bg-accent0">
+        <button  type="submit" className="lato w-full py-[5px] text-[1.5rem] rounded-lg bg-accent0 text-white max-mobXL:text-[1.2rem] font-bold transition-colors duration-200 hover:bg-accent0">
           Register
         </button>
 
