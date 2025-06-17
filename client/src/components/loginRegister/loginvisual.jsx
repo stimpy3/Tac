@@ -6,11 +6,10 @@ import gsap from "gsap";
 const LoginVisual = () => {
 
   useGSAP(()=>{
-       const tl = gsap.timeline({ delay: 0.5 });
+       const tl = gsap.timeline();
        tl.from(".logo", {
            y: -300,
            duration: 1.5,
-           delay:0.5,
            ease: "bounce",
        })
   });
@@ -21,7 +20,7 @@ const LoginVisual = () => {
              <div className="bg-[url('/logo2white.png')] bg-contain w-[95%] aspect-square"></div>
           </div>
           <div className="hidden  min-[860px]:block w-full h-full rounded-lg overflow-hidden">
-              <Spline scene="https://prod.spline.design/dR-t4UMgNWpTeBxl/scene.splinecode" />
+               <Spline scene="https://prod.spline.design/dR-t4UMgNWpTeBxl/scene.splinecode" />
           </div>
           <div className="hidden min-[530px]:block min-[860px]:hidden w-full h-full rounded-lg overflow-hidde">
               <Spline

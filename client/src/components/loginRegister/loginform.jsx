@@ -47,7 +47,7 @@ const LoginForm=() => {
   return (
     <div className="bg-white p-[20px] w-1/2 h-full flex flex-col justify-evenly items-center  bg-inherit text-black max-mobXL:h-full max-mobXL:w-full
     max-mobXL:rounded-t-[50px]">
-      <p className="inter max-mobXL:text-[2rem] max-mobXL:mb-0 text-[3rem] md:text-[4rem] mb-4 font-bold ">Login</p>
+      <p className="inter max-mobXL:text-[2rem] max-mobXL:mb-0 text-[3rem] md:text-[4rem] mb-4 font-bold text-center ">Welcome Back</p>
       <div className="w-full max-w-[450px]">
       <form onSubmit={handleLogin} className="flex flex-col justify-center w-full">
         <div className="max-mobL:text-[.9rem] w-full mb-[10px] ">
@@ -76,8 +76,15 @@ const LoginForm=() => {
               </div>
         </div>
 
+        <div className="flex flex-col max-mobL:text-[.9rem] mb-[20px]">
+          <section className="flex w-full h-fit items-center">
+            <div className="h-[2px] w-full bg-gray-300"></div><p className="text-gray-400 text-[0.9rem]">&nbsp;&nbsp;OR&nbsp;&nbsp;</p><div className="h-[2px] w-full bg-gray-300"></div>
+          </section>
+          <button className="border-[2px] border-gray-300 p-[5px] mt-[20px] rounded-lg flex items-center justify-center text-[1.1rem]"><div className="bg-[url('/googleLogo.svg')] bg-contain bg-no-repeat h-[22px] aspect-square"></div>&nbsp;&nbsp;&nbsp;Continue with Google</button>
+        </div>
 
-        <button type="submit" className="rounded-lg lato w-full py-[5px] text-[1.5rem] bg-accent0 text-white max-mobXL:text-[1.2rem] font-bold transition-colors duration-200 hover:bg-accent0">
+
+        <button type="submit" className="rounded-lg lato w-full py-[5px] text-[1.2rem] bg-gradient-to-r from-accent0 via-accent1 to-accent0 text-white max-mobXL:text-[1.2rem] font-bold transition-colors duration-200">
           Login
         </button>
 
