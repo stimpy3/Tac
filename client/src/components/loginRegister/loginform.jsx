@@ -77,7 +77,7 @@ const LoginForm=() => {
         </div>
 
 
-        <button type="submit" className="rounded-full lato w-full py-[7px] text-[1.5rem] bg-accent1 text-white max-mobXL:text-[1.2rem] font-bold transition-colors duration-200 hover:bg-accent0">
+        <button type="submit" className="rounded-lg lato w-full py-[5px] text-[1.5rem] bg-accent0 text-white max-mobXL:text-[1.2rem] font-bold transition-colors duration-200 hover:bg-accent0">
           Login
         </button>
 

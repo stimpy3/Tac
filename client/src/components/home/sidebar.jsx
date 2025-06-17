@@ -1,8 +1,8 @@
-import React from 'react';
+import React,{useState} from 'react';
 import { CalendarClock } from 'lucide-react';
 import { useNavigate, useLocation } from "react-router-dom";
 
-const Sidebar = () => {
+const Sidebar = ({ modal, setModal }) => {
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -44,8 +44,10 @@ const Sidebar = () => {
          
         </section>
         <section className="text-white text-[1.2rem] w-full justify-center my-[15px] flex flex-col items-center">
+          <button  onClick={() => setModal(true)}>
           <i className="fa-solid fa-right-from-bracket"></i>
           <p className="text-[0.6rem]">logout</p>
+          </button>
         </section>
       </div>
     </section>
