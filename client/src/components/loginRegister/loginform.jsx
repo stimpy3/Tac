@@ -180,8 +180,9 @@ const loginWithGoogle = useGoogleLogin({
 
         <p className="lato w-full mt-[10px]  text-center text-gray-500 max-mobL:text-[0.9rem] ">don't have an account? <button onClick={handleRegister} className="text-accent1 hover:text-accent1">Register</button></p>
       </form>
-      </div>
       <div className="hidden"></div>
+      </div>
+      
     </div>
   );
 };
