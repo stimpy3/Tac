@@ -24,15 +24,15 @@ const HomePage=() =>{
    return(
     <div className="realtive flex flex-col">
       {modal?
-         <section className='absolute z-[10] w-full h-full bg-transparent backdrop-blur-sm flex justify-center items-center'>
+         <section className='fixed z-[10] w-full h-full bg-transparent backdrop-blur-sm flex justify-center items-center'>
             <button onClick={()=>setModal(false)}className='relative w-full h-full bg-black opacity-50 '></button>
             <div className='absolute z-[15] opacity-[100%] w-[250px] h-[150px] bg-gray-200 flex flex-col justify-between rounded-xl'>
                <section className='flex items-center h-full w-fulls'>
                    <p className='text-black text-[1.2rem] text-center'>Are you sure you want to logout?</p>
                </section>
                <section className='w-full p-[10px] flex space-x-[10px] border-t-[1px] border-gray-500'>
-                  <button onClick={handleLogout} className='p-[5px] bg-accent1 text-white w-full rounded-lg'>Yes</button>
-                  <button onClick={()=>setModal(false)} className='p-[5px] bg-gray-600 text-white w-full rounded-lg'>No</button>
+                  <button onClick={handleLogout} className='p-[5px] bg-gradient-to-r from-accent0 via-accent1 to-accent0 text-white w-full rounded-lg'>Yes</button>
+                  <button onClick={()=>setModal(false)} className='p-[5px] bg-black text-white w-full rounded-lg'>No</button>
                </section>
             </div>
          </section>

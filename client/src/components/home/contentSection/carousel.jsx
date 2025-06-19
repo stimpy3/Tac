@@ -28,7 +28,7 @@ or DOM elements being out of sync with the state
 
 import React,{useState,useRef,useEffect} from 'react' //go inside one pair of curly braces, separated by commas
 import EmptyPlaceholder from './emptyPlaceholder';
-
+import gsap from "gsap";
 
 const Carousel=()=>{
   const [showVision,setShowVision]=useState(false);
@@ -147,9 +147,9 @@ const Carousel=()=>{
     if(showVision){
       return (
   
-        <div className='fixed inset-0 bg-gray-800 bg-opacity-50 backdrop-blur-sm flex justify-center items-center z-50'>
-           <div className='bg-gray-100 bg-opacity-85 h-[70%] w-[40%] max-h-[400px] max-w-[700px] rounded-lg shadow-lg overflow-hidden'>
-            <div className='bg-gradient-to-r  from-blue-400 to-purple-400 bg-opacity-100  px-[12px] h-[60px] flex items-center justify-between border-b-gray-500 border-b-[1px]'>
+        <div className='fixed z-[10] inset-0 bg-gray-800 bg-opacity-50 backdrop-blur-sm flex justify-center items-center'>
+           <div className='bg-gray-100 h-[70%] w-[40%] max-h-[400px] max-w-[700px] rounded-lg shadow-lg overflow-hidden'>
+            <div className='bg-[url("/modalBG.png")] bg-cover  bg-no-repeat  px-[12px] h-[60px] flex items-center justify-between border-b-gray-500 border-b-[1px]'>
                   <div className='flex'>
                   <div>
                   <p className='text-[1.2rem] text-white font-bold'>Add a Vision</p>
@@ -162,12 +162,12 @@ const Carousel=()=>{
                <input type="file" accept="image/*" onChange={handleUpload} />
               <div className='flex flex-col'>
                  <label>vision details:</label>
-                 <textarea className='border-[1px] px-[5px ]bg-white bg-opacity-50 border-gray-500 rounded' onChange={handleVisionDetails}></textarea> 
+                 <textarea className='border-[1px] px-[5px ]bg-white border-gray-500 rounded' onChange={handleVisionDetails}></textarea> 
               </div>
             </div>
-            <div className= 'flex px-[12px] h-[15%] text-[1.1rem] space-x-5 justify-center items-center '>
-                <button onClick={addVision} className='bg-gradient-to-r  from-blue-400 to-purple-400 w-full text-white px-4 py-2 rounded'>Create</button>
-                <button onClick={closeVisionPopup} className='bg-white bg-opacity-50 w-full text-gray-800 px-4 py-2 rounded border-[1px] border-gray-600'>Cancel</button>
+            <div className= 'flex px-[12px] h-[15%] text-[1.1rem] space-x-[10px] justify-center items-center border-t-[1px] border-gray-500'>
+                <button onClick={addVision} className='bg-gradient-to-r from-accent0 via-accent1 to-accent0 w-full text-white px-4 py-2 rounded'>Create</button>
+                <button onClick={closeVisionPopup} className='bg-black w-full text-white px-4 py-2 rounded border-[1px] border-gray-600'>Cancel</button>
             </div>
 
           </div>
@@ -180,14 +180,58 @@ const Carousel=()=>{
     }
   };
 
+  /*animate svg*/
+  const strokeBoxRef=useRef(null);
+  let path="M 0 40 Q 50 40, 100 40";
+  let finalPath="M 0 40 Q 50 80, 100 40";
 
+  useEffect(()=>{
+  strokeBoxRef.current.addEventListener("mousemove", (e) => {
+  const rect = strokeBoxRef.current.getBoundingClientRect();
+    const x = e.clientX - rect.left; // relative X inside strokeBoxRef.current
+    const y = e.clientY - rect.top; // 0 → 80
+    const vx =  (x/ rect.width) * 100    //if viewBox width is set to scale of 0 to 100
+     const vy = (y / rect.height) * 80; // if viewBox height is set to scale of 0 to 80
+  console.log(x,y);
+  path=`M 0 40 Q ${vx} ${vy}, 100 40`;
+  gsap.to(".pathName",{
+    attr:{d:path}
+   });
+  });
 
-
+  strokeBoxRef.current.addEventListener("mouseleave", (dets) => {
+  gsap.to(".pathName",{
+     attr: { d: "M 0 40 Q 50 40, 100 40" },
+      duration: 1,
+      ease: "elastic.out(4, 0.2)", //3 is amplitude , 0.2 smalle the value tighter and more bounces more elastic
+   });
+  });
+  },[]);
+  //[] means it runs once, so it is good for setting up event listeners
+  //why we needed useEffect, and why we didnt set up event listeners without useEffect
+  /*strokeBoxRef.current === null;
+    You're trying to attach an event listener to null. that's why it fails silently or crashes.
+    Why useEffect fixes this
+    React renders your component first, and after rendering, it calls useEffect.
+    At that point, strokeBoxRef.current is defined
+*/
   return(
-    <div className="flex flex-col h-[40%] w-full p-0">{/* heading(buttons and headin)+items */}
+    <div className="flex flex-col h-[40%] my-[10px] w-full p-0">{/* heading(buttons and headin)+items */}
       <div className='flex items-center w-full h-fit justify-between'>
-         <div className='flex mr-[10px] h-[30px]'><p className='flex items-center text-[1.5rem] w-fit h-full whitespace-nowrap'>Vision Board</p><button onClick={openVisionPopup} className='flex items-center justify-cente ml-[5px]  h-full text-[1.5rem] text-accent1 hover:text-[2rem] hover:rotate-90 transition-all duration-300'>+</button></div>
-         <div className="h-[2px] w-full bg-gray-400"></div> {/* partition line */}
+         <div className='flex mr-[10px] h-[80px]'><p className='flex items-center text-[1.5rem] w-fit h-full whitespace-nowrap'>Vision Board</p><button onClick={openVisionPopup} className='flex items-center justify-cente ml-[5px]  h-full text-[1.5rem] text-accent1 hover:text-[2rem] hover:rotate-90 transition-all duration-300'>+</button></div>
+           <svg  ref={strokeBoxRef} className=" w-full h-[80px]" viewBox="0 0 100 80" preserveAspectRatio="none">
+             {/*viewBox="0 0 100 80" viewBox="minX minY width height"
+              (minX, minY) → top-left corner of the viewBox 
+              (0,0)=minx miny
+              ●────────────► x (increasing right)
+              │
+              │
+              ▼ y (increasing down)
+              
+               preserveAspectRatio="none" to stretch and shape any way you like, really important to shape it
+              */}
+              <path d="M 0 40 Q 50 40, 100 40" className="pathName stroke-gray-500" fill="transparent" />
+           </svg>
          <div className='ml-[10px] min-w-[60px]'> {/* left right button container */}
          <button onClick={scrollLeft} className='border-[1px] border-gray-500 shadow-lg w-[25px] rounded-full bg-gray-300 mr-[5px] hover:bg-accent1 hover:border-none hover:text-white transition-colors duration-400'>&lt;</button>
          <button onClick={scrollRight} className='border-[1px] border-gray-500 shadow-lg w-[25px] rounded-full bg-gray-300 hover:bg-accent1 hover:border-none hover:text-white transition-colors duration-400'>&gt;</button>
@@ -198,7 +242,7 @@ const Carousel=()=>{
        {/*SCROLLBAR HIDE:- WE USED scroll-hide but this isnt inbuilt we defined this in our css*/}
        <div ref={carouselRef} data-label='carouselContainer' className='overflow-x-auto scrollbar-hide flex items-center w-full h-[calc(100vh-280px)] pb-[20px]'>
            {visions.length === 0 ? (
-             <div className="text-gray-500 pt-[0px] p-[10px] flex items-start justify-center w-full">
+             <div className="text-gray-500 h-[calc(100vh-300px)] border-[3px] border-gray-300 border-dashed rounded-xl pt-[0px] p-[10px] flex items-center justify-center w-full">
               <EmptyPlaceholder />
               </div> ) 
               : ( visions.map((vision) => (
@@ -216,7 +260,7 @@ const Carousel=()=>{
                            ))
            )}
       </div>
-       <div className="h-[2px] w-full bg-gray-400"></div> {/* partition line */}  
+       
     </div>
   );
 };
