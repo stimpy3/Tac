@@ -89,7 +89,7 @@ const TopBar=() =>{
                        <p className="mr-[5px] text-[0.9rem] mb-[2px]">{(username.length>15)?username.slice(0,10)+"...":username}</p>
                        <p className="text-gray-500 text-[0.6rem]">{useremail}</p>
                      </section> 
-                    <button><i class="fa-solid fa-angle-down"></i></button>
+                    <button><i className="fa-solid fa-angle-down"></i></button>
                 </section>
             </div>
         </div>
