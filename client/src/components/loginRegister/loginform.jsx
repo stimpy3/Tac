@@ -99,7 +99,7 @@ const loginWithGoogle = useGoogleLogin({
           "picture": "https://lh3.googleusercontent.com/a/...",
           "email": "sohanbhadalkar@gmail.com",
           "email_verified": true,
-          "locale": "en"
+          "locale": "en" 
         } 
           
       ✅ Only storing public info not entire res.data, as it might contain access tokens etc
@@ -181,11 +181,9 @@ const loginWithGoogle = useGoogleLogin({
         <p className="lato w-full mt-[10px]  text-center text-gray-500 max-mobL:text-[0.9rem] ">don't have an account? <button onClick={handleRegister} className="text-accent1 hover:text-accent1">Register</button></p>
       </form>
       </div>
+      <div className="hidden"></div>
     </div>
   );
 };
 
 export default LoginForm;
-
-
-//temporary comment
