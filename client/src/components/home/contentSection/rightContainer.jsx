@@ -185,16 +185,15 @@ const RightSide=()=>{
  
 
 return(
-<div data-label='rightSide' className="flex flex-col w-[25%] h-fit min-w-[250px] items-center">
-
-      {/*Progress Bar*/}
-      <div data-label='progressOuterDiv' className='w-full h-[110px] px-[15px] py-[0px] flex rounded-lg'>
+<div data-label='rightSide' className="flex flex-col max-w-[270px] h-fit min-w-[250px] items-center">
+     {/*Progress Bar*/}
+      <div data-label='progressOuterDiv' className='w-full h-[110px] pl-[15px] py-[0px] flex rounded-lg'>
         <div className='flex flex-col w-full h-full rounded-lg bg-white shadow-lg border-[1px] border-gray-400 p-[10px]'>
         <p className='text-accent1 mb-[5px] text-[0.9rem]'>Your Progress</p>
         <div>
           <p className='text-[1.2rem] mb-[5px]'>55% Completed</p>
           <div className='w-full h-[20px] rounded-full bg-gray-100 overflow-hidden border-[1px] border-gray-400'>
-            <div className='w-[60%] h-full bg-gradient-to-r from-blue-300 to-bluePurple rounded-full'></div>
+            <div className='w-[60%] h-full bg-gradient-to-r from-accent1 to-accent2 rounded-full'></div>
           </div>
         </div>
        </div>
@@ -203,10 +202,10 @@ return(
      {/* Calendar Component - separated from original code */}
      <Calendar />
 
-      <div data-label='deadlineContainer' className='w-full h-fit p-[15px]'>
+      <div data-label='deadlineContainer' className='w-full h-fit p-[15px] pr-[0px]'>
         {renderPopup()}
         <div data-label='innerDeadlineContainer' className='w-full min-h-[50px] h-fit rounded-lg bg-white shadow-lg border-[1px] border-b-[0px] border-gray-400 overflow-hidden'>
-           <section data-label='headingSection' className='w-full h-[50px] bg-gray-800 text-white flex items-center justify-between px-[10px]'>
+           <section data-label='headingSection' className='w-full h-[50px] bg-black text-white flex items-center justify-between px-[10px]'>
             <p>Upcoming Events</p><button onClick={openPopup} className='text-[1.5rem]'>+</button>
            </section>
            <section data-label='eventsSection' className='flex flex-col h-fit max-h-[150px] overflow-x-hidden overflow-y-auto'>
