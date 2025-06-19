@@ -14,6 +14,13 @@ const HomePage=() =>{
       };
    },[modal]);
 
+   const handleLogout=()=>{
+      localStorage.removeItem("user");
+      localStorage.removeItem("username"); // if you use this elsewhere
+      localStorage.removeItem("useremail");
+      navigate("/");
+   };
+
    return(
     <div className="realtive flex flex-col">
       {modal?
@@ -24,7 +31,7 @@ const HomePage=() =>{
                    <p className='text-black text-[1.2rem] text-center'>Are you sure you want to logout?</p>
                </section>
                <section className='w-full p-[10px] flex space-x-[10px] border-t-[1px] border-gray-500'>
-                  <button onClick={()=>navigate("/")} className='p-[5px] bg-accent1 text-white w-full rounded-lg'>Yes</button>
+                  <button onClick={handleLogout} className='p-[5px] bg-accent1 text-white w-full rounded-lg'>Yes</button>
                   <button onClick={()=>setModal(false)} className='p-[5px] bg-gray-600 text-white w-full rounded-lg'>No</button>
                </section>
             </div>

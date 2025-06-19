@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { EyeOff, Eye } from 'lucide-react';
+import { EyeOff, Eye } from "lucide-react";
 import axios from "axios";
+import { useGoogleLogin } from "@react-oauth/google"; //oauth
 
 const RegisterForm = () => {
   const navigate = useNavigate();
@@ -25,15 +26,60 @@ const RegisterForm = () => {
 
     if (password === "" || email === "" || username === "") return;
 
-    axios.post('http://localhost:3001/register', { username, email, password })
+    axios
+      .post("http://localhost:3001/register", { username, email, password })
       .then((result) => {
         localStorage.setItem("username", result.data.username);
+        localStorage.setItem("useremail", result.data.username);
         navigate("/home");
       })
       .catch((err) => {
         console.log(err);
       });
   };
+
+  //ACCESS TOKEN 
+  /*
+    🔐 What is an Access Token?
+    -An access token is a short-lived credential issued by an authentication server (like Google)
+     that authorizes a user to access protected resources (APIs, user data, etc.). It typically:
+    -Has an expiry (like 1 hour)
+
+Is a bearer token — whoever holds it, can use it
+   ⚠️ If It Falls in the Wrong Hands:
+    -An attacker who gets your token can:
+    -Impersonate you on APIs (like Google Drive, Gmail, YouTube)
+    -Steal private user data
+    -Cause data loss or corruption if write access is allowed
+    -Bypass login if your app accepts the token without check
+   */
+
+  // Google register
+  //oauth
+  const loginWithGoogle = useGoogleLogin({
+    onSuccess: async (tokenResponse) => {
+      try {
+        const res = await axios.get(
+          "https://www.googleapis.com/oauth2/v3/userinfo",
+          {
+            headers: {
+              Authorization: `Bearer ${tokenResponse.access_token}`,
+            },
+          }
+        );
+
+        const { name, email, picture } = res.data;
+
+        localStorage.setItem("user", JSON.stringify({ name, email, picture }));
+        navigate("/home");
+      } catch (err) {
+        console.error("Failed to fetch Google user:", err);
+      }
+    },
+    onError: () => {
+      alert("Google register failed");
+    },
+  });
 
   return (
     <div className="p-[20px] w-1/2 h-full flex flex-col justify-center items-center bg-inherit text-black max-mobXL:h-full max-mobXL:w-full bg-white max-mobXL:rounded-t-[50px]">
@@ -82,11 +128,20 @@ const RegisterForm = () => {
           </div>
 
           <div className="flex flex-col max-mobL:text-[.9rem] mb-[20px] w-full">
-          <section className="flex w-full h-fit items-center">
-            <div className="h-[2px] w-full bg-gray-300"></div><p className="text-gray-400 text-[0.9rem]">&nbsp;&nbsp;OR&nbsp;&nbsp;</p><div className="h-[2px] w-full bg-gray-300"></div>
-          </section>
-          <button className="border-[2px] border-gray-300 p-[5px] mt-[20px] rounded-lg flex items-center justify-center text-[1.1rem]"><div className="bg-[url('/googleLogo.svg')] bg-contain bg-no-repeat h-[22px] aspect-square"></div>&nbsp;&nbsp;&nbsp;Continue with Google</button>
-        </div>
+            <section className="flex w-full h-fit items-center">
+              <div className="h-[2px] w-full bg-gray-300"></div>
+              <p className="text-gray-400 text-[0.9rem]">&nbsp;&nbsp;OR&nbsp;&nbsp;</p>
+              <div className="h-[2px] w-full bg-gray-300"></div>
+            </section>
+            <button
+              type="button"
+              onClick={loginWithGoogle}
+              className="border-[2px] border-gray-300 p-[5px] mt-[20px] rounded-lg flex items-center justify-center text-[1.1rem]"
+            >
+              <div className="bg-[url('/googleLogo.svg')] bg-contain bg-no-repeat h-[22px] aspect-square"></div>
+              &nbsp;&nbsp;&nbsp;Continue with Google
+            </button>
+          </div>
 
           <button
             type="submit"

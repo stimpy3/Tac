@@ -2,8 +2,12 @@ import React,{useState} from "react";
 import { useNavigate } from "react-router-dom";
 import { Eye,EyeOff } from 'lucide-react';
 import axios from "axios";
+import { useGoogleLogin } from "@react-oauth/google"; //oauth
+import { jwtDecode } from "jwt-decode"; //to extract user info like emil pfp etc, GOTTA DO THIS IN LOGIN /REGISTER PAGE
+//NOT IN HOMEPAGE -REASON(EXPLORE LATER)
 
 const LoginForm=() => {
+  //npm install @react-oauth/google needed to be done in client folder
    const [email,setEmail]=useState("");
    const [password,setPassword]=useState("");
 
@@ -42,6 +46,87 @@ const LoginForm=() => {
         e.preventDefault();
         setShowFlag(!showFlag);
       };
+/*WHEN NOT TO USE LOCAL STORAGE
+Access Token	Can be used to access a user's private Google data
+Refresh Token	Can get new access tokens, long-lived, very sensitive
+Passwords	Obvious risk — never store these client-side
+API Keys (unprotected)	If they access backend services or databases
+*/
+
+
+  //ACCESS TOKEN 
+  /*
+    🔐 What is an Access Token?
+    -An access token is a short-lived credential issued by an authentication server (like Google)
+     that authorizes a user to access protected resources (APIs, user data, etc.). It typically:
+    -Has an expiry (like 1 hour)
+
+Is a bearer token — whoever holds it, can use it
+   ⚠️ If It Falls in the Wrong Hands:
+    -An attacker who gets your token can:
+    -Impersonate you on APIs (like Google Drive, Gmail, YouTube)
+    -Steal private user data
+    -Cause data loss or corruption if write access is allowed
+    -Bypass login if your app accepts the token without check
+   */
+
+
+//google login and accessing info and storing it
+const loginWithGoogle = useGoogleLogin({
+  onSuccess: async (tokenResponse) => {
+    //async makes the function capable of using await.
+    //await pauses the code until the Google API sends back user data.
+    //So Google gives your app a tokenResponse object when login succeeds.
+    try {
+      // Use the access token to fetch profile info
+      const res = await axios.get( //This makes a GET request to Google’s User Info API and waits for response
+       //axios.get(url, config) syntax...url: The endpoint config:(Optional) An object for headers, params, etc.
+        'https://www.googleapis.com/oauth2/v3/userinfo', //This is the URL Google provides to get user profile info using the token.
+        {
+          headers: {
+            Authorization: `Bearer ${tokenResponse.access_token}`,
+            //Google requires a Bearer token in the request header to prove you’re authorized.
+          },
+        }
+      );
+
+       /* Sample res.data will look like: 
+        {
+          "sub": "1058...",
+          "name": "Sohan Bhadalkar",
+          "given_name": "Sohan",
+          "family_name": "Bhadalkar",
+          "picture": "https://lh3.googleusercontent.com/a/...",
+          "email": "sohanbhadalkar@gmail.com",
+          "email_verified": true,
+          "locale": "en"
+        } 
+          
+      ✅ Only storing public info not entire res.data, as it might contain access tokens etc
+      need to pevent XXS attacks
+        */
+      const { name, email, picture }=res.data;
+
+      // ✅ Clean old auth info first
+      localStorage.removeItem("user");
+      localStorage.removeItem("username"); // if you use this elsewhere
+      localStorage.removeItem("useremail");
+
+      // Store or use user info
+      //JSON.stringify(...) is needed because localStorage only stores strings
+      localStorage.setItem("user", JSON.stringify({ name, email, picture }));
+      
+      navigate("/home");
+    } catch (error) {
+      console.error("Failed to fetch user info:", error);
+      alert("Google login succeeded but fetching user data failed");
+    }
+  },
+  onError: () => {
+    alert("Google login failed");
+  },
+});
+
     
 
   return (
@@ -80,7 +165,12 @@ const LoginForm=() => {
           <section className="flex w-full h-fit items-center">
             <div className="h-[2px] w-full bg-gray-300"></div><p className="text-gray-400 text-[0.9rem]">&nbsp;&nbsp;OR&nbsp;&nbsp;</p><div className="h-[2px] w-full bg-gray-300"></div>
           </section>
-          <button className="border-[2px] border-gray-300 p-[5px] mt-[20px] rounded-lg flex items-center justify-center text-[1.1rem]"><div className="bg-[url('/googleLogo.svg')] bg-contain bg-no-repeat h-[22px] aspect-square"></div>&nbsp;&nbsp;&nbsp;Continue with Google</button>
+          <div className="mt-[20px] w-full">
+             <button type="button" onClick={loginWithGoogle} className="w-full border-[2px] border-gray-300 p-[5px] rounded-lg flex items-center justify-center text-[1.1rem]">
+                <div className="bg-[url('/googleLogo.svg')] bg-contain bg-no-repeat h-[22px] aspect-square"></div>
+                 &nbsp;&nbsp;&nbsp;Continue with Google
+             </button>
+          </div>
         </div>
 
 
