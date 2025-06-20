@@ -5,6 +5,7 @@ const RightSide=()=>{
   const [events,setEvents]=useState([]);
   const [show,setShow]=useState(false);
   const [selectedCategory, setSelectedCategory] = useState("academic");
+  const [time,setTime]=useState("");
   const categoryRef= useRef(null);
   const nameRef=useRef(null);
   const dateRef=useRef(null);
@@ -182,27 +183,133 @@ const RightSide=()=>{
     setEvents(events.filter((_,index)=>{return index!=indexDelete;}));
   };
 
+  const [sunmoon,setSunmoon]=useState("");
+  const [sky,setSky]=useState("");
+
+useEffect(()=>{
+  const now =new Date();
+    
+    let hours24 = (now.getHours()).toString(); // 0-23
+    let hours12 = (hours24 % 12 || 12).toString();// 0-12 clock
+    let min = now.getMinutes();
+    let ampm=(now.getHours()<12)?"AM":"PM";
+    let formattedMin=((min<10)?min.toString().padStart(2,"0"):min.toString());
+    setTime(hours12+":"+formattedMin+" "+ampm);
+
+    if(now.getHours()>=0 && now.getHours()<4){ //night 12am-4am
+      setSky("bg-[radial-gradient(circle_at_50%_100%,#3d3d3d,black)]");
+      setSunmoon("bg-[url('/moon.png')]");
+    }
+    else if(now.getHours()>=4 && now.getHours()<6){ //early early morn 4am-6am
+      setSky("bg-[radial-gradient(circle_at_50%_100%,#2e2a4f,#463366)]");
+      setSunmoon("bg-[url('/moon.png')]");
+    }
+    else if(now.getHours()>=6 && now.getHours()<9){ //early morn 6am-9am
+      setSky("bg-[radial-gradient(circle_at_50%_100%,#b663bf,#3c72c9)]");
+      setSunmoon("bg-[url('/moon.png')]");
+    }
+    else if(now.getHours()>=9 && now.getHours()<12){//morn  9am-12pm
+      setSky("bg-[radial-gradient(circle_at_50%_100%,#d4d6bc,#749acf)]");
+      setSunmoon("bg-[#fffee2]");
+    }
+    else if(now.getHours()>=12 && now.getHours()<15){ //afternoon 12pm-3pm
+      setSky("bg-[radial-gradient(circle_at_50%_100%,#d4d6bc,#adc6ed)]");
+      setSunmoon("bg-[#fffee2]");
+    }
+    else if(now.getHours()>=15 && now.getHours()<17){//after afternoon 3pm-5pm
+      setSky("bg-[radial-gradient(circle_at_50%_100%,#d4d6bc,#749acf)]");
+      setSunmoon("bg-[#fffee2]");
+    }
+    else if(now.getHours()>=17 && now.getHours()<19){//eve 5pm-7pm
+      setSky("bg-[radial-gradient(circle_at_50%_100%,#b663bf,#3c72c9)]");
+      setSunmoon("bg-[url('/moon.png')]");
+    }
+    else if(now.getHours()>=19 && now.getHours()<21){//early night 7pm-9pm
+      setSky("bg-[radial-gradient(circle_at_50%_100%,#2e2a4f,#463366)]");
+      setSunmoon("bg-[url('/moon.png')]");
+    }
+    else if(now.getHours()>=21 && now.getHours()<=23){//night 9pm-12am
+      setSky("bg-[radial-gradient(circle_at_50%_100%,#3d3d3d,black)]");
+      setSunmoon("bg-[url('/moon.png')]");
+    }
  
+    
+
+  const interval = setInterval(() => {
+    const now =new Date();
+    let hours24 = (now.getHours()).toString(); // 0-23
+    let hours12 = (hours24 % 12 || 12).toString();// 0-12 clock
+    let min = now.getMinutes();
+    let ampm=(now.getHours()<12)?"AM":"PM";
+    let formattedMin=((min<10)?min.toString().padStart(2,"0"):min.toString());
+    setTime(hours12+":"+formattedMin+" "+ampm);
+    
+    if(now.getHours()>=0 && now.getHours()<4){ //night 12am-4am
+      setSky("bg-[radial-gradient(circle_at_50%_100%,#3d3d3d,black)]");
+      setSunmoon("bg-[url('/moon.png')]");
+    }
+    else if(now.getHours()>=4 && now.getHours()<6){ //early early morn 4am-6am
+      setSky("bg-[radial-gradient(circle_at_50%_100%,#2e2a4f,#463366)]");
+      setSunmoon("bg-[url('/moon.png')]");
+    }
+    else if(now.getHours()>=6 && now.getHours()<9){ //early morn 6am-9am
+      setSky("bg-[radial-gradient(circle_at_50%_100%,#b663bf,#3c72c9)]");
+      setSunmoon("bg-[url('/moon.png')]");
+    }
+    else if(now.getHours()>=9 && now.getHours()<12){//morn  9am-12pm
+      setSky("bg-[radial-gradient(circle_at_50%_100%,#d4d6bc,#749acf)]");
+      setSunmoon("bg-[#fffee2]");
+    }
+    else if(now.getHours()>=12 && now.getHours()<15){ //afternoon 12pm-3pm
+      setSky("bg-[radial-gradient(circle_at_50%_100%,#d4d6bc,#adc6ed)]");
+      setSunmoon("bg-[#fffee2]");
+    }
+    else if(now.getHours()>=15 && now.getHours()<17){//after afternoon 3pm-5pm
+      setSky("bg-[radial-gradient(circle_at_50%_100%,#d4d6bc,#749acf)]");
+      setSunmoon("bg-[#fffee2]");
+    }
+    else if(now.getHours()>=17 && now.getHours()<19){//eve 5pm-7pm
+      setSky("bg-[radial-gradient(circle_at_50%_100%,#b663bf,#3c72c9)]");
+      setSunmoon("bg-[url('/moon.png')]");
+    }
+    else if(now.getHours()>=19 && now.getHours()<21){//early night 7pm-9pm
+      setSky("bg-[radial-gradient(circle_at_50%_100%,#2e2a4f,#463366)]");
+      setSunmoon("bg-[url('/moon.png')]");
+    }
+    else if(now.getHours()>=21 && now.getHours()<=23){//night 9pm-12am
+      setSky("bg-[radial-gradient(circle_at_50%_100%,#3d3d3d,black)]");
+      setSunmoon("bg-[url('/moon.png')]");
+    }
+    
+    }, 30000);
+  
+  return ()=> clearInterval(interval);
+},[]); 
+ /* bg-[radial-gradient(circle_at_50%_100%,#8f4d96,#75c7fa)]  bg-[url("/moon.png")] early morn 4-8
+    bg-[radial-gradient(circle_at_50%_100%,#d4d6bc,#749acf)]  bg-[#fffee2] morning             8-12    
+    bg-[radial-gradient(circle_at_50%_100%,#d4d6bc,#7accff)]  bg-[#fffee2] afternoon           12-16
+    bg-[radial-gradient(circle_at_50%_100%,#8f4d96,#2c6695)]  bg-[url("/moon.png")] eve        16-20
+    bg-[radial-gradient(circle_at_50%_100%,#3d3d3d,black)]    bg-[url("/moon.png")] night      20-4
+  */
 
 return(
-<div data-label='rightSide' className="flex flex-col max-w-[270px] h-fit min-w-[250px] items-center">
+<div data-label='rightSide' className="flex flex-col w-[265px] h-fit min-w-[265px] items-center">
      {/*Progress Bar*/}
-      <div data-label='progressOuterDiv' className='w-full h-[110px] pl-[15px] py-[0px] flex rounded-lg'>
-        <div className='flex flex-col w-full h-full rounded-lg bg-white shadow-lg border-[1px] border-gray-400 p-[10px]'>
-        <p className='text-accent1 mb-[5px] text-[0.9rem]'>Your Progress</p>
-        <div>
-          <p className='text-[1.2rem] mb-[5px]'>55% Completed</p>
-          <div className='w-full h-[20px] rounded-full bg-gray-100 overflow-hidden border-[1px] border-gray-400'>
-            <div className='w-[60%] h-full bg-gradient-to-r from-accent1 to-accent2 rounded-full'></div>
-          </div>
-        </div>
+      <div data-label='progressOuterDiv' className=' min-w-[265px] w-full h-[110px] pl-[15px] py-[0px] flex'>
+        <div className='w-[250px] h-full bg-white shadow-lg border-[1px] border-gray-400 rounded-lg p-[5px]'>
+           <div className={`relative ${sky} text-white w-full h-full rounded-md
+           overflow-hidden`}>
+              <p className='absolute top-[2px] left-[5px] text-[1.2rem] inter'>{time}</p>
+              <div className={`absolute bottom-[-50%] left-[50%] translate-x-[-50%] h-[90px] aspect-square ${sunmoon} bg-cover bg-no-repeat rounded-full shadow-xl
+              centered-shadow`}></div>
+           </div>
        </div>
       </div>
 
      {/* Calendar Component - separated from original code */}
      <Calendar />
 
-      <div data-label='deadlineContainer' className='w-full h-fit p-[15px] pr-[0px]'>
+      <div data-label='deadlineContainer' className=' min-w-[265px] w-full h-fit p-[15px] pr-[0px]'>
         {renderPopup()}
         <div data-label='innerDeadlineContainer' className='w-full min-h-[50px] h-fit rounded-lg bg-white shadow-lg border-[1px] border-b-[0px] border-gray-400 overflow-hidden'>
            <section data-label='headingSection' className='w-full h-[50px] bg-black text-white flex items-center justify-between px-[10px]'>

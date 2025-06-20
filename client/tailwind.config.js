@@ -15,7 +15,7 @@ export default {
       colors: {
         accent0: "#5c29a3",
         accent1: "#8b3cfa",//purpleViolet
-        accent2: "#BAB3F9",//ligeter purrpleViolet
+        accent2: "#af91fa",//ligeter purrpleViolet
         accent3: "#bdb697",//ochre
         accent4: "#421482",//dark purple
 

@@ -28,6 +28,7 @@ or DOM elements being out of sync with the state
 
 import React,{useState,useRef,useEffect} from 'react' //go inside one pair of curly braces, separated by commas
 import EmptyPlaceholder from './emptyPlaceholder';
+import {ChevronRight,ChevronLeft,SquarePen} from 'lucide-react';
 import gsap from "gsap";
 
 const Carousel=()=>{
@@ -192,7 +193,6 @@ const Carousel=()=>{
     const y = e.clientY - rect.top; // 0 → 80
     const vx =  (x/ rect.width) * 100    //if viewBox width is set to scale of 0 to 100
      const vy = (y / rect.height) * 80; // if viewBox height is set to scale of 0 to 80
-  console.log(x,y);
   path=`M 0 40 Q ${vx} ${vy}, 100 40`;
   gsap.to(".pathName",{
     attr:{d:path}
@@ -203,7 +203,7 @@ const Carousel=()=>{
   gsap.to(".pathName",{
      attr: { d: "M 0 40 Q 50 40, 100 40" },
       duration: 1,
-      ease: "elastic.out(4, 0.2)", //3 is amplitude , 0.2 smalle the value tighter and more bounces more elastic
+      ease: "elastic.out(3, 0.2)", //3 is amplitude , 0.2 smalle the value tighter and more bounces more elastic
    });
   });
   },[]);
@@ -215,10 +215,17 @@ const Carousel=()=>{
     React renders your component first, and after rendering, it calls useEffect.
     At that point, strokeBoxRef.current is defined
 */
+
+  const date = new Date();
+  let month = date.getMonth();
+  const monthNames = [
+    "January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December"
+  ];
   return(
-    <div className="flex flex-col h-[40%] my-[10px] w-full p-0">{/* heading(buttons and headin)+items */}
+    <div className="flex flex-col h-[40%] mb-[20px] my-[10px] w-full p-0">{/* heading(buttons and headin)+items */}
       <div className='flex items-center w-full h-fit justify-between'>
-         <div className='flex mr-[10px] h-[80px]'><p className='flex items-center text-[1.5rem] w-fit h-full whitespace-nowrap'>Vision Board</p><button onClick={openVisionPopup} className='flex items-center justify-cente ml-[5px]  h-full text-[1.5rem] text-accent1 hover:text-[2rem] hover:rotate-90 transition-all duration-300'>+</button></div>
+         <div className='flex mr-[10px] h-[80px]'><p className='flex items-center text-[1.5rem] w-fit h-full whitespace-nowrap'>{ monthNames[month]} Activity</p><button onClick={openVisionPopup} className='flex items-center justify-cente ml-[5px]  h-full text-[1.5rem] text-accent1 hover:text-[2rem] hover:rotate-90 transition-all duration-300'>+</button></div>
            <svg  ref={strokeBoxRef} className=" w-full h-[80px]" viewBox="0 0 100 80" preserveAspectRatio="none">
              {/*viewBox="0 0 100 80" viewBox="minX minY width height"
               (minX, minY) → top-left corner of the viewBox 
@@ -230,19 +237,19 @@ const Carousel=()=>{
               
                preserveAspectRatio="none" to stretch and shape any way you like, really important to shape it
               */}
-              <path d="M 0 40 Q 50 40, 100 40" className="pathName stroke-gray-500" fill="transparent" />
+              <path d="M 0 40 Q 50 40, 100 40" className="pathName stroke-gray-400 stroke-[1.5]" fill="transparent" />
            </svg>
-         <div className='ml-[10px] min-w-[60px]'> {/* left right button container */}
-         <button onClick={scrollLeft} className='border-[1px] border-gray-500 shadow-lg w-[25px] rounded-full bg-gray-300 mr-[5px] hover:bg-accent1 hover:border-none hover:text-white transition-colors duration-400'>&lt;</button>
-         <button onClick={scrollRight} className='border-[1px] border-gray-500 shadow-lg w-[25px] rounded-full bg-gray-300 hover:bg-accent1 hover:border-none hover:text-white transition-colors duration-400'>&gt;</button>
+         <div className='ml-[10px] min-w-[80px] h-[80px] flex items-center'> {/* left right button container */}
+         <button onClick={scrollLeft} className='flex items-center justify-center border-[1px] border-gray-500 shadow-lg w-[35px] aspect-square rounded-full bg-gray-300 mr-[5px] hover:bg-accent1 hover:border-none hover:text-white transition-colors duration-400'><ChevronLeft/></button>
+         <button onClick={scrollRight} className='flex items-center justify-center border-[1px] border-gray-500 shadow-lg w-[35px] aspect-square rounded-full bg-gray-300 hover:bg-accent1 hover:border-none hover:text-white transition-colors duration-400'><ChevronRight/></button>
          </div>
        </div>
        
         {renderVisionPopup()}
        {/*SCROLLBAR HIDE:- WE USED scroll-hide but this isnt inbuilt we defined this in our css*/}
-       <div ref={carouselRef} data-label='carouselContainer' className='overflow-x-auto scrollbar-hide flex items-center w-full h-[calc(100vh-280px)] pb-[20px]'>
+       <div ref={carouselRef} data-label='carouselContainer' className='overflow-x-auto scrollbar-hide flex rounded-xl items-center w-full h-[350px] p-[20px] border-[3px] border-gray-300 border-dashed'>
            {visions.length === 0 ? (
-             <div className="text-gray-500 h-[calc(100vh-300px)] border-[3px] border-gray-300 border-dashed rounded-xl pt-[0px] p-[10px] flex items-center justify-center w-full">
+             <div className="text-gray-500 h-full  flex items-center justify-center w-full">
               <EmptyPlaceholder />
               </div> ) 
               : ( visions.map((vision) => (
@@ -250,12 +257,18 @@ const Carousel=()=>{
                              //You can't use template literals (`${imageSrc}`) inside Tailwind className strings like that.
                              // Tailwind is a utility-first CSS framework that only 
                              // works with static class names, and won't recognize or compile dynamic values in strings.
-                           <div data-label='vison' key={vision.id} className="flex flex-col card-base bg-white 
-                            min-w-[150px] text-black p-[10px] mr-[20px] h-[210px] rounded"
-                           style={{ backgroundImage: vision.image,
-                                    backgroundSize: "contain",
-                                    backgroundRepeat:"no-repeat",
-                                    backgroundPosition: "center", }}>
+                           <div data-label='vison' key={vision.id} className="relative flex flex-col rounded-xl pt-[30px]  shadow-purple-500/50 shadow-lg bg-[#333333]
+                            h-full aspect-[4/5] text-white p-[10px] mr-[20px] bg-[url('/gradient5.png')] bg-cover bg-no-repeat">  
+                             <button className="absolute bottom-[7px] left-[7px]"><SquarePen /></button>
+                             <div className="absolute bottom-[5px] right-[10px] bebas-neue-regular text-[1.2rem]">day 20/30</div>         
+                             <div className='w-full h-fit flex  flex-col items-center justify-center'>
+                               <p  className='flex items-center justify-center w-full bebas-neue-regular text-[3rem] h-fit text-white leading-none'>Leetcode</p>
+                               <p  className='text-center w-full cookie text-[1rem] h-fit text-white leading-none '>Lorem, . Magnam beatae quibusdam provident rem a nemo corporis!</p>
+                             </div>
+                             <div className='h-full w-full flex flex-col items-center justify-center'>
+                                <p className='text-[5rem] bebas-neue-regular leading-none'>20</p>
+                                <p className='text-[1rem] lobster'>tracked</p>
+                             </div>
                            </div> 
                            ))
            )}
