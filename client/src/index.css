@@ -10,6 +10,13 @@
     user-select:none;
   }
 
+  html,body{
+    height:100%;
+  }
+
+  .centered-shadow{
+    box-shadow: 0 0px 40px 20px #ffffff73;
+  }
  
  .custom-scrollbar::-webkit-scrollbar {
     width: 8px;
@@ -53,7 +60,7 @@
   font-style: normal;
 }
 
-.bebas-neue-regular {
+.bebas-neue-regular{
   font-family: "Bebas Neue", sans-serif;
   font-weight: 400;
   font-style: normal;
@@ -66,6 +73,11 @@
 }
 
 /*---------------CURSIVE-----------------*/
+.lobster{
+  font-family: "Lobster", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
 .seaweed{
   font-family: "Seaweed Script", cursive;
   font-weight: 400;
