@@ -225,7 +225,7 @@ const Carousel=()=>{
   return(
     <div className="flex flex-col h-[40%] mb-[20px] my-[10px] w-full p-0">{/* heading(buttons and headin)+items */}
       <div className='flex items-center w-full h-fit justify-between'>
-         <div className='flex mr-[10px] h-[80px]'><p className='flex items-center text-[1.5rem] w-fit h-full whitespace-nowrap'>{ monthNames[month]} Activity</p><button onClick={openVisionPopup} className='flex items-center justify-cente ml-[5px]  h-full text-[1.5rem] text-accent1 hover:text-[2rem] hover:rotate-90 transition-all duration-300'>+</button></div>
+         <div className='flex mr-[10px] h-[80px]'><p className='flex items-center text-[1.5rem] text-accentTxt w-fit h-full whitespace-nowrap'>{ monthNames[month]} Activity</p><button onClick={openVisionPopup} className='flex items-center justify-cente ml-[5px]  h-full text-[1.5rem] text-accent1 hover:text-[2rem] hover:rotate-90 transition-all duration-300'>+</button></div>
            <svg  ref={strokeBoxRef} className=" w-full h-[80px]" viewBox="0 0 100 80" preserveAspectRatio="none">
              {/*viewBox="0 0 100 80" viewBox="minX minY width height"
               (minX, minY) → top-left corner of the viewBox 
@@ -237,17 +237,17 @@ const Carousel=()=>{
               
                preserveAspectRatio="none" to stretch and shape any way you like, really important to shape it
               */}
-              <path d="M 0 40 Q 50 40, 100 40" className="pathName stroke-gray-400 stroke-[1.5]" fill="transparent" />
+              <path d="M 0 40 Q 50 40, 100 40" className="pathName stroke-accentBorder2 stroke-[1.5]" fill="transparent" />
            </svg>
          <div className='ml-[10px] min-w-[80px] h-[80px] flex items-center'> {/* left right button container */}
-         <button onClick={scrollLeft} className='flex items-center justify-center border-[1px] border-gray-500 shadow-lg w-[35px] aspect-square rounded-full bg-gray-300 mr-[5px] hover:bg-accent1 hover:border-none hover:text-white transition-colors duration-400'><ChevronLeft/></button>
-         <button onClick={scrollRight} className='flex items-center justify-center border-[1px] border-gray-500 shadow-lg w-[35px] aspect-square rounded-full bg-gray-300 hover:bg-accent1 hover:border-none hover:text-white transition-colors duration-400'><ChevronRight/></button>
+         <button onClick={scrollLeft} className='flex items-center justify-center border-[1px] border-gray-500 shadow-lg w-[35px] aspect-square rounded-full bg-accentS2 text-accentTxt mr-[5px] hover:bg-accent1 hover:border-none hover:text-white transition-colors duration-400'><ChevronLeft/></button>
+         <button onClick={scrollRight} className='flex items-center justify-center border-[1px] border-gray-500 shadow-lg w-[35px] aspect-square rounded-full bg-accentS2 text-accentTxt hover:bg-accent1 hover:border-none hover:text-white transition-colors duration-400'><ChevronRight/></button>
          </div>
        </div>
        
         {renderVisionPopup()}
        {/*SCROLLBAR HIDE:- WE USED scroll-hide but this isnt inbuilt we defined this in our css*/}
-       <div ref={carouselRef} data-label='carouselContainer' className='overflow-x-auto scrollbar-hide flex rounded-xl items-center w-full h-[350px] p-[20px] border-[3px] border-gray-300 border-dashed'>
+       <div ref={carouselRef} data-label='carouselContainer' className='overflow-x-auto scrollbar-hide flex rounded-xl items-center w-full h-[350px] p-[20px] border-[3px] border-accentBorder2 border-dashed'>
            {visions.length === 0 ? (
              <div className="text-gray-500 h-full  flex items-center justify-center w-full">
               <EmptyPlaceholder />

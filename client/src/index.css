@@ -43,7 +43,7 @@
 }
 
   .card-base {
-    @apply rounded-lg border-[1px] bg-white border-gray-400 shadow-lg;
+    @apply rounded-lg border-[1px] border-accentS3 shadow-lg;
   }
 
   .carousel-container::-webkit-scrollbar {
@@ -100,6 +100,24 @@
   font-optical-sizing: auto;
   font-weight: <weight>;
   font-style: normal;
+}
+
+/* Default (light mode) */
+:root {
+  --accentS: #ebebeb;
+  --accentS2: #d6d6d6;
+  --accentS3: #a8a8a8;
+  --accentM: #ffffff;
+  --accentTxt: #000000;
+}
+
+/* Dark mode */
+.dark {
+  --accentS: #262626;
+  --accentS2: #3b3b3b;
+  --accentS3: #969696;
+  --accentM: #000000;
+  --accentTxt: #ffffff;
 }
 
 
