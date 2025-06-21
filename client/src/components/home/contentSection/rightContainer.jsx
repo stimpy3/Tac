@@ -185,6 +185,8 @@ const RightSide=()=>{
 
   const [sunmoon,setSunmoon]=useState("");
   const [sky,setSky]=useState("");
+  const [text,setText]=useState("");
+  const [daystate,setDaystate]=useState("");
 
 useEffect(()=>{
   const now =new Date();
@@ -197,40 +199,59 @@ useEffect(()=>{
     setTime(hours12+":"+formattedMin+" "+ampm);
 
     if(now.getHours()>=0 && now.getHours()<4){ //night 12am-4am
-      setSky("bg-[radial-gradient(circle_at_50%_100%,#3d3d3d,black)]");
+      setSky("bg-[radial-gradient(circle_at_50%_100%,#3d3d3d,black)]"); 
       setSunmoon("bg-[url('/moon.png')]");
+      setText("text-white");
+      setDaystate("Night");
     }
     else if(now.getHours()>=4 && now.getHours()<6){ //early early morn 4am-6am
       setSky("bg-[radial-gradient(circle_at_50%_100%,#2e2a4f,#463366)]");
       setSunmoon("bg-[url('/moon.png')]");
+      setText("text-white");
+      setDaystate("Morning");
     }
     else if(now.getHours()>=6 && now.getHours()<9){ //early morn 6am-9am
       setSky("bg-[radial-gradient(circle_at_50%_100%,#b663bf,#3c72c9)]");
       setSunmoon("bg-[url('/moon.png')]");
+      setText("text-white");
+      setDaystate("Morning");
     }
     else if(now.getHours()>=9 && now.getHours()<12){//morn  9am-12pm
       setSky("bg-[radial-gradient(circle_at_50%_100%,#d4d6bc,#749acf)]");
       setSunmoon("bg-[#fffee2]");
+      setText("text-white");
+      setDaystate("Morning");
     }
     else if(now.getHours()>=12 && now.getHours()<15){ //afternoon 12pm-3pm
       setSky("bg-[radial-gradient(circle_at_50%_100%,#d4d6bc,#adc6ed)]");
       setSunmoon("bg-[#fffee2]");
+      setText("text-black");
+      setDaystate("Afternoon");
     }
     else if(now.getHours()>=15 && now.getHours()<17){//after afternoon 3pm-5pm
       setSky("bg-[radial-gradient(circle_at_50%_100%,#d4d6bc,#749acf)]");
       setSunmoon("bg-[#fffee2]");
+      setText("text-white");
+      setDaystate("Afternoon");
     }
     else if(now.getHours()>=17 && now.getHours()<19){//eve 5pm-7pm
       setSky("bg-[radial-gradient(circle_at_50%_100%,#b663bf,#3c72c9)]");
       setSunmoon("bg-[url('/moon.png')]");
+      setText("text-white");
+      setDaystate("Evening");
     }
     else if(now.getHours()>=19 && now.getHours()<21){//early night 7pm-9pm
       setSky("bg-[radial-gradient(circle_at_50%_100%,#2e2a4f,#463366)]");
       setSunmoon("bg-[url('/moon.png')]");
+      setText("text-white");
+      setDaystate("Night");
+      
     }
     else if(now.getHours()>=21 && now.getHours()<=23){//night 9pm-12am
       setSky("bg-[radial-gradient(circle_at_50%_100%,#3d3d3d,black)]");
       setSunmoon("bg-[url('/moon.png')]");
+      setText("text-white");
+      setDaystate("Night");
     }
  
     
@@ -245,62 +266,79 @@ useEffect(()=>{
     setTime(hours12+":"+formattedMin+" "+ampm);
     
     if(now.getHours()>=0 && now.getHours()<4){ //night 12am-4am
-      setSky("bg-[radial-gradient(circle_at_50%_100%,#3d3d3d,black)]");
+      setSky("bg-[radial-gradient(circle_at_50%_100%,#3d3d3d,black)]"); 
       setSunmoon("bg-[url('/moon.png')]");
+      setText("text-white");
+      setDaystate("Night");
     }
     else if(now.getHours()>=4 && now.getHours()<6){ //early early morn 4am-6am
       setSky("bg-[radial-gradient(circle_at_50%_100%,#2e2a4f,#463366)]");
       setSunmoon("bg-[url('/moon.png')]");
+      setText("text-white");
+      setDaystate("Morning");
     }
     else if(now.getHours()>=6 && now.getHours()<9){ //early morn 6am-9am
       setSky("bg-[radial-gradient(circle_at_50%_100%,#b663bf,#3c72c9)]");
       setSunmoon("bg-[url('/moon.png')]");
+      setText("text-white");
+      setDaystate("Morning");
     }
     else if(now.getHours()>=9 && now.getHours()<12){//morn  9am-12pm
       setSky("bg-[radial-gradient(circle_at_50%_100%,#d4d6bc,#749acf)]");
       setSunmoon("bg-[#fffee2]");
+      setText("text-white");
+      setDaystate("Morning");
     }
     else if(now.getHours()>=12 && now.getHours()<15){ //afternoon 12pm-3pm
       setSky("bg-[radial-gradient(circle_at_50%_100%,#d4d6bc,#adc6ed)]");
       setSunmoon("bg-[#fffee2]");
+      setText("text-black");
+      setDaystate("Afternoon");
     }
     else if(now.getHours()>=15 && now.getHours()<17){//after afternoon 3pm-5pm
       setSky("bg-[radial-gradient(circle_at_50%_100%,#d4d6bc,#749acf)]");
       setSunmoon("bg-[#fffee2]");
+      setText("text-white");
+      setDaystate("Afternoon");
     }
     else if(now.getHours()>=17 && now.getHours()<19){//eve 5pm-7pm
       setSky("bg-[radial-gradient(circle_at_50%_100%,#b663bf,#3c72c9)]");
       setSunmoon("bg-[url('/moon.png')]");
+      setText("text-white");
+      setDaystate("Evening");
     }
     else if(now.getHours()>=19 && now.getHours()<21){//early night 7pm-9pm
       setSky("bg-[radial-gradient(circle_at_50%_100%,#2e2a4f,#463366)]");
       setSunmoon("bg-[url('/moon.png')]");
+      setText("text-white");
+      setDaystate("Night");
+      
     }
     else if(now.getHours()>=21 && now.getHours()<=23){//night 9pm-12am
       setSky("bg-[radial-gradient(circle_at_50%_100%,#3d3d3d,black)]");
       setSunmoon("bg-[url('/moon.png')]");
+      setText("text-white");
+      setDaystate("Night");
     }
+ 
     
     }, 30000);
   
   return ()=> clearInterval(interval);
 },[]); 
- /* bg-[radial-gradient(circle_at_50%_100%,#8f4d96,#75c7fa)]  bg-[url("/moon.png")] early morn 4-8
-    bg-[radial-gradient(circle_at_50%_100%,#d4d6bc,#749acf)]  bg-[#fffee2] morning             8-12    
-    bg-[radial-gradient(circle_at_50%_100%,#d4d6bc,#7accff)]  bg-[#fffee2] afternoon           12-16
-    bg-[radial-gradient(circle_at_50%_100%,#8f4d96,#2c6695)]  bg-[url("/moon.png")] eve        16-20
-    bg-[radial-gradient(circle_at_50%_100%,#3d3d3d,black)]    bg-[url("/moon.png")] night      20-4
-  */
 
 return(
 <div data-label='rightSide' className="flex flex-col w-[265px] h-fit min-w-[265px] items-center">
      {/*Progress Bar*/}
-      <div data-label='progressOuterDiv' className=' min-w-[265px] w-full h-[110px] pl-[15px] py-[0px] flex'>
-        <div className='w-[250px] h-full bg-white shadow-lg border-[1px] border-gray-400 rounded-lg p-[5px]'>
+      <div data-label='progressOuterDiv' className=' min-w-[265px] w-full h-[110px] pl-[15px] py-[0px] flex '>
+        <div className='w-[250px] h-full bg-white shadow-lg border-[1px] border-accentBorder2 rounded-lg'>
            <div className={`relative ${sky} text-white w-full h-full rounded-md
            overflow-hidden`}>
-              <p className='absolute top-[2px] left-[5px] text-[1.2rem] inter'>{time}</p>
-              <div className={`absolute bottom-[-50%] left-[50%] translate-x-[-50%] h-[90px] aspect-square ${sunmoon} bg-cover bg-no-repeat rounded-full shadow-xl
+              <div className="absolute top-[5px] left-[7px] flex flex-col">
+                  <p className={` text-[1.3rem] ${text} inter`}>{time}</p>
+                  <p className={`text-[0.9rem] ${text} inter`}>{daystate}</p>
+              </div>
+              <div className={`absolute bottom-[-40%] left-[50%] translate-x-[-50%] h-[90px] aspect-square ${sunmoon} bg-cover bg-no-repeat rounded-full shadow-xl
               centered-shadow`}></div>
            </div>
        </div>
@@ -311,7 +349,7 @@ return(
 
       <div data-label='deadlineContainer' className=' min-w-[265px] w-full h-fit p-[15px] pr-[0px]'>
         {renderPopup()}
-        <div data-label='innerDeadlineContainer' className='w-full min-h-[50px] h-fit rounded-lg bg-white shadow-lg border-[1px] border-b-[0px] border-gray-400 overflow-hidden'>
+        <div data-label='innerDeadlineContainer' className='w-full min-h-[50px] h-fit rounded-lg bg-white shadow-lg border-[1px] border-b-[0px] border-accentBorder2 overflow-hidden'>
            <section data-label='headingSection' className='w-full h-[50px] bg-black text-white flex items-center justify-between px-[10px]'>
             <p>Upcoming Events</p><button onClick={openPopup} className='text-[1.5rem]'>+</button>
            </section>
@@ -325,7 +363,7 @@ return(
               onClick={() => deleteEvent(index)}...
               */
               events.map((event,index)=>(                                                                                                                                                                                                                  
-               <div key={index} className='w-full min-h-[50px] border-b-[1px] border-gray-400 p-[5px] flex items-center'>
+               <div key={index} className='w-full min-h-[50px] border-b-[1px] border-accentS3 p-[5px] flex items-center'>
                   <section data-label='contentOfDeadine' className='h-full w-[95%] flex'>
                      
                       <div data-label='categoryIcon' className={`w-[40px] h-[40px] rounded flex justify-center items-center text-white ${event.color}`}>
@@ -333,7 +371,7 @@ return(
                       </div>
                       
                       <div data-label='date&Event' className='w-full h-[40px] flex'>
-                        <div className="w-[40px] h-[40px] flex flex-col justify-center items-center border-r-[1.5px] border-r-gray-300">
+                        <div className="w-[40px] h-[40px] flex flex-col justify-center items-center border-r-[1.5px] border-r-accentS2">
                           <div className='text-[0.9rem]'>{event.day}</div>
                           <p className='text-[0.6rem] text-black'>{event.date} {event.month}</p>
                         </div>

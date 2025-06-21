@@ -14,7 +14,7 @@ const TimeTable=()=>{
   let width=100;
 
   const lines = Array.from({ length: 23 }, (_, i) => (
-                     <div key={i} data-label="verticalLines" className="absolute z-[5px] min-w-[0.5px] h-[calc(100%+40px)] bg-gray-400"
+                     <div key={i} data-label="verticalLines" className="absolute z-[5px] min-w-[0.5px] h-[calc(100%+40px)] bg-accenS3"
                       style={{ left: `${(i+1) * width - 1}px` }}/>));
 
 
@@ -510,7 +510,7 @@ return (showTaskModal)?  //gotta return where called
                   className={(errorModal === 1 || errorModal === 2)? 
                     "border-[1.5px] min-h-[27px] py-[2px] px-[5px] placeholder-red-500 placeholder:text-[0.9rem] rounded-md w-full border-red-500"
                     :
-                    "border-[1px] min-h-[27px] py-[2px] px-[5px] rounded-md w-full border-gray-400"
+                    "border-[1px] min-h-[27px] py-[2px] px-[5px] rounded-md w-full border-accentS3"
                     }
                     placeholder={(errorModal === 1 || errorModal === 2)?"task needs to be named":"e.g. meditation"}
                     />
@@ -520,7 +520,7 @@ return (showTaskModal)?  //gotta return where called
                <div className='flex justify-between'>
                 <div  className='flex'>
                  <label>Day:</label>
-                 <select type="text" onChange={handleDayTemp} className="ml-[5px] max-h-[27px] p-[2px] border-[1px] rounded-md border-gray-400">
+                 <select type="text" onChange={handleDayTemp} className="ml-[5px] max-h-[27px] p-[2px] border-[1px] rounded-md border-accentS3">
                     <option>Monday</option>
                     <option>Tuesday</option>
                     <option>Wednesday</option>
@@ -536,7 +536,7 @@ return (showTaskModal)?  //gotta return where called
                     <label>Start Time:</label>
                     <input type="time" onChange={handleStartTemp} 
                     className={(errorModal === 0 || errorModal === 2)? 
-                    "ml-[5px] border-[1px] rounded-md border-gray-400"
+                    "ml-[5px] border-[1px] rounded-md border-accentS3"
                     :
                     "ml-[5px] border-[1.5px] rounded-md border-red-500"
                     }/>
@@ -547,7 +547,7 @@ return (showTaskModal)?  //gotta return where called
                     className={(errorModal === 1 || errorModal === 3)? 
                     "ml-[5px] border-[1.5px] rounded-md border-red-500"
                     :
-                    "ml-[5px] border-[1px] rounded-md border-gray-400"
+                    "ml-[5px] border-[1px] rounded-md border-accentS3"
                     }
                     />
                  </div>
@@ -556,8 +556,8 @@ return (showTaskModal)?  //gotta return where called
              </div>
                
             </div>
-            <div className= 'bg-gray-100 flex px-[15px] py-[15px] h-fit text-[1.1rem] space-x-5 justify-center items-center border-[1px] border-gray-400'>
-                <button  onClick={handleTaskModal} className=' bg-white w-full px-4 py-2 rounded border-[1px] border-gray-400'>Cancel</button>
+            <div className= 'bg-gray-100 flex px-[15px] py-[15px] h-fit text-[1.1rem] space-x-5 justify-center items-center border-[1px] border-accentS3'>
+                <button  onClick={handleTaskModal} className=' bg-white w-full px-4 py-2 rounded border-[1px] border-accentS3'>Cancel</button>
                 <button onClick={handleCreateTask} className='bg-accent2 w-full border-[1px] border-accent1 text-accent0 px-4 py-2 rounded '>Create</button>
             </div>
 
@@ -573,14 +573,14 @@ return (showTaskModal)?  //gotta return where called
           {renderTaskModal()}
           <button data-label='addTaskBtn' onClick={handleTaskModal} className="absolute z-[10] h-[60px] w-[60px] text-[2rem] flex items-center justify-center bg-black text-white rounded-full shadow-lg right-5 bottom-5 hover:bg-accent1 hover:rotate-90 transition-all duration-300"><Plus className="scale-110"/></button>
           <Sidebar/>
-          <div data-label='outerRightContainer' className=' w-[calc(100%-85px)] ml-[85px] bg-gray-200  p-[15px] flex justify-center '>
+          <div data-label='outerRightContainer' className=' w-[calc(100%-85px)] ml-[85px] bg-accentS p-[15px] flex justify-center '>
               <div data-label='timeTableContainer'  className='h-[516px] w-[98%] flex relative border-[1px] border-black'>
               <div className={`min-w-[130px] h-full  flex flex-col items-center border-r-[1px] border-black`}> 
-                <section className='flex justify-betweenitems-center w-full min-h-[40px] bg-gray-300'>
+                <section className='flex justify-betweenitems-center w-full min-h-[40px] bg-accentS2'>
                    <button className='text-[#929292]  bg-black w-full h-full flex items-center justify-center px-[10px]' onClick={handleCalender}>{(showCalender)?<CalendarOff/>:<CalendarDays/>}</button>
-                   <section data-label='scrollContainer' className='bg-gray-300 px-[5px] border-b-[1px] border-black w-[90px] h-full flex items-center justify-around text-[1.6rem]'>
-                      <button onClick={handleLeftScroll} className='mr-[5px] rounded-full h-[80%] aspect-square bg-white text-accent1 hover:bg-black hover:text-accent2 transition-all duration-300 flex items-center justify-center border-[1px] border-gray-400 shadow-lg'><ChevronLeft/></button>
-                      <button onClick={handleRightScroll} className='rounded-full h-[80%] aspect-square bg-white text-accent1 hover:bg-black hover:text-accent2 transition-all duration-300 flex items-center justify-center border-[1px] border-gray-400 shadow-lg'><ChevronRight/></button>
+                   <section data-label='scrollContainer' className='bg-accentS2 px-[5px] border-b-[1px] border-black w-[90px] h-full flex items-center justify-around text-[1.6rem]'>
+                      <button onClick={handleLeftScroll} className='mr-[5px] rounded-full h-[80%] aspect-square bg-white text-accent1 hover:bg-black hover:text-accent2 transition-all duration-300 flex items-center justify-center border-[1px] border-accentS3 shadow-lg'><ChevronLeft/></button>
+                      <button onClick={handleRightScroll} className='rounded-full h-[80%] aspect-square bg-white text-accent1 hover:bg-black hover:text-accent2 transition-all duration-300 flex items-center justify-center border-[1px] border-accentS3 shadow-lg'><ChevronRight/></button>
                    </section>
                 </section>
 
@@ -604,7 +604,7 @@ return (showTaskModal)?  //gotta return where called
                  </section>
               </div>
 
-              <div data-label='contentContainer' ref={contentRef} className='min-w-[900px] overflow-y-hidden overflow-x-hidden h-full bg-gray-200 flex flex-col relative'>
+              <div data-label='contentContainer' ref={contentRef} className='min-w-[900px] overflow-y-hidden overflow-x-hidden h-full bg-accentS flex flex-col relative'>
                 <div data-label="currentLineContainer" className="absolute z-[6] w-fit h-[480px] bottom-0 flex flex-col items-center"   style={{ left: `${leftDistance-6.5}px` }}>
                    <div data-label="currentLineCircle" className="w-[12px] h-[12px] border-[3px] border-accent2 bg-transparent rounded-full"></div>
                    <div data-label="currentLine" className="h-full w-[3px] bg-accent2"></div>
@@ -638,22 +638,22 @@ return (showTaskModal)?  //gotta return where called
 
                 </section>
                 <section data-label='planContainer' className='flex flex-col w-[2400px] h-[476px] border-b-[1px]'>
-                    <div className='h-[68px] w-full flex items-center border-b-[1px] border-gray-400 py-[10px] relative'>
+                    <div className='h-[68px] w-full flex items-center border-b-[1px] border-accentS3 py-[10px] relative'>
                       {mondayTasks()}
                     </div>
-                    <div className='h-[68px] w-full flex items-center border-b-[1px] border-gray-400 py-[10px] relative'>
+                    <div className='h-[68px] w-full flex items-center border-b-[1px] border-accentS3 py-[10px] relative'>
                       {tuesdayTasks()}
                     </div>
-                    <div className='h-[68px] w-full flex items-center border-b-[1px] border-gray-400 py-[10px] relative'>
+                    <div className='h-[68px] w-full flex items-center border-b-[1px] border-accentS3 py-[10px] relative'>
                       {wednesdayTasks()}
                     </div>
-                    <div className='h-[68px] w-full flex items-center border-b-[1px] border-gray-400 py-[10px] relative'>
+                    <div className='h-[68px] w-full flex items-center border-b-[1px] border-accentS3 py-[10px] relative'>
                       {thursdayTasks()}
                     </div>
-                    <div className='h-[68px] w-full flex items-center border-b-[1px] border-gray-400 py-[10px] relative'>
+                    <div className='h-[68px] w-full flex items-center border-b-[1px] border-accentS3 py-[10px] relative'>
                       {fridayTasks()}
                     </div>
-                    <div className='h-[68px] w-full flex items-center border-b-[1px] border-gray-400 py-[10px] relative'>
+                    <div className='h-[68px] w-full flex items-center border-b-[1px] border-accentS3 py-[10px] relative'>
                       {saturdayTasks()}        
                     </div>
                     <div className='h-[68px] w-full flex items-center py-[10px] relative'>

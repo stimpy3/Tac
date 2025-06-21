@@ -19,6 +19,21 @@ export default {
         accent3: "#bdb697",//ochre
         accent4: "#421482",//dark purple
 
+        //darkmode
+        // accentS:"#262626",
+        // accentS2:"#3b3b3b",
+        // accentS3:"#969696",
+        // accentM:"#000000",
+        // accentTxt:"#ffffff",
+        // accentBorder2:"#545454"
+
+        //lightmode
+        accentS:"#ebebeb",
+        accentS2:"#d6d6d6",
+        accentS3:"#a8a8a8",
+        accentM:"#ffffff",
+        accentTxt:"#000000",
+        accentBorder2:"#d6d6d6"
       },
       fontFamily: {
         ubuntu: ['Ubuntu', 'sans-serif'],

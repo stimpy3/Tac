@@ -129,62 +129,87 @@ const loginWithGoogle = useGoogleLogin({
 
     
 
-  return (
-    <div className="bg-white p-[20px] w-1/2 h-full flex flex-col justify-evenly items-center  bg-inherit text-black max-mobXL:h-full max-mobXL:w-full
-    max-mobXL:rounded-t-[50px]">
-      <p className="inter max-mobXL:text-[2rem] max-mobXL:mb-0 text-[3rem] md:text-[4rem] mb-4 font-bold text-center ">Welcome Back</p>
-      <div className="w-full max-w-[450px]">
+ return (
+  <div className="bg-white p-[20px] w-1/2 h-full flex flex-col justify-evenly items-center text-black max-mobXL:h-full max-mobXL:w-full max-mobXL:rounded-t-[50px]">
+    <p className="inter text-[3rem] md:text-[4rem] font-bold text-center mb-4 max-mobXL:text-[2rem] max-mobXL:mb-0">
+      Welcome Back
+    </p>
+
+    <div className="w-full max-w-[450px]">
       <form onSubmit={handleLogin} className="flex flex-col justify-center w-full">
-        <div className="max-mobL:text-[.9rem] w-full mb-[10px] ">
-            <label className="lato">enter email:</label>
+        
+        {/* Email input */}
+        <div className="w-full mb-[10px] max-mobL:text-[.9rem]">
+          <label className="lato">enter email:</label>
+          <input
+            type="email"
+            placeholder="e.g jack@gmail.com"
+            name="email"
+            className="lato w-full text-[1rem] py-[5px] px-[5px] mt-[2px] rounded-lg border-[2px] border-accentS2 bg-white text-black outline-none"
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+        </div>
+
+        {/* Password input */}
+        <div className="mb-[20px] max-mobL:text-[.9rem]">
+          <label className="lato">enter password:</label>
+          <div className="flex border-[2px] border-accentS2 bg-white rounded-lg">
             <input
-             type="email"
-             placeholder="e.g jack@gmail.com" name="email"
-             className="lato  max-mobXL:mt-[0px]  w-full text-[1rem] py-[5px] p-[2px] px-[5px] mt-[2px] rounded-lg border-[2px] bg-white border-gray-300 text-black outline-none focus:outline-none"
-             onChange={(e)=>{setEmail(e.target.value)}}
-             required
-             />
-        </div>
-
-        <div className="max-mobL:text-[.9rem] mb-[20px]">
-              <label className="lato">enter password:</label>
-               <div className="flex border-[2px] bg-white rounded-lg border-gray-300 ">
-              <input
-               type={(showFlag)?"text":"password"}
-               name="password"
-               placeholder="Password"
-               className="lato max-mobXL:mt-[0px] text-[1rem] py-[5px] w-full p-[2px] px-[5px] bg-white text-black outline-none focus:outline-none"
-               onChange={(e)=>{setPassword(e.target.value)}}
-               required
-              />
-              <button className=" w-[30px] text-gray-300" onClick={handleShowPass}>{(showFlag)?<Eye/>:<EyeOff/>}</button>
-              </div>
-        </div>
-
-        <div className="flex flex-col max-mobL:text-[.9rem] mb-[20px]">
-          <section className="flex w-full h-fit items-center">
-            <div className="h-[2px] w-full bg-gray-300"></div><p className="text-gray-400 text-[0.9rem]">&nbsp;&nbsp;OR&nbsp;&nbsp;</p><div className="h-[2px] w-full bg-gray-300"></div>
-          </section>
-          <div className="mt-[20px] w-full">
-             <button type="button" onClick={loginWithGoogle} className="w-full border-[2px] border-gray-300 p-[5px] rounded-lg flex items-center justify-center text-[1.1rem]">
-                <div className="bg-[url('/googleLogo.svg')] bg-contain bg-no-repeat h-[22px] aspect-square"></div>
-                 &nbsp;&nbsp;&nbsp;Continue with Google
-             </button>
+              type={showFlag ? "text" : "password"}
+              name="password"
+              placeholder="Password"
+              className="lato text-[1rem] py-[5px] px-[5px] w-full bg-white text-black outline-none"
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+            <button type="button" className="w-[30px] text-accentS2" onClick={handleShowPass}>
+              {showFlag ? <Eye /> : <EyeOff />}
+            </button>
           </div>
         </div>
 
+        {/* Divider & Google login */}
+        <div className="flex flex-col mb-[20px] max-mobL:text-[.9rem]">
+          <section className="flex w-full items-center">
+            <div className="h-[2px] w-full bg-accentS2"></div>
+            <p className="text-gray-400 text-[0.9rem] px-2">OR</p>
+            <div className="h-[2px] w-full bg-accentS2"></div>
+          </section>
+          <div className="mt-[20px] w-full">
+            <button
+              type="button"
+              onClick={loginWithGoogle}
+              className="w-full border-[2px] border-accentS2 p-[5px] rounded-lg flex items-center justify-center text-[1.1rem]"
+            >
+              <div className="bg-[url('/googleLogo.svg')] bg-contain bg-no-repeat h-[22px] aspect-square"></div>
+              &nbsp;&nbsp;&nbsp;Continue with Google
+            </button>
+          </div>
+        </div>
 
-        <button type="submit" className="rounded-lg lato w-full py-[5px] text-[1.2rem] bg-gradient-to-r from-accent0 via-accent1 to-accent0 text-white max-mobXL:text-[1.2rem] font-bold transition-colors duration-200">
+        {/* Submit button */}
+        <button
+          type="submit"
+          className="rounded-lg lato w-full py-[5px] text-[1.2rem] bg-gradient-to-r from-accent0 via-accent1 to-accent0 text-white font-bold transition-colors duration-200 max-mobXL:text-[1.2rem]"
+        >
           Login
         </button>
 
-        <p className="lato w-full mt-[10px]  text-center text-gray-500 max-mobL:text-[0.9rem] ">don't have an account? <button onClick={handleRegister} className="text-accent1 hover:text-accent1">Register</button></p>
+        {/* Register link */}
+        <p className="lato w-full mt-[10px] text-center text-gray-500 max-mobL:text-[0.9rem]">
+          don't have an account?{" "}
+          <button onClick={handleRegister} className="text-accent1 hover:text-accent1">
+            Register
+          </button>
+        </p>
       </form>
       <div className="hidden"></div>
-      </div>
-      
     </div>
-  );
+  </div>
+);
+
+
 };
 
 export default LoginForm;
