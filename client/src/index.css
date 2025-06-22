@@ -14,6 +14,10 @@
     height:100%;
   }
 
+  #root{
+    height:100%;
+  }
+
   .centered-shadow{
     box-shadow: 0 0px 40px 20px #ffffff73;
   }

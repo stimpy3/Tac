@@ -22,7 +22,7 @@ const HomePage=() =>{
    };
 
    return(
-  <div className="relative flex flex-col dark:bg-daccentS">
+  <div className="relative flex flex-col dark:bg-daccentS h-full">
     {modal ? (
       <section className='fixed z-[10] w-full h-full bg-transparent backdrop-blur-sm flex justify-center items-center'>
         <button onClick={() => setModal(false)} className='relative w-full h-full bg-black opacity-50'></button>
