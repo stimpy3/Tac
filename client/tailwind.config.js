@@ -27,7 +27,8 @@ export default {
         accentS3:"#a8a8a8",
         accentM:"#ffffff",
         accentTxt:"#000000",
-        accentBorder2:"#d6d6d6",
+        accentTxt2: "#525252",
+        accentBorder2:"#b5b5b5",
 
         //darkmode
         daccentS: "#262626",

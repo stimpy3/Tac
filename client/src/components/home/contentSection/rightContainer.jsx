@@ -87,8 +87,8 @@ const RightSide=()=>{
       return (
   
         <div className='fixed inset-0 bg-black bg-opacity-20 backdrop-blur-sm flex justify-center items-center z-50'>
-          <div className='bg-gray-100 bg-opacity-85 h-[70%] w-[40%] max-h-[400px] max-w-[700px] rounded-lg shadow-lg overflow-hidden'>
-            <div className='bg-gradient-to-r  from-blue-400 to-purple-400 bg-opacity-100  px-[12px] h-[60px] flex items-center justify-between border-b-gray-500 border-b-[1px]'>
+          <div className='bg-accentS dark:bg-daccentS h-[70%] w-[40%] max-h-[400px] max-w-[700px] rounded-lg shadow-lg overflow-hidden'>
+            <div className='bg-[url("/modalBG.png")] bg-cover bg-no-repeat  px-[12px] h-[60px] flex items-center justify-between border-b-gray-500 border-b-[1px]'>
                   <div className='flex'>
                   <div>
                   <p className='text-[1.2rem] text-white font-bold'>Add a Deadline</p>
@@ -99,25 +99,25 @@ const RightSide=()=>{
             </div>
             <div data-label='DeadlineEventInputContainer' className=' px-[10px] py-[20px] w-full h-[70%] flex flex-col justify-around'>
               <div className='flex flex-col'>
-                <label>event name:</label>
-                <input type='text' placeholder='Max 15 characters' className='px-[5px] border-[1px] border-gray-500 bg-white bg-opacity-50 rounded' 
+                <label  className="text-accentTxt dark:text-daccentTxt">event name:</label>
+                <input type='text' placeholder='Max 15 characters' className='px-[5px] border-[1px] border-accentBorder2 dark:border-daccentBorder2 bg-accentS dark:bg-daccentS rounded text-accentTxt dark:text-daccentTxt' 
                 ref={nameRef} maxlength="16" required></input>
               </div>
 
               <div className='flex flex-col'>
-                 <label>event details:</label>
-                 <textarea className='border-[1px] px-[5px] border-gray-500 bg-white bg-opacity-50 rounded'></textarea> 
+                 <label className="text-accentTxt dark:text-daccentTxt">event details:</label>
+                 <textarea className='border-[1px] px-[5px] border-accentBorder2 dark:border-daccentBorder2 bg-accentS dark:bg-daccentS rounded text-accentTxt dark:text-daccentTxt'></textarea> 
               </div>
 
               <div className='flex justify-between'>
                   <div className='flex'>
-                     <label>date:</label>
-                     <input type='date' className='ml-[5px] px-[5px] border-[1px] border-gray-500 rounded'
+                     <label className="text-accentTxt dark:text-daccentTxt">date:</label>
+                     <input type='date' className='ml-[5px] px-[5px] border-[1px] border-accentBorder2 dark:border-daccentBorder2 rounded bg-accentS dark:bg-daccentS text-accentTxt dark:text-daccentTxt'
                      ref={dateRef}></input>
                   </div>
                   <div className='flex'>
-                    <label>Category:</label>
-                    <select id="my-dropdown" name="fruits" className=' ml-[5px] border-[1px] border-gray-500 rounded'
+                    <label  className="text-accentTxt dark:text-daccentTxt">Category:</label>
+                    <select id="my-dropdown" name="fruits" className=' ml-[5px] border-[1px] border-accentBorder2 dark:border-daccentBorder2 bg-accentS dark:bg-daccentS rounded text-accentTxt dark:text-daccentTxt'
                     ref={categoryRef}>
                            <option value="academic">Academic</option>
                            <option value="health">Health & Wellness</option>
@@ -128,9 +128,9 @@ const RightSide=()=>{
                   </div>
               </div>
             </div>
-            <div className='flex px-[12px] h-[15%] text-[1.1rem] space-x-5 justify-center items-center '>
-                <button onClick={createEvent} className='bg-gradient-to-r  from-blue-400 to-purple-400 w-full text-white px-4 py-2 rounded'>Create</button>
-                <button onClick={closePopup} className=' w-full text-gray-800 px-4 py-2 rounded border-[1px] border-gray-600 bg-white bg-opacity-50 '>Cancel</button>
+            <div className='flex px-[12px] h-[15%] text-[1.1rem] space-x-5 justify-center items-center border-t-[1px] border-gray-500'>
+                <button onClick={createEvent} className='bg-gradient-to-r from-accent0 via-accent1 to-accent0 w-full text-white px-4 py-2 rounded'>Create</button>
+                <button onClick={closePopup} className=' w-full px-4 py-2 rounded text-white bg-black '>Cancel</button>
             </div>
 
           </div>
@@ -348,9 +348,9 @@ return(
 
       <div data-label='deadlineContainer' className=' min-w-[265px] w-full h-fit p-[15px] pr-[0px]'>
         {renderPopup()}
-        <div data-label='innerDeadlineContainer' className='w-full min-h-[50px] h-fit rounded-lg bg-white shadow-lg border-[1px] border-b-[0px] border-accentBorder2 dark:border-daccentBorder2 overflow-hidden'>
-           <section data-label='headingSection' className='w-full h-[50px] bg-black text-white flex items-center justify-between px-[10px]'>
-            <p>Upcoming Events</p><button onClick={openPopup} className='text-[1.5rem]'>+</button>
+        <div data-label='innerDeadlineContainer' className='w-full min-h-[50px] h-fit rounded-lg bg-accentM dark:bg-daccentS2 shadow-lg border-[1px] border-b-[0px] border-accentBorder2 dark:border-daccentBorder2 overflow-hidden'>
+           <section data-label='headingSection' className='w-full h-[50px] bg-accentS2 dark:bg-daccentM text-accentTxt2 font-medium dark:text-daccentTxt flex items-center justify-between px-[10px]'>
+            <p>Upcoming Events</p><button onClick={openPopup} className='text-[1.5rem] text-accent1'>+</button>
            </section>
            <section data-label='eventsSection' className='flex flex-col h-fit max-h-[150px] overflow-x-hidden overflow-y-auto'>
              {
@@ -370,18 +370,18 @@ return(
                       </div>
                       
                       <div data-label='date&Event' className='w-full h-[40px] flex'>
-                        <div className="w-[40px] h-[40px] flex flex-col justify-center items-center border-r-[1.5px] border-r-accentS2">
-                          <div className='text-[0.9rem]'>{event.day}</div>
-                          <p className='text-[0.6rem] text-black'>{event.date} {event.month}</p>
+                        <div className="w-[40px] h-[40px] flex flex-col justify-center items-center border-r-[1.5px] border-r-accentS2 dark:border-r-daccentS3">
+                          <div className='text-[0.9rem] text-accentTxt dark:text-daccentTxt'>{event.day}</div>
+                          <p className='text-[0.6rem] text-accentTxt dark:text-daccentTxt'>{event.date} {event.month}</p>
                         </div>
                         <div className='pl-[10px]'>
-                          <p className='h-fit'>{event.name}</p>
-                          <div className='text-[0.7rem] text-gray-800'>{((parseInt(event.date) - new Date().getDate())>=0)?`${(parseInt(event.date) - new Date().getDate())} days left`:"deadline has passed"}</div>
+                          <p className='h-fit text-accentTxt dark:text-daccentTxt'>{event.name}</p>
+                          <div className='text-[0.7rem] text-daccentS3'>{((parseInt(event.date) - new Date().getDate())>=0)?`${(parseInt(event.date) - new Date().getDate())} days left`:"deadline has passed"}</div>
                         </div> 
                       </div>
 
                   </section>
-                  <button className='hover:text-bluePurple text-[1.2rem]'  onClick={()=>deleteEvent(index)}>x</button>
+                  <button className='hover:text-bluePurple text-[1.2rem] text-accentTxt dark:text-daccentTxt' onClick={()=>deleteEvent(index)}>x</button>
               </div>
               ))
              }

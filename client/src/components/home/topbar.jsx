@@ -55,11 +55,11 @@ const TopBar = () => {
 
       {/* Profile and top icons */}
       <div className="h-full flex items-center gap-[20px]">
-        <div className="min-w-[70px] flex justify-between items-center h-full text-accentS3 dark:text-daccentS3">
+        <div className="min-w-[70px] flex justify-between items-center h-full text-accentS3 dark:text-daccentS3 ">
           <button onClick={()=>setMode(prev=>!prev)}>
-            {mode?<Moon/>:<Sun/>}
+            {mode?<Moon className="hover:text-accent1"/>:<Sun className="hover:text-accent1"/>}
           </button>
-          <button><i className="fa-solid fa-bell text-[1.3rem]"></i></button>
+          <button><i className="fa-solid fa-bell text-[1.3rem] hover:text-accent1"></i></button>
         </div>
 
         <div className="h-[60px] w-[220px] bg-accentM  dark:bg-daccentM flex items-center rounded-full pl-[5px] border-[1px] border-accentBorder2 dark:border-daccentBorder2">

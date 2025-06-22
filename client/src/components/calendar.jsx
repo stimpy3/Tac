@@ -59,12 +59,12 @@ const Calendar = () => {
 
   return (
     <div className='w-full h-[300px] p-[15px] pr-[0px] pb-[0px]'>
-        <article data-label='calendarContainer' className='flex flex-col w-[250px] h-full rounded-lg bg-accentS dark:bg-daccentS2 shadow-lg border-[1px] border-accentBorder2 dark:border-daccentBorder2 items-center pb-[5px] overflow-hidden'>  
-           <div className="w-full h-[1000px] flex justify-between px-[10px] border-b-[1px] border-accentBorder2 dark:border-daccentBorder2 mb-[5px] bg-black">
-             <p className="h-full flex items-center font-bold text-[1.2rem] text-white">{month}, {year}</p>
+        <article data-label='calendarContainer' className='flex flex-col w-[250px] h-full rounded-lg bg-accentM dark:bg-daccentS2 shadow-lg border-[1px] border-accentBorder2 dark:border-daccentBorder2 items-center pb-[5px] overflow-hidden'>  
+           <div className="w-full h-[1000px] flex justify-between px-[10px] border-b-[1px] border-accentBorder2 dark:border-daccentBorder2 mb-[5px] bg-accentS2 dark:bg-daccentM">
+             <p className="h-full flex items-center font-medium text-[1.2rem] text-accentTxt2 dark:text-daccentTxt">{month}, {year}</p>
              <section data-label="leftRightButtonContainer" className="w-[40px] h-[15%] flex text-white text-[1.2rem]">
-                <button onClick={revBtnCalendar} className=" h-[45px] w-[50%] flex items-center justify-center "><ChevronLeft/></button>
-                <button onClick={fwdBtnCalendar} className=" h-[45px] w-[50%] flex items-center justify-center"><ChevronRight/></button>
+                <button onClick={revBtnCalendar} className=" h-[45px] w-[50%] flex items-center justify-center text-accent1"><ChevronLeft/></button>
+                <button onClick={fwdBtnCalendar} className=" h-[45px] w-[50%] flex items-center justify-center text-accent1"><ChevronRight/></button>
              </section>
            </div>
            <div data-label='weekContainer' className='mb-[5px] grid grid-cols-7 w-full h-[15%] text-accent1 font-bold rounded-md p-[5px]'>

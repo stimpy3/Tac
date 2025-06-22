@@ -225,7 +225,7 @@ const Carousel=()=>{
         <p className='flex items-center text-[1.5rem] text-accentTxt dark:text-daccentTxt w-fit h-full whitespace-nowrap'>
           {monthNames[month]} Activity
         </p>
-        <button onClick={openVisionPopup} className='flex items-center justify-cente ml-[5px] h-full text-[1.5rem] text-accent1 hover:text-[2rem] hover:rotate-90 transition-all duration-300'>+</button>
+        <button onClick={openVisionPopup} className='flex items-center justify-cente h-full text-[1.5rem] text-accent1 hover:text-[2rem] hover:rotate-90 transition-all duration-300 font-bold w-[30px] justify-center '>+</button>
       </div>
       <svg ref={strokeBoxRef} className="w-full h-[80px]" viewBox="0 0 100 80" preserveAspectRatio="none">
         <path d="M 0 40 Q 50 40, 100 40" className="pathName stroke-accentBorder2 dark:stroke-daccentBorder2 stroke-[1.5]" fill="transparent" />
@@ -238,19 +238,21 @@ const Carousel=()=>{
 
     {renderVisionPopup()}
 
-    <div ref={carouselRef} data-label='carouselContainer' className='overflow-x-auto scrollbar-hide flex rounded-xl items-center w-full h-[350px] p-[20px] border-[3px] border-accentBorder2 dark:border-daccentBorder2 border-dashed'>
+    <div ref={carouselRef} data-label='carouselContainer' className='overflow-x-auto scrollbar-hide flex rounded-xl items-center w-full h-[350px] p-[20px] border-[3px] border-accentS2 dark:border-daccentS2 border-dashed'>
       {visions.length === 0 ? (
         <div className="text-gray-500 h-full flex items-center justify-center w-full">
           <EmptyPlaceholder />
         </div>
-      ) : (
+      ) : ( //bg-[url('/gradient5.png')] shadow-purple-500/50 shadow-lg
         visions.map((vision) => (
-          <div data-label='vison' key={vision.id} className="relative flex flex-col rounded-xl pt-[30px] shadow-purple-500/50 shadow-lg bg-[#333333] h-full aspect-[4/5] text-white p-[10px] mr-[20px] bg-[url('/gradient5.png')] bg-cover bg-no-repeat">
+          <div data-label='vison' key={vision.id} className="relative flex flex-col rounded-xl pt-[30px]  bg-accentM dark:bg-daccentM h-full aspect-[4/5] text-accentTxt dark:text-daccentTxt p-[10px] mr-[20px] bg-cover bg-no-repeat">
             <button className="absolute bottom-[7px] left-[7px]"><SquarePen /></button>
             <div className="absolute bottom-[5px] right-[10px] bebas-neue-regular text-[1.2rem]">day 20/30</div>
             <div className='w-full h-fit flex flex-col items-center justify-center'>
-              <p className='flex items-center justify-center w-full bebas-neue-regular text-[3rem] h-fit text-white leading-none'>Leetcode</p>
-              <p className='text-center w-full cookie text-[1rem] h-fit text-white leading-none'>Lorem, . Magnam beatae quibusdam provident rem a nemo corporis!</p>
+              <p className='flex items-center justify-center w-full bebas-neue-regular text-[3rem] h-fit 
+              text-accentTxt dark:text-daccentTxt leading-none'>Leetcode</p>
+              <p className='text-center w-full cookie text-[1rem] h-fit 
+              text-accentTxt dark:text-daccentTxt leading-none'>Lorem, . Magnam beatae quibusdam provident rem a nemo corporis!</p>
             </div>
             <div className='h-full w-full flex flex-col items-center justify-center'>
               <p className='text-[5rem] bebas-neue-regular leading-none'>20</p>
