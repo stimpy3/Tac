@@ -10,12 +10,9 @@
     user-select:none;
   }
 
-  html,body{
-    height:100%;
-  }
-
-  #root{
-    height:100%;
+  html,body,#root{
+    height: auto;
+    min-height:100vh;
   }
 
   .centered-shadow{
