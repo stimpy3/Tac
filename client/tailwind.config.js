@@ -4,6 +4,8 @@ export default {
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
+  darkMode: 'class',//Yes.Tailwind has a built-in dark: feature. But by default, it's disabled, so you need to enable it.
+  //This tells Tailwind to look for a class="dark"
   theme: {
     extend: {
       screens: {
@@ -19,21 +21,21 @@ export default {
         accent3: "#bdb697",//ochre
         accent4: "#421482",//dark purple
 
-        //darkmode
-        // accentS:"#262626",
-        // accentS2:"#3b3b3b",
-        // accentS3:"#969696",
-        // accentM:"#000000",
-        // accentTxt:"#ffffff",
-        // accentBorder2:"#545454"
-
         //lightmode
         accentS:"#ebebeb",
         accentS2:"#d6d6d6",
         accentS3:"#a8a8a8",
         accentM:"#ffffff",
         accentTxt:"#000000",
-        accentBorder2:"#d6d6d6"
+        accentBorder2:"#d6d6d6",
+
+        //darkmode
+        daccentS: "#262626",
+        daccentS2: "#3b3b3b",
+        daccentS3: "#969696",
+        daccentM: "#000000",
+        daccentTxt: "#ffffff",
+        daccentBorder2: "#545454"
       },
       fontFamily: {
         ubuntu: ['Ubuntu', 'sans-serif'],

@@ -329,9 +329,8 @@ useEffect(()=>{
 
 return(
 <div data-label='rightSide' className="flex flex-col w-[265px] h-fit min-w-[265px] items-center">
-     {/*Progress Bar*/}
-      <div data-label='progressOuterDiv' className=' min-w-[265px] w-full h-[110px] pl-[15px] py-[0px] flex '>
-        <div className='w-[250px] h-full bg-white shadow-lg border-[1px] border-accentBorder2 rounded-lg'>
+      <div data-label='timeOuterDiv' className=' min-w-[265px] w-full h-[110px] pl-[15px] py-[0px] flex '>
+        <div className='w-[250px] h-full bg-white shadow-lg border-[1px] border-accentBorder2 dark:border-daccentBorder2 rounded-lg'>
            <div className={`relative ${sky} text-white w-full h-full rounded-md
            overflow-hidden`}>
               <div className="absolute top-[5px] left-[7px] flex flex-col">
@@ -349,7 +348,7 @@ return(
 
       <div data-label='deadlineContainer' className=' min-w-[265px] w-full h-fit p-[15px] pr-[0px]'>
         {renderPopup()}
-        <div data-label='innerDeadlineContainer' className='w-full min-h-[50px] h-fit rounded-lg bg-white shadow-lg border-[1px] border-b-[0px] border-accentBorder2 overflow-hidden'>
+        <div data-label='innerDeadlineContainer' className='w-full min-h-[50px] h-fit rounded-lg bg-white shadow-lg border-[1px] border-b-[0px] border-accentBorder2 dark:border-daccentBorder2 overflow-hidden'>
            <section data-label='headingSection' className='w-full h-[50px] bg-black text-white flex items-center justify-between px-[10px]'>
             <p>Upcoming Events</p><button onClick={openPopup} className='text-[1.5rem]'>+</button>
            </section>
