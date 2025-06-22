@@ -8,7 +8,7 @@ const Content=()=>{
 return(
 <section className=" w-[calc(100%-70px)] pr-[35px] h-full ml-[70px] "> 
    <TopBar></TopBar>
-   <div className="flex w-full min-h-[calc(100%-90px)]">
+   <div className="flex w-full min-h-[calc(100%-100px)]">
       <div className="flex flex-col w-[calc(100%-250px)] h-fit px-[20px]">   
         <MotivationDiv/>
         <Carousel/>
