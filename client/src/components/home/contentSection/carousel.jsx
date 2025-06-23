@@ -221,7 +221,7 @@ const Carousel=()=>{
   return (
   <div className="flex flex-col h-[40%] mb-[20px] my-[10px] w-full p-0">{/* heading(buttons and headin)+items */}
     <div className='flex items-center w-full h-fit justify-between'>
-      <div className='flex mr-[10px] h-[80px]'>
+      <div className='flex mr-[10px] h-[120px]'>
         <p className='flex items-center text-[1.5rem] text-accentTxt dark:text-daccentTxt w-fit h-full whitespace-nowrap'>
           {monthNames[month]} Activity
         </p>
@@ -230,7 +230,7 @@ const Carousel=()=>{
       <svg ref={strokeBoxRef} className="w-full h-[80px]" viewBox="0 0 100 80" preserveAspectRatio="none">
         <path d="M 0 40 Q 50 40, 100 40" className="pathName stroke-accentBorder2 dark:stroke-daccentBorder2 stroke-[1.5]" fill="transparent" />
       </svg>
-      <div className='ml-[10px] min-w-[80px] h-[80px] flex items-center'>
+      <div className='ml-[10px] min-w-[80px] h-[120px] flex items-center'>
         <button onClick={scrollLeft} className='flex items-center justify-center border-[1px] border-gray-500 shadow-lg w-[35px] aspect-square rounded-full bg-accentS2 dark:bg-daccentS2 text-accentTxt dark:text-daccentTxt mr-[5px] hover:bg-accent1 dark:hover:bg-accent1 hover:text-white transition-colors duration-400'><ChevronLeft /></button>
         <button onClick={scrollRight} className='flex items-center justify-center border-[1px] border-gray-500 shadow-lg w-[35px] aspect-square rounded-full bg-accentS2 dark:bg-daccentS2 text-accentTxt dark:text-daccentTxt hover:bg-accent1 dark:hover:bg-accent1 hover:text-white transition-colors duration-400'><ChevronRight /></button>
       </div>

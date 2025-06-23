@@ -6,7 +6,7 @@ const Sidebar = ({ modal, setModal }) => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const baseClasses = "mb-[40px] text-[1.2rem] flex justify-center w-full p-[5px] rounded-full";
+  const baseClasses = "text-[1.2rem] flex justify-center w-full p-[5px] rounded-full";
 const isActive = (path) => location.pathname === path ? "text-accent1" : "text-accentS3 dark:text-daccentS3";
 
 return (
@@ -18,7 +18,7 @@ return (
       >
       </div>
       <section className="flex flex-col items-center justify-center w-full h-full">
-        <section className="flex flex-col w-full h-fit">
+        <section className="flex flex-col w-full h-[70%] max-h-[480px] justify-evenly">
           <button
             onClick={() => navigate("/home")}
             className={`${baseClasses} ${isActive("/home")}`}

@@ -44,7 +44,7 @@ const TopBar = () => {
 
 
   return (
-    <div className="w-full h-[100px] pl-[20px] flex justify-between items-center">
+    <div className="w-full h-[120px] pl-[20px] flex justify-between items-center">
       {/* Label and date */}
       <div className="flex flex-col justify-center">
         <h1 className="text-[1.5rem] text-accentTxt dark:text-daccentTxt">Welcome {username.split(" ")[0]} 👋</h1>
