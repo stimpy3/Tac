@@ -24,8 +24,8 @@ const MotivationDiv = () => {
   }, []);
 
   return (
-  <div className="h-[110px] w-full bg-black dark:bg-daccentM rounded-xl flex items-center justify-center p-[20px] bg-[url('/topbarBG.png')] dark:bg-[url('/dtopbarBG.png')] bg-cover border-[1px] border-accentBorder2 dark:border-daccentBorder2">
-    <p className="text-white text-[1.2rem] text-center select-text">
+  <div className="h-[400px] w-full bg-black dark:bg-daccentM rounded-xl flex items-center justify-center p-[20px] bg-[url('/topbarBG.png')] dark:bg-[url('/dtopbarBG.png')] bg-cover border-[1px] border-accentBorder2 dark:border-daccentBorder2">
+    <p className="text-white text-[1.8rem] text-center select-text">
       {"\"" + quote + "\"" || "Loading quote..."}
     </p>
   </div>
