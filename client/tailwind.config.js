@@ -31,12 +31,12 @@ export default {
         accentBorder2:"#b5b5b5",
 
         //darkmode
-        daccentS: "#262626",
-        daccentS2: "#3b3b3b",
+        daccentS: "#141414",
+        daccentS2: "#242424",
         daccentS3: "#969696",
         daccentM: "#000000",
         daccentTxt: "#ffffff",
-        daccentBorder2: "#545454"
+        daccentBorder2: "#343434"
       },
       fontFamily: {
         ubuntu: ['Ubuntu', 'sans-serif'],
