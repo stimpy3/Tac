@@ -14,7 +14,7 @@ return (
     <div className="flex flex-col h-full w-full bg-accentM dark:bg-daccentM shadow-lg px-[0px] py-[5px] items-center border-r-[1px] border-accentBorder2 dark:border-daccentBorder2">
       <div
         data-label="logoContainer"
-        className="bg-[url('/logo2.png')] dark:bg-[url('/logo2white.png')] bg-contain w-[40px] aspect-square my-[20px] bg-no-repeat"
+        className="bg-[url('/logoPlainBlack.png')] dark:bg-[url('/logoPlainWhite.png')] bg-contain w-[40px] aspect-square my-[20px] bg-no-repeat"
       >
       </div>
       <section className="flex flex-col items-center justify-center w-full h-full">
