@@ -1,4 +1,4 @@
-import React from "react";
+import React,{useState,useEffect} from "react";
 import { BrowserRouter as Router, Routes, Route} from "react-router-dom";
 import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';//oauth
 import LoginPage from "./components/loginRegister/loginpage.jsx";
@@ -7,12 +7,15 @@ import RegisterPage from "./components/loginRegister/registerpage.jsx";
 import LandingPage from "./components/landingPage/landingpage.jsx";
 import TimeTable from "./components/timeTable/timeTable.jsx";
 import PrivateRoute from "./components/auth/privateRoutes.jsx"; //Import it for protection
+import { DarkModeProvider } from "./darkModeContext.jsx";
 
 function App() {
+  
   return ( 
     //useGoogleLogin(...) hook can be used anywhere
     //or any other Google OAuth functionality — because those rely on having the OAuth context initialized.
     <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
+    <DarkModeProvider>
     <Router>
       <Routes>
          <Route path="/" element={<LandingPage/>}/>
@@ -30,6 +33,7 @@ function App() {
          }/> 
        </Routes>
     </Router>
+    </DarkModeProvider>
     </GoogleOAuthProvider>
   );
 }

@@ -14,7 +14,7 @@ const TimeTable=()=>{
   let width=100;
 
   const lines = Array.from({ length: 23 }, (_, i) => (
-                     <div key={i} data-label="verticalLines" className="absolute z-[5px] min-w-[0.5px] h-[calc(100%+40px)] bg-accenS3"
+                     <div key={i} data-label="verticalLines" className="absolute z-[5px] min-w-[0.5px] h-[calc(100%+40px)] bg-accentS3 dark:bg-accentTxt2 "
                       style={{ left: `${(i+1) * width - 1}px` }}/>));
 
 
@@ -410,9 +410,9 @@ const saturdayTasks=()=>{
                          zIndex: 2,
                        }}>
             
-                   <div data-label="visual" className="h-full rounded-lg border-[1px] border-white" style={{ backgroundColor: satColors[index % satColors.length] }}>
+                   <div data-label="visual" className="h-full rounded-lg border-[1px] border-accentBorder2 dark:border-daccentBorder2 " style={{ backgroundColor: satColors[index % satColors.length] }}>
                    </div>
-                   <div data-label="tooltip" className="absolute bg-black p-[5px] text-white text-[0.5rem] flex flex-col rounded-sm
+                   <div data-label="tooltip" className="absolute bg-daccentM dark:bg-accentM p-[5px] text-accentTxt dark:text-daccentTxt text-[0.5rem] flex flex-col rounded-sm
                      z-[10] opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity"
                      style={{ left:0, top: -20}}>
                                <p>{(task.name.length>15)?(task.name.slice(0,15)+"..."):task.name+":"}</p>
@@ -492,9 +492,9 @@ const sundayTasks=()=>{
   //1 for wrong
 const renderTaskModal=()=>{
 return (showTaskModal)?  //gotta return where called
-    <div className="absolute w-full h-full bg-gray-800  z-[50] bg-opacity-50 backdrop-blur-sm flex items-center justify-center">
-        <div className='bg-gray-100 min-w-[400px] h-[70%] w-[40%] max-h-[400px] max-w-[700px] rounded-lg shadow-lg overflow-hidden'>
-            <div className='bg-[url("/modalBG.png")] bg-cover  bg-no-repeat  px-[12px] h-[60px] flex items-center justify-between border-b-gray-500 border-b-[1px]'>
+    <div className="absolute w-full h-full inset-0 bg-black bg-opacity-20 z-[50] backdrop-blur-lg flex items-center justify-center">
+        <div className='bg-accentS dark:bg-daccentS min-w-[450px] h-[70%] w-[40%] max-h-[400px] max-w-[700px] rounded-lg shadow-lg overflow-hidden'>
+            <div className='bg-[url("/modalBG.png")] bg-cover  bg-no-repeat  px-[12px] h-[60px] flex items-center justify-between border-b-gray-500  dark:border-b-daccentBorder2 border-b-[1px]'>
                   <div className='flex'>
                   <div>
                   <p className='text-[1.2rem] text-white font-bold'>Add Event</p>
@@ -503,14 +503,14 @@ return (showTaskModal)?  //gotta return where called
                   </div>
                   <button onClick={handleTaskModal} className='text-white text-[1.6rem]'><X /></button>
             </div>
-            <div data-label='timetableInputContainer' className='bg-gray-100 px-[15px] py-[15px] w-full h-[65%] flex flex-col justify-around'>
+            <div data-label='timetableInputContainer' className='bg-accentS dark:bg-daccentS2 px-[15px] py-[15px] w-full h-[65%] flex flex-col justify-around'>
                <div>
-                 <label>Task name:</label>
+                 <label className="text-accentTxt dark:text-daccentTxt">Task name:</label>
                  <input type="text" onChange={handleNameTemp}
                   className={(errorModal === 1 || errorModal === 2)? 
-                    "border-[1.5px] min-h-[27px] py-[2px] px-[5px] placeholder-red-500 placeholder:text-[0.9rem] rounded-md w-full border-red-500"
+                    "border-[1.5px] min-h-[27px] py-[2px] px-[5px] bg-accentS dark:bg-daccentS2 text-accentTxt dark:text-daccentTxt placeholder-red-500 placeholder:text-[0.9rem] rounded-md w-full border-red-500"
                     :
-                    "border-[1px] min-h-[27px] py-[2px] px-[5px] rounded-md w-full border-accentS3"
+                    "border-[1px] min-h-[27px] py-[2px] px-[5px] bg-accentS dark:bg-daccentS2 dark:border-daccentBorder2 text-accentTxt dark:text-daccentTxt rounded-md w-full border-accentS3"
                     }
                     placeholder={(errorModal === 1 || errorModal === 2)?"task needs to be named":"e.g. meditation"}
                     />
@@ -519,8 +519,8 @@ return (showTaskModal)?  //gotta return where called
 
                <div className='flex justify-between'>
                 <div  className='flex'>
-                 <label>Day:</label>
-                 <select type="text" onChange={handleDayTemp} className="ml-[5px] max-h-[27px] p-[2px] border-[1px] rounded-md border-accentS3">
+                 <label className="text-accentTxt dark:text-daccentTxt">Day:&nbsp;</label>
+                 <select type="text" onChange={handleDayTemp} className="ml-[5px] text-accentTxt dark:text-daccentTxt bg-accentS dark:bg-daccentS2 max-h-[27px] p-[2px] border-[1px] rounded-md border-accentS3 dark:border-daccentBorder2">
                     <option>Monday</option>
                     <option>Tuesday</option>
                     <option>Wednesday</option>
@@ -533,21 +533,21 @@ return (showTaskModal)?  //gotta return where called
                  
                 <div data-label="timeInputcontainer" className="w-fit flex flex-col h-[90px] justify-between">
                   <div className="flex justify-between">
-                    <label>Start Time:</label>
+                    <label className="text-accentTxt dark:text-daccentTxt">Start Time:&nbsp;</label>
                     <input type="time" onChange={handleStartTemp} 
                     className={(errorModal === 0 || errorModal === 2)? 
-                    "ml-[5px] border-[1px] rounded-md border-accentS3"
+                    "ml-[5px] border-[1px] rounded-md bg-accentS dark:bg-daccentS2 text-accentTxt dark:text-daccentTxt border-accentS3 dark:border-daccentBorder2"
                     :
-                    "ml-[5px] border-[1.5px] rounded-md border-red-500"
+                    "ml-[5px] border-[1.5px] rounded-md bg-accentS dark:bg-daccentS2 text-accentTxt dark:text-daccentTxt border-red-500"
                     }/>
                  </div>
                  <div className="flex justify-between">
-                    <label>End time:</label>
+                    <label className="text-accentTxt dark:text-daccentTxt">End time:&nbsp;</label>
                     <input type="time" onChange={handleEndTemp} 
                     className={(errorModal === 1 || errorModal === 3)? 
-                    "ml-[5px] border-[1.5px] rounded-md border-red-500"
+                    "ml-[5px] border-[1.5px] rounded-md bg-accentS dark:bg-daccentS2 text-accentTxt dark:text-daccentTxt border-red-500"
                     :
-                    "ml-[5px] border-[1px] rounded-md border-accentS3"
+                    "ml-[5px] border-[1px] rounded-md bg-accentS dark:bg-daccentS2 text-accentTxt dark:text-daccentTxt border-accentS3 dark:border-daccentBorder2"
                     }
                     />
                  </div>
@@ -556,9 +556,9 @@ return (showTaskModal)?  //gotta return where called
              </div>
                
             </div>
-            <div className= 'bg-gray-100 flex px-[15px] py-[15px] h-fit text-[1.1rem] space-x-5 justify-center items-center border-[1px] border-accentS3'>
-                <button  onClick={handleTaskModal} className=' bg-white w-full px-4 py-2 rounded border-[1px] border-accentS3'>Cancel</button>
-                <button onClick={handleCreateTask} className='bg-accent2 w-full border-[1px] border-accent1 text-accent0 px-4 py-2 rounded '>Create</button>
+            <div className= 'bg-accentS dark:bg-daccentS2 flex px-[15px] py-[15px] h-fit text-[1.1rem] space-x-5 justify-center items-center border-t-[1px] border-accentS3 dark:border-daccentBorder2 '>
+                <button onClick={handleCreateTask} className='bg-gradient-to-r from-accent0 via-accent1 to-accent0  w-full text-white px-4 py-2 rounded '>Create</button>
+                <button  onClick={handleTaskModal} className=' bg-black text-white w-full px-4 py-2 rounded border-[1px] border-black'>Cancel</button>
             </div>
 
           </div>
@@ -569,18 +569,18 @@ return (showTaskModal)?  //gotta return where called
 };
 
     return(
-        <div data-label='masterContainer' className='w-screen h-screen bg-gray-500 flex relative'>
+        <div data-label='masterContainer' className='w-screen h-screen flex relative bg-accentS dark:bg-daccentS'>
           {renderTaskModal()}
-          <button data-label='addTaskBtn' onClick={handleTaskModal} className="absolute z-[10] h-[60px] w-[60px] text-[2rem] flex items-center justify-center bg-black text-white rounded-full shadow-lg right-5 bottom-5 hover:bg-accent1 hover:rotate-90 transition-all duration-300"><Plus className="scale-110"/></button>
+          <button data-label='addTaskBtn' onClick={handleTaskModal} className="absolute z-[10] h-[60px] w-[60px] text-[2rem] flex items-center justify-center dark:bg-accentM bg-daccentM text-daccentTxt dark:text-accentTxt  rounded-full shadow-lg right-5 bottom-5 hover:bg-accent1 dark:hover:bg-accent2 hover:rotate-90 transition-all duration-300"><Plus className="scale-110"/></button>
           <Sidebar/>
-          <div data-label='outerRightContainer' className=' w-[calc(100%-85px)] ml-[85px] bg-accentS p-[15px] flex justify-center '>
+          <div data-label='outerRightContainer' className=' w-[calc(100%-55px)] ml-[55px] p-[15px] flex justify-center '>
               <div data-label='timeTableContainer'  className='h-[516px] w-[98%] flex relative border-[1px] border-black'>
               <div className={`min-w-[130px] h-full  flex flex-col items-center border-r-[1px] border-black`}> 
                 <section className='flex justify-betweenitems-center w-full min-h-[40px] bg-accentS2'>
-                   <button className='text-[#929292]  bg-black w-full h-full flex items-center justify-center px-[10px]' onClick={handleCalender}>{(showCalender)?<CalendarOff/>:<CalendarDays/>}</button>
-                   <section data-label='scrollContainer' className='bg-accentS2 px-[5px] border-b-[1px] border-black w-[90px] h-full flex items-center justify-around text-[1.6rem]'>
-                      <button onClick={handleLeftScroll} className='mr-[5px] rounded-full h-[80%] aspect-square bg-white text-accent1 hover:bg-black hover:text-accent2 transition-all duration-300 flex items-center justify-center border-[1px] border-accentS3 shadow-lg'><ChevronLeft/></button>
-                      <button onClick={handleRightScroll} className='rounded-full h-[80%] aspect-square bg-white text-accent1 hover:bg-black hover:text-accent2 transition-all duration-300 flex items-center justify-center border-[1px] border-accentS3 shadow-lg'><ChevronRight/></button>
+                   <button className='text-accentS3 dark:text-daccentS3  bg-daccentM w-full h-full flex items-center justify-center px-[10px]' onClick={handleCalender}>{(showCalender)?<CalendarOff/>:<CalendarDays/>}</button>
+                   <section data-label='scrollContainer' className='bg-accentS2 dark:bg-daccentS2 px-[5px] border-b-[1px] border-black w-[90px] h-full flex items-center justify-around text-[1.6rem]'>
+                      <button onClick={handleLeftScroll} className='mr-[5px] rounded-full h-[80%] aspect-square bg-accentM  text-accent0 hover:bg-black hover:text-accent2 transition-all duration-300 flex items-center justify-center border-[1px] border-accentS3  shadow-lg'><ChevronLeft/></button>
+                      <button onClick={handleRightScroll} className='rounded-full h-[80%] aspect-square bg-accentM text-accent0 hover:bg-black hover:text-accent2 transition-all duration-300 flex items-center justify-center border-[1px] border-accentS3 shadow-lg'><ChevronRight/></button>
                    </section>
                 </section>
 
@@ -593,14 +593,14 @@ return (showTaskModal)?  //gotta return where called
                    <Calendar/>
                  </div>
                  }
-                 <section data-label='daysNameContainer' className='h-[476px] w-full bg-[#BAB3F9] flex flex-col items-center text-accent0 text-[1.2rem]'>
+                 <section data-label='daysNameContainer' className='h-[476px] w-full bg-accent2 dark:bg-daccent2 flex flex-col items-center text-accent0 text-[1.2rem]'>
                     <div className='h-[68px] text-[1.3rem] w-full flex items-center justify-center'>Mon</div>
-                    <div className='h-[68px] text-[1.3rem] w-full flex items-center justify-center border-t-[1px] border-accent1'>Tue</div>
-                    <div className='h-[68px] text-[1.3rem] w-full flex items-center justify-center border-t-[1px] border-accent1'>Wed</div>
-                    <div className='h-[68px] text-[1.3rem] w-full flex items-center justify-center border-t-[1px] border-accent1'>Thu</div>
-                    <div className='h-[68px] text-[1.3rem] w-full flex items-center justify-center border-t-[1px] border-accent1'>Fri</div>
-                    <div className='h-[68px] text-[1.3rem] w-full flex items-center justify-center border-t-[1px] border-accent1'>Sat</div>
-                    <div className='h-[68px] text-[1.3rem] w-full flex items-center justify-center border-y-[1px] border-accent1'>Sun</div>
+                    <div className='h-[68px] text-[1.3rem] w-full flex items-center justify-center border-t-[1px] border-accent0'>Tue</div>
+                    <div className='h-[68px] text-[1.3rem] w-full flex items-center justify-center border-t-[1px] border-accent0'>Wed</div>
+                    <div className='h-[68px] text-[1.3rem] w-full flex items-center justify-center border-t-[1px] border-accent0'>Thu</div>
+                    <div className='h-[68px] text-[1.3rem] w-full flex items-center justify-center border-t-[1px] border-accent0'>Fri</div>
+                    <div className='h-[68px] text-[1.3rem] w-full flex items-center justify-center border-t-[1px] border-accent0'>Sat</div>
+                    <div className='h-[68px] text-[1.3rem] w-full flex items-center justify-center border-y-[1px] border-accent0'>Sun</div>
                  </section>
               </div>
 
@@ -637,23 +637,23 @@ return (showTaskModal)?  //gotta return where called
                     <div className='w-[100px] flex flex-col items-center justify-center '>11-12<span className='text-[0.6rem]'>PM</span></div>
 
                 </section>
-                <section data-label='planContainer' className='flex flex-col w-[2400px] h-[476px] border-b-[1px]'>
-                    <div className='h-[68px] w-full flex items-center border-b-[1px] border-accentS3 py-[10px] relative'>
+                <section data-label='planContainer' className='flex flex-col w-[2400px] h-[476px] border-b-[1px] bg-accentS dark:bg-daccentM'>
+                    <div className='h-[68px] w-full flex items-center border-b-[1px] border-accentS3 dark:border-accentTxt2 py-[10px] relative'>
                       {mondayTasks()}
                     </div>
-                    <div className='h-[68px] w-full flex items-center border-b-[1px] border-accentS3 py-[10px] relative'>
+                    <div className='h-[68px] w-full flex items-center border-b-[1px] border-accentS3 dark:border-accentTxt2 py-[10px] relative'>
                       {tuesdayTasks()}
                     </div>
-                    <div className='h-[68px] w-full flex items-center border-b-[1px] border-accentS3 py-[10px] relative'>
+                    <div className='h-[68px] w-full flex items-center border-b-[1px] border-accentS3 dark:border-accentTxt2 py-[10px] relative'>
                       {wednesdayTasks()}
                     </div>
-                    <div className='h-[68px] w-full flex items-center border-b-[1px] border-accentS3 py-[10px] relative'>
+                    <div className='h-[68px] w-full flex items-center border-b-[1px] border-accentS3 dark:border-accentTxt2 py-[10px] relative'>
                       {thursdayTasks()}
                     </div>
-                    <div className='h-[68px] w-full flex items-center border-b-[1px] border-accentS3 py-[10px] relative'>
+                    <div className='h-[68px] w-full flex items-center border-b-[1px] border-accentS3 dark:border-accentTxt2 py-[10px] relative'>
                       {fridayTasks()}
                     </div>
-                    <div className='h-[68px] w-full flex items-center border-b-[1px] border-accentS3 py-[10px] relative'>
+                    <div className='h-[68px] w-full flex items-center border-b-[1px] border-accentS3 dark:border-accentTxt2 py-[10px] relative'>
                       {saturdayTasks()}        
                     </div>
                     <div className='h-[68px] w-full flex items-center py-[10px] relative'>
