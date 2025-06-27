@@ -1,27 +1,18 @@
 import React, { useState,useEffect } from 'react';
 import { Sun,Moon } from 'lucide-react';
+import { useDarkMode } from "../../darkModeContext";
 
 /* Older React (before React 17)
 You always had to import React, because:
 JSX (<div>) gets compiled to React.createElement(...)
 So without React, your code would throw an error. */
-
+//lightmode darkmode
 const TopBar = () => {
   // Google sign-in accessing from local storage
   const user = JSON.parse(localStorage.getItem("user"));
   const useremail = localStorage.getItem("useremail") || (user?.email ?? "");
   const username = localStorage.getItem("username") || (user?.name ?? "");
-  const [mode,setMode]=useState(() => {
-  const saved = localStorage.getItem("mode");
-  if (saved){
-    return saved === "dark";
-  }
-  return window.matchMedia("(prefers-color-scheme: dark)").matches;
-  //window.matchMedia(...) is a browser API that lets you query things like screen size, color scheme, etc.
-  //"(prefers-color-scheme: dark)" is a special media query that returns true if the system is set to dark mode.
-  //.matches gives the actual result: true or false
-  });//returns true or false
-
+  
   const today = new Date();
   const date = today.toLocaleDateString("en-US", {
     year: "numeric",
@@ -31,17 +22,8 @@ const TopBar = () => {
 
   const randomColor = ["bg-accent1", "bg-[#a1cbcf]", "bg-[#8ca3dc]", "bg-[#b4b4e4]", "bg-[#9d91c2]"];
   const [userColor] = useState(randomColor[Math.floor(Math.random() * 5)]);
-
-   useEffect(()=>{
-    localStorage.setItem("mode", mode ? "dark" : "light");
-    if(mode){
-     document.documentElement.classList.add("dark");
-    }
-    else{
-     document.documentElement.classList.remove("dark");
-    }
-  },[mode]);
-
+ 
+  const { mode, setMode } = useDarkMode();
 
   return (
     <div className="w-full h-[120px] pl-[20px] flex justify-between items-center">

@@ -3,6 +3,7 @@ import Calendar from '../../calendar'; // Import the separated Calendar componen
 
 const RightSide=()=>{
   const [events,setEvents]=useState([]);
+  const [eventCount,setEventCount]=useState(0);
   const [show,setShow]=useState(false);
   const [selectedCategory, setSelectedCategory] = useState("academic");
   const [time,setTime]=useState("");
@@ -44,6 +45,28 @@ const RightSide=()=>{
     let monthsArray=["January", "February", "March", "April", "May", "June","July", "August", "September", "October", "November", "December"];
     const date=new Date(dateRef.current.value);//convert dte string to date object
     const dayName=daysArray[date.getDay()];
+    if(selectedName=="" && selectedDate==""){
+        nameRef.current.classList.remove("border-accentBorder2", "dark:border-daccentBorder2");
+        nameRef.current.classList.add("border-red-500");
+        dateRef.current.classList.remove("border-accentBorder2", "dark:border-daccentBorder2");
+        dateRef.current.classList.add("border-red-500");
+        return;
+    }
+    else if(selectedDate=="" ){
+      dateRef.current.classList.remove("border-accentBorder2", "dark:border-daccentBorder2");
+      dateRef.current.classList.add("border-red-500");
+      nameRef.current.classList.remove("border-red-500");
+      nameRef.current.classList.add("border-accentBorder2", "dark:border-daccentBorder2");
+       return;
+    }
+     else if(selectedName=="" ){
+       nameRef.current.classList.remove("border-accentBorder2", "dark:border-daccentBorder2");
+       nameRef.current.classList.add("border-red-500");
+       dateRef.current.classList.remove("border-red-500");
+       dateRef.current.classList.add("border-accentBorder2", "dark:border-daccentBorder2");
+       return;
+    }
+    setEventCount(prev=>prev+1);
     const newEvent = {
      icon:categoryData[selectedCategory].icon,
      color:categoryData[selectedCategory].color,
@@ -61,23 +84,23 @@ const RightSide=()=>{
   const categoryData={
     academic: {
       icon: "fa-solid fa-graduation-cap",
-      color: "bg-[#9ebee1]",
+      color: "bg-[#4592ff]",
     },
     health: {
       icon: "fa-regular fa-heart",
-      color: "bg-[#dcbcdc]",
+      color: "bg-[#e872e8]",
     },
     career: {
       icon: "fa-solid fa-list",
-      color: "bg-[#BBD2C5]",
+      color: "bg-[#62b035]",
     },
     personal: {
       icon: "fa-solid fa-user",
-      color: "bg-[#f3c4d5]",
+      color: "bg-[#fc357d]",
     },
     other: {
       icon: "fa-solid fa-hashtag",
-      color: "bg-[#9f9aec]",
+      color: "bg-[#685ffa]",
     }
   };
 
@@ -87,8 +110,8 @@ const RightSide=()=>{
       return (
   
         <div className='fixed inset-0 bg-black bg-opacity-20 backdrop-blur-sm flex justify-center items-center z-50'>
-          <div className='bg-accentS dark:bg-daccentS h-[70%] w-[40%] max-h-[400px] max-w-[700px] rounded-lg shadow-lg overflow-hidden'>
-            <div className='bg-[url("/modalBG.png")] bg-cover bg-no-repeat  px-[12px] h-[60px] flex items-center justify-between border-b-gray-500 border-b-[1px]'>
+          <div className='bg-accentS dark:bg-daccentS2 h-[70%] w-[40%] min-w-[450px] max-h-[400px] max-w-[700px] rounded-lg shadow-lg overflow-hidden'>
+            <div className='bg-[url("/modalBG.png")] bg-cover bg-no-repeat  px-[12px] h-[60px] flex items-center justify-between border-accentBorder2 dark:border-daccentBorder2 border-b-[1px]'>
                   <div className='flex'>
                   <div>
                   <p className='text-[1.2rem] text-white font-bold'>Add a Deadline</p>
@@ -100,24 +123,24 @@ const RightSide=()=>{
             <div data-label='DeadlineEventInputContainer' className=' px-[10px] py-[20px] w-full h-[70%] flex flex-col justify-around'>
               <div className='flex flex-col'>
                 <label  className="text-accentTxt dark:text-daccentTxt">event name:</label>
-                <input type='text' placeholder='Max 15 characters' className='px-[5px] border-[1px] border-accentBorder2 dark:border-daccentBorder2 bg-accentS dark:bg-daccentS rounded text-accentTxt dark:text-daccentTxt' 
+                <input type='text' placeholder='Max 15 characters' className='px-[5px] border-[1px] border-accentBorder2 dark:border-daccentBorder2 bg-accentS dark:bg-daccentS2 rounded text-accentTxt dark:text-daccentTxt' 
                 ref={nameRef} maxlength="16" required></input>
               </div>
 
               <div className='flex flex-col'>
                  <label className="text-accentTxt dark:text-daccentTxt">event details:</label>
-                 <textarea className='border-[1px] px-[5px] border-accentBorder2 dark:border-daccentBorder2 bg-accentS dark:bg-daccentS rounded text-accentTxt dark:text-daccentTxt'></textarea> 
+                 <textarea className='border-[1px] px-[5px] border-accentBorder2 dark:border-daccentBorder2 bg-accentS dark:bg-daccentS2 rounded text-accentTxt dark:text-daccentTxt'></textarea> 
               </div>
 
               <div className='flex justify-between'>
                   <div className='flex'>
                      <label className="text-accentTxt dark:text-daccentTxt">date:</label>
-                     <input type='date' className='ml-[5px] px-[5px] border-[1px] border-accentBorder2 dark:border-daccentBorder2 rounded bg-accentS dark:bg-daccentS text-accentTxt dark:text-daccentTxt'
+                     <input type='date' className='ml-[5px] px-[5px] border-[1px] border-accentBorder2 dark:border-daccentBorder2 rounded bg-accentS dark:bg-daccentS2 text-accentTxt dark:text-daccentTxt'
                      ref={dateRef}></input>
                   </div>
                   <div className='flex'>
                     <label  className="text-accentTxt dark:text-daccentTxt">Category:</label>
-                    <select id="my-dropdown" name="fruits" className=' ml-[5px] border-[1px] border-accentBorder2 dark:border-daccentBorder2 bg-accentS dark:bg-daccentS rounded text-accentTxt dark:text-daccentTxt'
+                    <select id="my-dropdown" name="fruits" className=' ml-[5px] border-[1px] border-accentBorder2 dark:border-daccentBorder2 bg-accentS dark:bg-daccentS2 rounded text-accentTxt dark:text-daccentTxt'
                     ref={categoryRef}>
                            <option value="academic">Academic</option>
                            <option value="health">Health & Wellness</option>
@@ -128,7 +151,7 @@ const RightSide=()=>{
                   </div>
               </div>
             </div>
-            <div className='flex px-[12px] h-[15%] text-[1.1rem] space-x-5 justify-center items-center border-t-[1px] border-gray-500'>
+            <div className='flex px-[12px] h-[15%] text-[1.1rem] space-x-5 justify-center items-center border-t-[1px] border-accentBorder2 dark:border-daccentBorder2'>
                 <button onClick={createEvent} className='bg-gradient-to-r from-accent0 via-accent1 to-accent0 w-full text-white px-4 py-2 rounded'>Create</button>
                 <button onClick={closePopup} className=' w-full px-4 py-2 rounded text-white bg-black '>Cancel</button>
             </div>
@@ -350,7 +373,7 @@ return(
         {renderPopup()}
         <div data-label='innerDeadlineContainer' className='w-full min-h-[50px] h-fit rounded-lg bg-accentM dark:bg-daccentS2 shadow-lg border-[1px] border-b-[0px] border-accentBorder2 dark:border-daccentBorder2 overflow-hidden'>
            <section data-label='headingSection' className='w-full h-[50px] bg-accentS2 dark:bg-daccentM text-accentTxt2 font-medium dark:text-daccentTxt flex items-center justify-between px-[10px]'>
-            <p>Upcoming Events</p><button onClick={openPopup} className='text-[1.5rem] text-accent1'>+</button>
+            <p>Upcoming Events ({eventCount})</p><button onClick={openPopup} className='text-[1.5rem] text-accent1'>+</button>
            </section>
            <section data-label='eventsSection' className='flex flex-col h-fit max-h-[300px] overflow-x-hidden overflow-y-auto'>
              {
@@ -376,7 +399,12 @@ return(
                         </div>
                         <div className='pl-[10px]'>
                           <p className='h-fit text-accentTxt dark:text-daccentTxt'>{event.name}</p>
-                          <div className='text-[0.7rem] text-daccentS3'>{((parseInt(event.date) - new Date().getDate())>=0)?`${(parseInt(event.date) - new Date().getDate())} days left`:"deadline has passed"}</div>
+                          <div className='text-[0.7rem] text-accent2 font-bold'>{
+                          ((parseInt(event.date) - new Date().getDate())>=0)?
+                          (((parseInt(event.date) - new Date().getDate())==1)?"1 day left":`${(parseInt(event.date) - new Date().getDate())} days left`)
+                          :
+                          "deadline has passed"}
+                          </div>
                         </div> 
                       </div>
 

@@ -22,6 +22,7 @@ export default {
         accent4: "#421482",//dark purple
 
         //lightmode
+        daccent2:"#9177d1",
         accentS:"#ebebeb",
         accentS2:"#d6d6d6",
         accentS3:"#a8a8a8",
