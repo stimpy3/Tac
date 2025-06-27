@@ -28,7 +28,7 @@ or DOM elements being out of sync with the state
 
 import React,{useState,useRef,useEffect} from 'react' //go inside one pair of curly braces, separated by commas
 import EmptyPlaceholder from './emptyPlaceholder';
-import {ChevronRight,ChevronLeft,SquarePen} from 'lucide-react';
+import {ChevronRight,ChevronLeft,SquarePen,X} from 'lucide-react';
 import gsap from "gsap";
 
 const Carousel=()=>{
@@ -156,7 +156,7 @@ const Carousel=()=>{
                 <p className='text-[0.7rem] text-gray-100'>Visualization reminds your mind where it needs to go.</p>
               </div>
             </div>
-            <button onClick={closeVisionPopup} className='text-white text-[1.6rem]'>x</button>
+            <button onClick={closeVisionPopup} className='text-white text-[1.6rem]'><X/></button>
           </div>
           <div data-label='VisonInputContainer' className='px-[10px] py-[20px] w-full h-[70%] flex flex-col justify-around'>
             <input type="file" accept="image/*" onChange={handleUpload} />

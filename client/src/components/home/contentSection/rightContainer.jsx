@@ -1,5 +1,6 @@
 import React, { useState,useEffect,useRef } from 'react';
 import Calendar from '../../calendar'; // Import the separated Calendar component
+import { X } from 'lucide-react';
 
 const RightSide=()=>{
   const [events,setEvents]=useState([]);
@@ -118,13 +119,13 @@ const RightSide=()=>{
                   <p className='text-[0.7rem] text-gray-100'>Deadlines track what your brain drops</p>
                   </div>
                   </div>
-                  <button onClick={closePopup} className='text-white text-[1.6rem]'>x</button>
+                  <button onClick={closePopup} className='text-white text-[1.6rem]'><X/></button>
             </div>
             <div data-label='DeadlineEventInputContainer' className=' px-[10px] py-[20px] w-full h-[70%] flex flex-col justify-around'>
               <div className='flex flex-col'>
                 <label  className="text-accentTxt dark:text-daccentTxt">event name:</label>
-                <input type='text' placeholder='Max 15 characters' className='px-[5px] border-[1px] border-accentBorder2 dark:border-daccentBorder2 bg-accentS dark:bg-daccentS2 rounded text-accentTxt dark:text-daccentTxt' 
-                ref={nameRef} maxlength="16" required></input>
+                <input type='text' placeholder='Max 13 characters' className='px-[5px] border-[1px] border-accentBorder2 dark:border-daccentBorder2 bg-accentS dark:bg-daccentS2 rounded text-accentTxt dark:text-daccentTxt' 
+                ref={nameRef} maxlength="13" required></input>
               </div>
 
               <div className='flex flex-col'>
@@ -409,7 +410,7 @@ return(
                       </div>
 
                   </section>
-                  <button className='hover:text-bluePurple text-[1.2rem] text-accentTxt dark:text-daccentTxt' onClick={()=>deleteEvent(index)}>x</button>
+                  <button className='hover:text-bluePurple text-[1.2rem] text-accentTxt dark:text-daccentTxt' onClick={()=>{deleteEvent(index);setEventCount(prev=>prev-1);}}><X/></button>
               </div>
               ))
              }

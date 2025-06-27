@@ -150,9 +150,9 @@ const mondayTasks = () => {
                          zIndex: 2,
                        }}>
             
-                   <div data-label="visual" className="h-full rounded-lg  border-[1px] border-white" style={{ backgroundColor: monColors[index % monColors.length] }}>
+                   <div data-label="visual" className="h-full rounded-lg  border-[1px] border-accentS3 dark:divide-accentTxt2" style={{ backgroundColor: monColors[index % monColors.length] }}>
                    </div>
-                   <div data-label="tooltip" className="absolute bg-black p-[5px] text-white text-[0.5rem] flex flex-col rounded-sm
+                   <div data-label="tooltip" className="absolute p-[5px] bg-daccentM dark:bg-accentM text-daccentTxt dark:text-accentTxt text-[0.8rem] flex flex-col rounded-sm
                      z-[10] opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity"
                      style={{ left:0, top: -20}}>
                                <p>{(task.name.length>15)?(task.name.slice(0,15)+"..."):task.name+":"}</p>
@@ -204,9 +204,9 @@ const tuesdayTasks=()=>{
                          zIndex: 2,
                        }}>
             
-                   <div data-label="visual" className="h-full rounded-lg border-[1px] border-white" style={{ backgroundColor: tueColors[index % tueColors.length] }}>
+                   <div data-label="visual" className="h-full rounded-lg border-[1px] border-accentS3 dark:divide-accentTxt2" style={{ backgroundColor: tueColors[index % tueColors.length] }}>
                    </div>
-                   <div data-label="tooltip" className="absolute bg-black p-[5px] text-white text-[0.5rem] flex flex-col rounded-sm
+                   <div data-label="tooltip" className="absolute p-[5px] bg-daccentM dark:bg-accentM text-daccentTxt dark:text-accentTxt text-[0.8rem] flex flex-col rounded-sm
                      z-[10] opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity"
                      style={{ left:0, top: -20}}>
                                <p>{(task.name.length>15)?(task.name.slice(0,15)+"..."):task.name+":"}</p>
@@ -256,9 +256,9 @@ const wednesdayTasks=()=>{
                          zIndex: 2,
                        }}>
             
-                   <div data-label="visual" className="h-full rounded-lg border-[1px] border-white" style={{ backgroundColor: wedColors[index % wedColors.length] }}>
+                   <div data-label="visual" className="h-full rounded-lg border-[1px] border-accentS3 dark:divide-accentTxt2" style={{ backgroundColor: wedColors[index % wedColors.length] }}>
                    </div>
-                   <div data-label="tooltip" className="absolute bg-black p-[5px] text-white text-[0.5rem] flex flex-col rounded-sm
+                   <div data-label="tooltip" className="absolute p-[5px] bg-daccentM dark:bg-accentM text-daccentTxt dark:text-accentTxt text-[0.8rem] flex flex-col rounded-sm
                      z-[10] opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity"
                      style={{ left:0, top: -20}}>
                                <p>{(task.name.length>15)?(task.name.slice(0,15)+"..."):task.name+":"}</p>
@@ -307,9 +307,9 @@ const thursdayTasks=()=>{
                          zIndex: 2,
                        }}>
             
-                   <div data-label="visual" className="h-full rounded-lg border-[1px] border-white" style={{ backgroundColor: thuColors[index % thuColors.length] }}>
+                   <div data-label="visual" className="h-full rounded-lg border-[1px] border-accentS3 dark:divide-accentTxt2" style={{ backgroundColor: thuColors[index % thuColors.length] }}>
                    </div>
-                   <div data-label="tooltip" className="absolute bg-black p-[5px] text-white text-[0.5rem] flex flex-col rounded-sm
+                   <div data-label="tooltip" className="absolute p-[5px] bg-daccentM dark:bg-accentM text-daccentTxt dark:text-accentTxt text-[0.8rem] flex flex-col rounded-sm
                      z-[10] opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity"
                      style={{ left:0, top: -20}}>
                                <p>{(task.name.length>15)?(task.name.slice(0,15)+"..."):task.name+":"}</p>
@@ -359,9 +359,9 @@ const fridayTasks=()=>{
                          zIndex: 2,
                        }}>
             
-                   <div data-label="visual" className="h-full rounded-lg border-[1px] border-white" style={{ backgroundColor: friColors[index % friColors.length] }}>
+                   <div data-label="visual" className="h-full rounded-lg border-[1px] border-accentS3 dark:divide-accentTxt2" style={{ backgroundColor: friColors[index % friColors.length] }}>
                    </div>
-                   <div data-label="tooltip" className="absolute bg-black p-[5px] text-white text-[0.5rem] flex flex-col rounded-sm
+                   <div data-label="tooltip" className="absolute p-[5px] bg-daccentM dark:bg-accentM text-daccentTxt dark:text-accentTxt text-[0.8rem] flex flex-col rounded-sm
                      z-[10] opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity"
                      style={{ left:0, top: -20}}>
                                <p>{(task.name.length>15)?(task.name.slice(0,15)+"..."):task.name+":"}</p>
@@ -412,7 +412,7 @@ const saturdayTasks=()=>{
             
                    <div data-label="visual" className="h-full rounded-lg border-[1px] border-accentBorder2 dark:border-daccentBorder2 " style={{ backgroundColor: satColors[index % satColors.length] }}>
                    </div>
-                   <div data-label="tooltip" className="absolute bg-daccentM dark:bg-accentM p-[5px] text-accentTxt dark:text-daccentTxt text-[0.5rem] flex flex-col rounded-sm
+                   <div data-label="tooltip" className="absolute bg-daccentM dark:bg-accentM p-[5px] text-accentTxt dark:text-daccentTxt text-[0.8rem] flex flex-col rounded-sm
                      z-[10] opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity"
                      style={{ left:0, top: -20}}>
                                <p>{(task.name.length>15)?(task.name.slice(0,15)+"..."):task.name+":"}</p>
@@ -461,9 +461,9 @@ const sundayTasks=()=>{
                          zIndex: 2,
                        }}>
             
-                   <div data-label="visual" className="h-full rounded-lg border-[1px] border-white" style={{ backgroundColor: sunColors[index % sunColors.length] }}>
+                   <div data-label="visual" className="h-full rounded-lg border-[1px] border-accentS3 dark:divide-accentTxt2" style={{ backgroundColor: sunColors[index % sunColors.length] }}>
                    </div>
-                   <div data-label="tooltip" className="absolute bg-black p-[5px] text-white text-[0.5rem] flex flex-col rounded-sm
+                   <div data-label="tooltip" className="absolute p-[5px] bg-daccentM dark:bg-accentM text-daccentTxt dark:text-accentTxt text-[0.8rem] flex flex-col rounded-sm
                      z-[10] opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity"
                      style={{ left:0, top: -20}}>
                                <p>{(task.name.length>15)?(task.name.slice(0,15)+"..."):task.name+":"}</p>
