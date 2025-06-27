@@ -7,7 +7,7 @@ import RegisterPage from "./components/loginRegister/registerpage.jsx";
 import LandingPage from "./components/landingPage/landingpage.jsx";
 import TimeTable from "./components/timeTable/timeTable.jsx";
 import PrivateRoute from "./components/auth/privateRoutes.jsx"; //Import it for protection
-import { DarkModeProvider } from "./darkModeContext.jsx";
+import { DarkModeProvider } from "./darkModeContext.jsx"; //context useContext
 
 function App() {
   
@@ -15,7 +15,7 @@ function App() {
     //useGoogleLogin(...) hook can be used anywhere
     //or any other Google OAuth functionality — because those rely on having the OAuth context initialized.
     <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
-    <DarkModeProvider>
+    <DarkModeProvider> {/*context useContext*/}
     <Router>
       <Routes>
          <Route path="/" element={<LandingPage/>}/>

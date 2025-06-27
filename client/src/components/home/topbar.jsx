@@ -1,6 +1,6 @@
 import React, { useState,useEffect } from 'react';
 import { Sun,Moon } from 'lucide-react';
-import { useDarkMode } from "../../darkModeContext";
+import { useDarkMode } from "../../darkModeContext"; //context useContext
 
 /* Older React (before React 17)
 You always had to import React, because:
@@ -23,7 +23,7 @@ const TopBar = () => {
   const randomColor = ["bg-accent1", "bg-[#a1cbcf]", "bg-[#8ca3dc]", "bg-[#b4b4e4]", "bg-[#9d91c2]"];
   const [userColor] = useState(randomColor[Math.floor(Math.random() * 5)]);
  
-  const { mode, setMode } = useDarkMode();
+  const { mode, setMode } = useDarkMode(); //context useContext
 
   return (
     <div className="w-full h-[120px] pl-[20px] flex justify-between items-center">
