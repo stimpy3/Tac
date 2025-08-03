@@ -1,6 +1,7 @@
 import React, { useState,useEffect } from 'react';
-import { Sun,Moon } from 'lucide-react';
+import { Sun,MoonStar } from 'lucide-react';
 import { useDarkMode } from "../../darkModeContext"; //context useContext
+import { getCurrentUser } from "../../utils/auth";
 
 /* Older React (before React 17)
 You always had to import React, because:
@@ -8,10 +9,10 @@ JSX (<div>) gets compiled to React.createElement(...)
 So without React, your code would throw an error. */
 //lightmode darkmode
 const TopBar = () => {
-  // Google sign-in accessing from local storage
-  const user = JSON.parse(localStorage.getItem("user"));
-  const useremail = localStorage.getItem("useremail") || (user?.email ?? "");
-  const username = localStorage.getItem("username") || (user?.name ?? "");
+  // Get user from auth utility
+  const user = getCurrentUser();
+  const useremail = user?.email || "";
+  const username = user?.username || user?.name || "";
   
   const today = new Date();
   const date = today.toLocaleDateString("en-US", {
@@ -39,7 +40,7 @@ const TopBar = () => {
       <div className="h-full flex items-center gap-[20px]">
         <div className="min-w-[70px] flex justify-between items-center h-full text-accentS3 dark:text-daccentS3 ">
           <button onClick={()=>setMode(prev=>!prev)}>
-            {mode?<Moon className="hover:text-accent1"/>:<Sun className="hover:text-accent1"/>}
+            {mode?<MoonStar className="hover:text-accent1"/>:<Sun className="hover:text-accent1"/>}
           </button>
           <button><i className="fa-solid fa-bell text-[1.3rem] hover:text-accent1"></i></button>
         </div>
@@ -63,7 +64,7 @@ const TopBar = () => {
                 />
               </div>
             ) : (
-              <div className={`flex items-center justify-center text-[1.4rem] text-white w-[50px] h-[50px] ${userColor} rounded-full border border-accentS3 dark:border-daccentS3 shadow-lg`}>
+              <div className={`flex items-center justify-center text-[1.4rem] text-white w-[50px] h-[50px] ${userColor} rounded-full border border-accentS3 dark:border-accentS3 shadow-lg`}>
                 {username && username[0] ? username[0].toUpperCase() : <i className="fa-solid fa-user"></i>}
               </div>
             )

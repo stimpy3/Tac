@@ -17,32 +17,75 @@ Use useRef() when you want to store something across renders...
 without causing re-renders, making it ideal for storing things like DOM references, 
 timers, or other mutable values that don't require a UI update
 
-If you mistakenly try to use useState for things that don’t need re-rendering
+If you mistakenly try to use useState for things that don't need re-rendering
 (like DOM elements or non-UI data), you could end up in a situation where the
  component re-renders more often than needed, causing unnecessary re-computation or UI updates.
 
 React may re-render the component, but if you're modifying the DOM directly(document.queryselector etc)
-outside React’s control, it could lead to unexpected behavior,like styles not being updated,
+outside React's control, it could lead to unexpected behavior,like styles not being updated,
 or DOM elements being out of sync with the state
  */
 
 import React,{useState,useRef,useEffect} from 'react' //go inside one pair of curly braces, separated by commas
 import EmptyPlaceholder from './emptyPlaceholder';
 import {ChevronRight,ChevronLeft,SquarePen,X} from 'lucide-react';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import gsap from "gsap";
 
 const Carousel=()=>{
-  const [showVision,setShowVision]=useState(false);
-  const [visions, setVisions] = useState([]);
-  const [tempVision, setTempVision] = useState({
+
+    
+
+  const [showTask,setShowTask]=useState(false);
+  const [tasks, setTasks] = useState([]);
+  const [tempTask, setTempTask] = useState({
     id:"",
-    details:"",
-    image:null,
+    name:"",
+    description:"",
+    streak: 0,
+    lastMarkedDate: null,
+    startDate: null,
+    frequency: "",
+    problemsSolved: 0,
   });
+
+  const nameRef = useRef(null);
+  const descriptionRef = useRef(null);
+  const startDateRef = useRef(null);
+  const frequencyRef = useRef(null);
+
+  // Function to generate projected data
+  const generateProjectedData = (frequency) => {
+    const data = [];
+    for (let day = 0; day <= 30; day++) {
+      data.push({
+        day: day,
+        projected: Math.floor((day / 30) * frequency),
+        actual: 0
+      });
+    }
+    return data;
+  };
+
+  // Function to generate actual data based on problems solved
+  const generateActualData = (frequency, problemsSolved, elapsedDays) => {
+    const data = [];
+    for (let day = 0; day <= 30; day++) {
+      // Calculate linear projected line: distribute weekly frequency across days
+      const projected = Math.floor((day / 30) * frequency); 
+      
+      data.push({
+        day: day,
+        projected: projected,
+        actual: day === elapsedDays ? problemsSolved : (day < elapsedDays ? 0 : null)
+      });
+    }
+    return data;
+  };
 
 
   const carouselRef=useRef(null); /*useRef(null) initializes the reference with
-   null because, initially, there’s no DOM element assigned to the reference
+   null because, initially, there's no DOM element assigned to the reference
    Initially, carouselRef.current is null because the div hasn't been rendered yet
    */
   // Scroll left function
@@ -67,13 +110,31 @@ const Carousel=()=>{
     }
   };
 
-   const openVisionPopup=()=>{
-    setShowVision(true);
+   const openTaskPopup=()=>{
+    setShowTask(true);
   };
   
-  const closeVisionPopup=()=>{
-    setShowVision(false);
-     setTempVision({ id: "", image: null, details: "" }); //Clear it
+  const closeTaskPopup=()=>{
+    setShowTask(false);
+    setTempTask({ id: "", name: "", description: "", streak: 0, lastMarkedDate: null, startDate: null, frequency: "", problemsSolved: 0 }); //Clear it
+    
+    // Reset border colors
+    if (nameRef.current) {
+      nameRef.current.classList.remove("border-red-500");
+      nameRef.current.classList.add("border-gray-500");
+    }
+    if (descriptionRef.current) {
+      descriptionRef.current.classList.remove("border-red-500");
+      descriptionRef.current.classList.add("border-gray-500");
+    }
+    if (startDateRef.current) {
+      startDateRef.current.classList.remove("border-red-500");
+      startDateRef.current.classList.add("border-gray-500");
+    }
+    if (frequencyRef.current) {
+      frequencyRef.current.classList.remove("border-red-500");
+      frequencyRef.current.classList.add("border-gray-500");
+    }
   };
 
 
@@ -92,7 +153,7 @@ const Carousel=()=>{
         For example, if a popup disables scrolling, the cleanup re-enables it when the popup closes.
      */
     useEffect(()=>{
-    if(showVision){
+    if(showTask){
        document.body.style.overflowY='hidden';
     }
     else{
@@ -107,67 +168,233 @@ const Carousel=()=>{
     return () => {
       document.body.style.overflowY= 'auto';
     };
-    },[showVision]); //useeffect will run if anything in the dependency array changes
+    },[showTask]); //useeffect will run if anything in the dependency array changes
  
 
-  const handleUpload=(e)=>{ //adding image to tempVision reason is we dont wanna
-    //directly update vision till e have confirmed the change after pressing create
-    const file=e.target.files[0];
-    const reader= new FileReader();
-    reader.onload=()=>{ //asynchronous operation
-       setTempVision((prev) => ({ ...prev, image: `url(${reader.result})` }));
-       //...prev is used to keep the attributes:- id and details same but change only image
-    };
-    if (file) reader.readAsDataURL(file); //SHOULD BE WRITTEN AFTER onload 
-    //if written before onload it start reading the file, then onload wont run as file already read
-    //reader.readAsDataURL(file) tells the browser to convert the uploaded file into a Base64 string. 
-    //Once done, reader.result holds that string so you can display the image instantly in an <img> tag.
-    /*If you write reader.readAsDataURL(file); before setting reader.onload, it's like saying:
-      "Clap when the video ends!" but you say this after the video has already ended — so there's no clapping.
-      Set reader.onload before reading, or the "clap" (code) won't happen. */
-  };
 
-  const handleVisionDetails=(e)=>{//adding details part to tempVision
-    setTempVision((prev) => ({ ...prev, details: e.target.value }));
-    //...prev is used to keep the attributes:- id and image same but change only details   
-  };
 
     
-  const addVision=()=>{  //confirming changes(when create button pressed) temp vision added to visions
-    const newVision = {
+  const addTask=()=>{  //confirming changes(when create button pressed) temp task added to tasks
+    const selectedName = nameRef.current.value;
+    const selectedDescription = descriptionRef.current.value;
+    const selectedStartDate = startDateRef.current.value;
+    const selectedFrequency = frequencyRef.current.value;
+    
+    // Validation checks
+    if(selectedName == "" && selectedDescription == "" && selectedStartDate == "" && selectedFrequency == ""){
+      // All fields empty
+      nameRef.current.classList.remove("border-gray-500");
+      nameRef.current.classList.add("border-red-500");
+      descriptionRef.current.classList.remove("border-gray-500");
+      descriptionRef.current.classList.add("border-red-500");
+      startDateRef.current.classList.remove("border-gray-500");
+      startDateRef.current.classList.add("border-red-500");
+      frequencyRef.current.classList.remove("border-gray-500");
+      frequencyRef.current.classList.add("border-red-500");
+      return;
+    }
+    else if(selectedName == ""){
+      // Only name missing
+      nameRef.current.classList.remove("border-gray-500");
+      nameRef.current.classList.add("border-red-500");
+      descriptionRef.current.classList.remove("border-red-500");
+      descriptionRef.current.classList.add("border-gray-500");
+      startDateRef.current.classList.remove("border-red-500");
+      startDateRef.current.classList.add("border-gray-500");
+      frequencyRef.current.classList.remove("border-red-500");
+      frequencyRef.current.classList.add("border-gray-500");
+      return;
+    }
+    else if(selectedDescription == ""){
+      // Only description missing
+      nameRef.current.classList.remove("border-red-500");
+      nameRef.current.classList.add("border-gray-500");
+      descriptionRef.current.classList.remove("border-gray-500");
+      descriptionRef.current.classList.add("border-red-500");
+      startDateRef.current.classList.remove("border-red-500");
+      startDateRef.current.classList.add("border-gray-500");
+      frequencyRef.current.classList.remove("border-red-500");
+      frequencyRef.current.classList.add("border-gray-500");
+      return;
+    }
+    else if(selectedStartDate == ""){
+      // Only start date missing
+      nameRef.current.classList.remove("border-red-500");
+      nameRef.current.classList.add("border-gray-500");
+      descriptionRef.current.classList.remove("border-red-500");
+      descriptionRef.current.classList.add("border-gray-500");
+      startDateRef.current.classList.remove("border-gray-500");
+      startDateRef.current.classList.add("border-red-500");
+      frequencyRef.current.classList.remove("border-red-500");
+      frequencyRef.current.classList.add("border-gray-500");
+      return;
+    }
+    else if(selectedFrequency == ""){
+      // Only frequency missing
+      nameRef.current.classList.remove("border-red-500");
+      nameRef.current.classList.add("border-gray-500");
+      descriptionRef.current.classList.remove("border-red-500");
+      descriptionRef.current.classList.add("border-gray-500");
+      startDateRef.current.classList.remove("border-red-500");
+      startDateRef.current.classList.add("border-gray-500");
+      frequencyRef.current.classList.remove("border-gray-500");
+      frequencyRef.current.classList.add("border-red-500");
+      return;
+    }
+    else if(isNaN(selectedFrequency) || selectedFrequency <= 0){
+      // Frequency is not a valid number
+      nameRef.current.classList.remove("border-red-500");
+      nameRef.current.classList.add("border-gray-500");
+      descriptionRef.current.classList.remove("border-red-500");
+      descriptionRef.current.classList.add("border-gray-500");
+      startDateRef.current.classList.remove("border-red-500");
+      startDateRef.current.classList.add("border-gray-500");
+      frequencyRef.current.classList.remove("border-gray-500");
+      frequencyRef.current.classList.add("border-red-500");
+      return;
+    }
+    
+    // All validations passed
+    const newTask = {
     id: Date.now(),
-    image: tempVision.image,
-    details: tempVision.details,
+    name: selectedName,
+    description: selectedDescription,
+    streak: 0,
+    lastMarkedDate: null,
+    startDate: selectedStartDate,
+    frequency: parseInt(selectedFrequency),
+    problemsSolved: 0,
   };
-   setVisions((prev) => [...prev, newVision]);
-   setTempVision({ id: "", image: null, details: "" }); //Clear it
-   setShowVision(false);
+   setTasks((prev) => [...prev, newTask]);
+   setTempTask({ id: "", name: "", description: "", streak: 0, lastMarkedDate: null, startDate: null, frequency: "", problemsSolved: 0 }); //Clear it
+   setShowTask(false);
    };
 
-   const renderVisionPopup = () => {
-  if (showVision) {
+   const markToday = (taskId) => {
+    const today = new Date().toDateString();
+    console.log('Marking today for task:', taskId, 'Date:', today);
+    
+    setTasks(prev => prev.map(task => {
+      if (task.id === taskId) {
+        console.log('Current task:', task.name, 'Problems solved:', task.problemsSolved, 'Last marked:', task.lastMarkedDate);
+        
+        const lastMarked = task.lastMarkedDate ? new Date(task.lastMarkedDate).toDateString() : null;
+        const yesterday = new Date();
+        yesterday.setDate(yesterday.getDate() - 1);
+        const yesterdayString = yesterday.toDateString();
+        
+        console.log('Last marked:', lastMarked, 'Today:', today, 'Yesterday:', yesterdayString);
+        
+        // Always increment problems solved
+        let newProblemsSolved = task.problemsSolved + 1;
+        let newStreak = task.streak;
+        let newLastMarkedDate = task.lastMarkedDate;
+        
+        // Handle streak logic
+        if (lastMarked === today) {
+          // Already marked today, just increment problems solved, keep same streak
+          console.log('Already marked today, incrementing problems only');
+        } else if (lastMarked === yesterdayString) {
+          // Marked yesterday, increment streak and problems solved
+          console.log('Marked yesterday, incrementing streak and problems');
+          newStreak = task.streak + 1;
+          newLastMarkedDate = today;
+        } else {
+          // Not marked yesterday, reset streak to 1 and add problems solved
+          console.log('Not marked yesterday, resetting streak to 1 and adding problems');
+          newStreak = 1;
+          newLastMarkedDate = today;
+        }
+        
+        return { 
+          ...task, 
+          streak: newStreak, 
+          lastMarkedDate: newLastMarkedDate,
+          problemsSolved: newProblemsSolved
+        };
+      }
+      return task;
+    }));
+   };
+
+   const removeTask = (taskId) => {
+    setTasks(prev => prev.filter(task => task.id !== taskId));
+   };
+
+   const getElapsedDays = (startDate) => {
+    if (!startDate) return 1;
+    const start = new Date(startDate);
+    const today = new Date();
+    
+    // Reset time to start of day for accurate calculation
+    start.setHours(0, 0, 0, 0);
+    today.setHours(0, 0, 0, 0);
+    
+    const diffTime = today - start;
+    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24)) + 1; // Add 1 to start from day 1
+    
+    return Math.min(Math.max(diffDays, 1), 30); // Ensure minimum 1, maximum 30
+   };
+
+   const renderTaskPopup = () => {
+  if (showTask) {
     return (
-      <div className='fixed z-[10] inset-0 bg-gray-800 bg-opacity-50 backdrop-blur-sm flex justify-center items-center'>
-        <div className='bg-gray-100 dark:bg-daccentS h-[70%] w-[40%] max-h-[400px] max-w-[700px] rounded-lg shadow-lg overflow-hidden'>
+      <div className='fixed z-[10] inset-0 bg-black  bg-opacity-20 backdrop-blur-sm flex justify-center items-center'>
+        <div className='absolute inset-0' onClick={closeTaskPopup}></div>
+        <div className='bg-gray-100 dark:bg-daccentS h-[70%] w-[40%] max-h-[400px] max-w-[700px] rounded-lg shadow-lg overflow-hidden relative z-10'>
           <div className='bg-[url("/modalBG.png")] bg-cover bg-no-repeat px-[12px] h-[60px] flex items-center justify-between border-b-gray-500 border-b-[1px]'>
             <div className='flex'>
               <div>
-                <p className='text-[1.2rem] text-white font-bold'>Add a Vision</p>
-                <p className='text-[0.7rem] text-gray-100'>Visualization reminds your mind where it needs to go.</p>
+                <p className='text-[1.2rem] text-white font-bold'>Add a Task</p>
+                <p className='text-[0.7rem] text-gray-100'>Track your progress and build streaks.</p>
               </div>
             </div>
-            <button onClick={closeVisionPopup} className='text-white text-[1.6rem]'><X/></button>
+            <button onClick={closeTaskPopup} className='text-white text-[1.6rem]'><X/></button>
           </div>
-          <div data-label='VisonInputContainer' className='px-[10px] py-[20px] w-full h-[70%] flex flex-col justify-around'>
-            <input type="file" accept="image/*" onChange={handleUpload} />
-            <div className='flex flex-col'>
-              <label>vision details:</label>
-              <textarea className='border-[1px] px-[5px] bg-white dark:bg-daccentS text-black dark:text-white border-gray-500 rounded' onChange={handleVisionDetails}></textarea>
+          <div data-label='TaskInputContainer' className='px-[10px] py-[20px] w-full h-[70%] flex flex-col justify-between'>
+            <div className='flex flex-col h-[20%]'>
+              <label className='text-accentTxt dark:text-daccentTxt mb-2'>Task Name:</label>
+              <input 
+                type="text" 
+                className='border-[1px] px-[5px] py-2 bg-white dark:bg-daccentS text-black dark:text-white border-gray-500 rounded h-[60%]' 
+                placeholder="e.g., LEETCODE"
+                ref={nameRef}
+                required
+              />
+            </div>
+            <div className='flex flex-col h-[35%]'>
+              <label className='text-accentTxt dark:text-daccentTxt mb-2'>Description:</label>
+              <textarea 
+                className='border-[1px] px-[5px] py-2 bg-white dark:bg-daccentS text-black dark:text-white border-gray-500 rounded resize-none h-[80%]' 
+                placeholder="Brief description of your task..."
+                ref={descriptionRef}
+                required
+              ></textarea>
+            </div>
+            <div className='flex items-center h-[15%]'>
+              <label className='text-accentTxt dark:text-daccentTxt mr-[5px]'>Start Date:</label>
+              <input 
+                type="date" 
+                className='border-[1px] px-[5px] py-2 bg-white dark:bg-daccentS text-black dark:text-white border-gray-500 rounded w-fit h-[60%]' 
+                ref={startDateRef}
+                required
+              />
+            </div>
+            <div className='flex items-center h-[15%]'>
+              <label className='text-accentTxt dark:text-daccentTxt mr-[5px]'>Frequency:</label>
+              <input 
+                type="number" 
+                className='border-[1px] px-[5px] py-2 bg-white dark:bg-daccentS text-black dark:text-white border-gray-500 rounded w-fit h-[60%]' 
+                placeholder="e.g.,20 (frequency per 30days)"
+                ref={frequencyRef}
+                min="1"
+                required
+              />
             </div>
           </div>
           <div className='flex px-[12px] h-[15%] text-[1.1rem] space-x-[10px] justify-center items-center border-t-[1px] border-gray-500'>
-            <button onClick={addVision} className='bg-gradient-to-r from-accent0 via-accent1 to-accent0 w-full text-white px-4 py-2 rounded'>Create</button>
-            <button onClick={closeVisionPopup} className='bg-black w-full text-white px-4 py-2 rounded border-[1px] border-gray-600'>Cancel</button>
+            <button onClick={addTask} className='bg-gradient-to-r from-accent0 via-accent1 to-accent0 w-full text-white px-4 py-2 rounded'>Create</button>
+            <button onClick={closeTaskPopup} className='bg-black w-full text-white px-4 py-2 rounded border-[1px] border-gray-600'>Cancel</button>
           </div>
         </div>
       </div>
@@ -225,7 +452,7 @@ const Carousel=()=>{
         <p className='flex items-center text-[1.5rem] text-accentTxt dark:text-daccentTxt w-fit h-full whitespace-nowrap'>
           {monthNames[month]} Activity
         </p>
-        <button onClick={openVisionPopup} className='flex items-center justify-cente h-full text-[1.5rem] text-accent1 hover:text-[2rem] hover:rotate-90 transition-all duration-300 font-bold w-[30px] justify-center '>+</button>
+        <button onClick={openTaskPopup} className='flex items-center justify-cente h-full text-[1.5rem] text-accent1 hover:text-[2rem] hover:rotate-90 transition-all duration-300 font-bold w-[30px] justify-center '>+</button>
       </div>
       <svg ref={strokeBoxRef} className="w-full h-[80px]" viewBox="0 0 100 80" preserveAspectRatio="none">
         <path d="M 0 40 Q 50 40, 100 40" className="pathName stroke-accentBorder2 dark:stroke-daccentBorder2 stroke-[1.5]" fill="transparent" />
@@ -236,27 +463,95 @@ const Carousel=()=>{
       </div>
     </div>
 
-    {renderVisionPopup()}
+    {renderTaskPopup()}
 
     <div ref={carouselRef} data-label='carouselContainer' className='overflow-x-auto scrollbar-hide flex rounded-xl items-center w-full h-[350px] p-[20px] border-[3px] border-accentS2 dark:border-daccentS2 border-dashed'>
-      {visions.length === 0 ? (
+      {tasks.length === 0 ? (
         <div className="text-gray-500 h-full flex items-center justify-center w-full">
           <EmptyPlaceholder />
         </div>
       ) : ( //bg-[url('/gradient5.png')] shadow-purple-500/50 shadow-lg
-        visions.map((vision) => (
-          <div data-label='vison' key={vision.id} className="relative flex flex-col rounded-xl pt-[30px]  bg-accentM dark:bg-daccentM h-full aspect-[4/5] text-accentTxt dark:text-daccentTxt p-[10px] mr-[20px] bg-cover bg-no-repeat">
-            <button className="absolute bottom-[7px] left-[7px]"><SquarePen /></button>
-            <div className="absolute bottom-[5px] right-[10px] bebas-neue-regular text-[1.2rem]">day 20/30</div>
-            <div className='w-full h-fit flex flex-col items-center justify-center'>
-              <p className='flex items-center justify-center w-full bebas-neue-regular text-[3rem] h-fit 
-              text-accentTxt dark:text-daccentTxt leading-none'>Leetcode</p>
-              <p className='text-center w-full cookie text-[1rem] h-fit 
-              text-accentTxt dark:text-daccentTxt leading-none'>Lorem, . Magnam beatae quibusdam provident rem a nemo corporis!</p>
+        tasks.map((task) => (
+          <div data-label='task' key={task.id} className="relative flex flex-col rounded-xl bg-accentM dark:bg-daccentM h-full aspect-[4/5] text-accentTxt dark:text-daccentTxt p-[10px] mr-[20px] bg-cover bg-no-repeat">
+            <div data-label='graphContainer' className='w-full h-[65%] flex items-center justify-center'>
+               <div className="absolute top-[10px] left-[10px] text-[1rem] bebas-neue-regular">{task.streak}🔥</div>
+                <button 
+                  onClick={() => removeTask(task.id)}
+                  className="absolute top-[10px] right-[10px] text-accentTxt dark:text-daccentTxt hover:text-red-500 transition-colors"
+                >
+                  <X size={16} />
+                </button> 
+                <ResponsiveContainer width="90%" height="90%">
+                  <LineChart data={generateActualData(task.frequency, task.problemsSolved, getElapsedDays(task.startDate))}
+                   margin={{ top: 0, right: 40, bottom: 0, left: 0 }} >
+                    <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
+                    <XAxis 
+                      dataKey="day" 
+                      stroke="#9CA3AF"
+                      fontSize={10}
+                      tick={{ fill: '#9CA3AF' }}
+                    />
+                    <YAxis 
+                      stroke="#9CA3AF"
+                      fontSize={10}
+                      tick={{ fill: '#9CA3AF' }}
+                    />
+                    <Tooltip 
+                      contentStyle={{ 
+                        backgroundColor: '#1F2937', 
+                        border: '1px solid #374151',
+                        borderRadius: '8px',
+                        color: '#F9FAFB',
+                        opacity: 0.7 ,
+                      }}
+                    />
+                    <Legend 
+                      wrapperStyle={{ color: '#9CA3AF', fontSize: '10px' }}
+                    />
+                    <Line 
+                      type="monotone" 
+                      dataKey="projected" 
+                      stroke="#6B7280" 
+                      strokeWidth={2}
+                      strokeDasharray="5 5"
+                      dot={(props) => {
+                        const { cx, cy, payload } = props;
+                        const day = payload.day;
+                        // Only show dots every 5 days
+                        if ([0, 5, 10, 15, 20, 25, 30].includes(day)) {
+                          return <circle cx={cx} cy={cy} r={3} fill="#6B7280" />;
+                        }
+                        return null;
+                      }}
+                      name="Projected"
+                    />
+                    <Line 
+                      type="monotone" 
+                      dataKey="actual" 
+                      stroke="#60A5FA" 
+                      strokeWidth={1.5}
+                      dot={{ fill: '#60A5FA', strokeWidth: 1, r: 3 }}
+                      name="Actual"
+                    />
+                  </LineChart>
+                </ResponsiveContainer>
             </div>
-            <div className='h-full w-full flex flex-col items-center justify-center'>
-              <p className='text-[5rem] bebas-neue-regular leading-none'>20</p>
-              <p className='text-[1rem] lobster'>tracked</p>
+            <div data-label='taskDescriptionContainer' className='p-[5px] h-[35%] rounded-lg bg-accentS2 dark:bg-daccentS2 w-full flex flex-col items-center justify-center'>
+              <div className='w-full h-[70%]'>
+                  <p className='mt-[5px] flex items-center justify-start w-full bebas-neue-regular text-[1.5rem] h-fit 
+                  text-accentTxt dark:text-daccentTxt leading-none'>{task.name.length > 20 ? task.name.slice(0, 20) + "..."  : task.name}</p>
+                  <p className='mt-[5px] w-full inter text-[0.8rem] h-fit 
+                  text-accentTxt dark:text-daccentTxt leading-none'>{task.description.length > 35 ? task.description.slice(0, 35) + "..."  : task.description}</p>
+              </div>
+              <div className='flex items-center justify-between w-full h-[30%]'>
+                  <div className='text-[1rem] bebas-neue-regular'>DAY: {getElapsedDays(task.startDate)}/30</div>
+                  <button 
+                    onClick={() => markToday(task.id)}
+                    className='text-[1rem] bebas-neue-regular bg-accent1 text-white p-[2px] px-[5px] rounded hover:bg-accent0 transition-colors'
+                  >
+                    MARK TODAY +
+                  </button>
+              </div>
             </div>
           </div>
         ))

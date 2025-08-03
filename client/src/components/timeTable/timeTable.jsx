@@ -493,7 +493,8 @@ const sundayTasks=()=>{
 const renderTaskModal=()=>{
 return (showTaskModal)?  //gotta return where called
     <div className="absolute w-full h-full inset-0 bg-black bg-opacity-20 z-[50] backdrop-blur-lg flex items-center justify-center">
-        <div className='bg-accentS dark:bg-daccentS min-w-[450px] h-[70%] w-[40%] max-h-[400px] max-w-[700px] rounded-lg shadow-lg overflow-hidden'>
+        <div className='absolute inset-0' onClick={handleTaskModal}></div>
+        <div className='bg-accentS dark:bg-daccentS min-w-[450px] h-[70%] w-[40%] max-h-[400px] max-w-[700px] rounded-lg shadow-lg overflow-hidden relative z-10'>
             <div className='bg-[url("/modalBG.png")] bg-cover  bg-no-repeat  px-[12px] h-[60px] flex items-center justify-between border-b-gray-500  dark:border-b-daccentBorder2 border-b-[1px]'>
                   <div className='flex'>
                   <div>

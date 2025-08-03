@@ -111,7 +111,8 @@ const RightSide=()=>{
       return (
   
         <div className='fixed inset-0 bg-black bg-opacity-20 backdrop-blur-sm flex justify-center items-center z-50'>
-          <div className='bg-accentS dark:bg-daccentS2 h-[70%] w-[40%] min-w-[450px] max-h-[400px] max-w-[700px] rounded-lg shadow-lg overflow-hidden'>
+          <div className='absolute inset-0' onClick={closePopup}></div>
+          <div className='bg-accentS dark:bg-daccentS2 h-[70%] w-[40%] min-w-[450px] max-h-[400px] max-w-[700px] rounded-lg shadow-lg overflow-hidden relative z-10'>
             <div className='bg-[url("/modalBG.png")] bg-cover bg-no-repeat  px-[12px] h-[60px] flex items-center justify-between border-accentBorder2 dark:border-daccentBorder2 border-b-[1px]'>
                   <div className='flex'>
                   <div>

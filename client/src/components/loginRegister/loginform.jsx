@@ -18,19 +18,22 @@ const LoginForm=() => {
       axios.post("http://localhost:3001/login", { email, password })
       .then(result => {
       console.log(result)
-      if(result.data==="Success"){
+      if(result.data.message === "Login successful"){
+        // Store JWT token and user data
+        localStorage.setItem("token", result.data.token);
+        localStorage.setItem("user", JSON.stringify(result.data.user));
         navigate('/home');
-      }
-      else if(result.data==="password Incorrect"){
-        alert("wrong password");
-      }
-      else if(result.data==="no such record exists"){
-         alert("no such record");
+      } else {
+        alert(result.data.message || "Login failed");
       }
       })
       .catch((err) => {
         console.error(err);
-        alert("Login failed");
+        if (err.response && err.response.data && err.response.data.message) {
+          alert(err.response.data.message);
+        } else {
+          alert("Login failed");
+        }
       });
     };
 
@@ -79,13 +82,13 @@ const loginWithGoogle = useGoogleLogin({
     //So Google gives your app a tokenResponse object when login succeeds.
     try {
       // Use the access token to fetch profile info
-      const res = await axios.get( //This makes a GET request to Google’s User Info API and waits for response
+      const res = await axios.get( //This makes a GET request to Google's User Info API and waits for response
        //axios.get(url, config) syntax...url: The endpoint config:(Optional) An object for headers, params, etc.
         'https://www.googleapis.com/oauth2/v3/userinfo', //This is the URL Google provides to get user profile info using the token.
         {
           headers: {
             Authorization: `Bearer ${tokenResponse.access_token}`,
-            //Google requires a Bearer token in the request header to prove you’re authorized.
+            //Google requires a Bearer token in the request header to prove you're authorized.
           },
         }
       );
@@ -107,19 +110,24 @@ const loginWithGoogle = useGoogleLogin({
         */
       const { name, email, picture }=res.data;
 
-      // ✅ Clean old auth info first
-      localStorage.removeItem("user");
-      localStorage.removeItem("username"); // if you use this elsewhere
-      localStorage.removeItem("useremail");
+      // Send Google user data to our server to get JWT token
+      const serverResponse = await axios.post("http://localhost:3001/google-login", {
+        email,
+        name,
+        picture
+      });
 
-      // Store or use user info
-      //JSON.stringify(...) is needed because localStorage only stores strings
-      localStorage.setItem("user", JSON.stringify({ name, email, picture }));
-      
-      navigate("/home");
+      if (serverResponse.data.message === "Google login successful") {
+        // Store JWT token and user data
+        localStorage.setItem("token", serverResponse.data.token);
+        localStorage.setItem("user", JSON.stringify(serverResponse.data.user));
+        navigate("/home");
+      } else {
+        alert("Google login failed");
+      }
     } catch (error) {
       console.error("Failed to fetch user info:", error);
-      alert("Google login succeeded but fetching user data failed");
+      alert("Google login failed");
     }
   },
   onError: () => {

@@ -2,6 +2,7 @@ import React,{useEffect, useState} from 'react';
 import Content from './contentSection/content.jsx';
 import Sidebar from './sidebar.jsx';
 import { useNavigate } from "react-router-dom";
+import { logout } from "../../utils/auth";
 
 const HomePage=() =>{
    const navigate=useNavigate();
@@ -15,18 +16,15 @@ const HomePage=() =>{
    },[modal]);
 
    const handleLogout=()=>{
-      localStorage.removeItem("user");
-      localStorage.removeItem("username"); // if you use this elsewhere
-      localStorage.removeItem("useremail");
-      navigate("/");
+      logout(); // This will clean up all tokens and redirect to login
    };
 
    return(
   <div className="relative flex flex-col dark:bg-daccentS h-auto min-h-[100vh]">
     {modal ? (
       <section className='fixed z-[10] w-full h-full bg-transparent backdrop-blur-sm flex justify-center items-center'>
-        <button onClick={() => setModal(false)} className='relative w-full h-full bg-black opacity-50'></button>
-        <div className='absolute z-[15] opacity-[100%] w-[250px] h-[150px] bg-accentS dark:bg-daccentS flex flex-col justify-between rounded-xl'>
+        <div className='absolute inset-0' onClick={() => setModal(false)}></div>
+        <div className='absolute z-[15] opacity-[100%] w-[250px] h-[150px] bg-accentS dark:bg-daccentS flex flex-col justify-between rounded-xl relative z-10'>
           <section className='flex items-center h-full w-fulls'>
             <p className='text-accentTxt dark:text-daccentTxt text-[1.2rem] text-center'>
               Are you sure you want to logout?

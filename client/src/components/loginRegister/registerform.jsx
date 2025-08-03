@@ -29,12 +29,22 @@ const RegisterForm = () => {
     axios
       .post("http://localhost:3001/register", { username, email, password })
       .then((result) => {
-        localStorage.setItem("username", result.data.username);
-        localStorage.setItem("useremail", result.data.username);
-        navigate("/home");
+        if (result.data.message === "User registered successfully") {
+          // Store JWT token and user data
+          localStorage.setItem("token", result.data.token);
+          localStorage.setItem("user", JSON.stringify(result.data.user));
+          navigate("/home");
+        } else {
+          alert(result.data.message || "Registration failed");
+        }
       })
       .catch((err) => {
         console.log(err);
+        if (err.response && err.response.data && err.response.data.message) {
+          alert(err.response.data.message);
+        } else {
+          alert("Registration failed");
+        }
       });
   };
 
@@ -70,10 +80,24 @@ Is a bearer token — whoever holds it, can use it
 
         const { name, email, picture } = res.data;
 
-        localStorage.setItem("user", JSON.stringify({ name, email, picture }));
-        navigate("/home");
+        // Send Google user data to our server to get JWT token
+        const serverResponse = await axios.post("http://localhost:3001/google-login", {
+          email,
+          name,
+          picture
+        });
+
+        if (serverResponse.data.message === "Google login successful") {
+          // Store JWT token and user data
+          localStorage.setItem("token", serverResponse.data.token);
+          localStorage.setItem("user", JSON.stringify(serverResponse.data.user));
+          navigate("/home");
+        } else {
+          alert("Google registration failed");
+        }
       } catch (err) {
         console.error("Failed to fetch Google user:", err);
+        alert("Google registration failed");
       }
     },
     onError: () => {

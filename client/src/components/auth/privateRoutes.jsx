@@ -1,10 +1,43 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Navigate } from "react-router-dom";
+import { isAuthenticated, verifyToken } from "../../utils/auth";
+import LoadingSpinner from "../LoadingSpinner";
 //children is our prop
 //children is a keyword , its like a prop, you dont need to pass it from parent to access elsewhere
 const PrivateRoute = ({ children }) => {
-  const user = localStorage.getItem("user"); // to check if person is logged (if user obj empty its logged out)
-  return (user ? children : <Navigate to="/login" />);
+  const [isValidToken, setIsValidToken] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const checkAuthentication = async () => {
+      // First check if token exists and is valid format
+      if (!isAuthenticated()) {
+        // If no token or invalid format, redirect immediately
+        setIsValidToken(false);
+        setIsLoading(false);
+        return;
+      }
+
+      // If token exists and looks valid, verify with server
+      try {
+        const isValid = await verifyToken();
+        setIsValidToken(isValid);
+      } catch (error) {
+        console.error('Token verification error:', error);
+        setIsValidToken(false);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    checkAuthentication();
+  }, []);
+
+  if (isLoading) {
+    return <LoadingSpinner size="medium" />;
+  }
+
+  return isValidToken ? children : <Navigate to="/login" />;
 };
 /*
   <Route path="/home" element={
