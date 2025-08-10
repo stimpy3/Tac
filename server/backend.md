@@ -2,13 +2,13 @@ current file structure for our backend
 server/
 ├── index.js              ← Main backend file (Express server)
 └── models/
-    └── employee.js       ← Mongoose schema/model for employees
+    └── user.js       ← Mongoose schema/model for users
 
 Dependencies you're using:
 1. express – for creating a web server
 2. mongoose – to connect and interact with MongoDB
 3. cors – to allow requests from a frontend (e.g., React app on a different port)
-4. employeeModel – your MongoDB model to store users (employees)
+4. userModel – your MongoDB model to store users (users)
 
 Q. What is an Express server?
 An Express server is just a Node.js server using the Express.js library.
@@ -40,7 +40,7 @@ Reason:
 To organize your code.
 You created the folder to store your Mongoose model, which defines the structure of data in MongoDB.
 Instead of putting everything in index.js, it's better to separate parts like:
-models/ → all your data models (e.g., employees, products, etc.)
+models/ → all your data models (e.g., users, products, etc.)
 routes/ (later) → all your route logic
 controllers/ (optional later) → separate the logic that handles each route
 
@@ -174,9 +174,9 @@ const mongoose=require("mongoose") //Mongoose is a JavaScript library that helps
 //  (a NoSQL database) easily from Node.js.
 const cors=require("cors") //It imports the CORS (Cross-Origin Resource Sharing) middleware into your Node.js backend.
 const cookieParser = require("cookie-parser");//cookies for fetching user name
-const employeeModel=require('./models/employee') 
+const userModel=require('./models/user') 
 
-//LOOK AT ./models/employee.js file for explantion on this
+//LOOK AT ./models/user.js file for explantion on this
 /*require() is a built-in function in Node.js.
 => It is used to import code from:
 => other files (your own code),
@@ -317,21 +317,21 @@ app.post('/register',(req,res)=>{
        // The data sent from frontend will be in req.body (because of express.json())
        // 1. 'register' here is the URL path (route) you defined.
      //    It's NOT a keyword, you choose it yourself based on what you want the route to do.
-     //    For example, it could be '/login' or '/add-employee' or anything else.
+     //    For example, it could be '/login' or '/add-user' or anything else.
 
      // 2. 'req' stands for 'request' — it represents the data the client (frontend) sends to your server.
      //    The data sent in POST request is accessed using req.body (because of app.use(express.json()))
      //    This means the client sends JSON, Express parses it, and gives you a JavaScript object here.
 
      // 3. 'res' stands for 'response' — it’s how your server sends data back to the client.
-    employeeModel.create(req.body)
+    userModel.create(req.body)
      // create() is a Mongoose function that adds the data to MongoDB
-     // 4. employeeModel.create(req.body)
-     //    'req.body' is a normal JavaScript object (not raw JSON string) containing the employee data.
+     // 4. userModel.create(req.body)
+     //    'req.body' is a normal JavaScript object (not raw JSON string) containing the user data.
      //    create() saves this object to the MongoDB database.
      //    It returns a Promise (an async operation).
-    .then(employees=>res.json(employees))
-     // 5. .then(employees => res.json(employees))
+    .then(users=>res.json(users))
+     // 5. .then(users => res.json(users))
      //    After saving, 'then' runs with the saved data (still a JS object).
      //    res.json() converts that JS object into JSON format and sends it back to the client.
      //    We send it back so the client knows the data was saved successfully and can see what was saved.
@@ -348,9 +348,9 @@ app.post("/login",(req,res)=>{
   const {email,password}=req.body;//req.body hold js objects (json to js object with help of app.use(epress.json()))
   //All Mongoose query methods like findOne(), find(), save(), update(), etc., return a Promise.
   //That’s why you use .then() or await to handle their results asynchronously.
-   employeeModel.findOne({email:email}).then(user=>{ 
+   userModel.findOne({email:email}).then(user=>{ 
     //user is the document returned by MongoDB via Mongoose.
-    //It is a JavaScript object representing the employee record that matched the query.
+    //It is a JavaScript object representing the user record that matched the query.
 
 
     //Both .then() and await handle asynchronous operations.
@@ -379,7 +379,7 @@ app.post("/login", async (req, res) => {
 
   try {
     // Await the Promise returned by findOne()
-    const user = await employeeModel.findOne({ email: email });
+    const user = await userModel.findOne({ email: email });
 
     if (user) {
       if (user.password === password) {
@@ -495,7 +495,7 @@ Think of app.listen() like turning on the radio — you first set up the playlis
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
-const employeeModel = require('./models/employees'); // our MongoDB model
+const userModel = require('./models/users'); // our MongoDB model
 
 // 2. Create server object
 const app = express(); // app is now our server object
@@ -514,7 +514,7 @@ mongoose.connect("mongodb://localhost:27017/yourDBname");
 
 // 5. Define API routes
 app.post('/register', (req, res) => {
-    employeeModel.create(req.body)
+    userModel.create(req.body)
         .then(user => res.json(user))
         .catch(err => res.json(err));
 });
