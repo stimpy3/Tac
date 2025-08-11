@@ -45,14 +45,6 @@ mongoose
   .then(() => console.log("✅ Connected to MongoDB Atlas"))
   .catch((err) => console.error("❌ MongoDB connection error:", err));
 
-// Serve static files
-app.use(express.static(path.join(__dirname, "../client/dist")));
-
-// Fallback for SPA routes
-app.get(/.*/, (req, res) => {
-  res.sendFile(path.join(__dirname, "../client/dist/index.html"));
-});
-
 // ---------------- Routes ----------------
 
 app.post("/register", async (req, res) => {
@@ -156,6 +148,20 @@ app.post("/verify-token", (req, res) => {
 });
 
 // ---------------- Server ----------------
-app.listen(3001, () => {
-  console.log("🚀 Server running on port 3001");
+// app.listen(3001, () => {
+//   console.log("🚀 Server running on port 3001");
+// });
+
+/*When you deploy to Render (or most cloud hosts), they don’t just let you pick any port like 3001.
+Instead, they give you a port number via an environment variable called PORT that your app needs to use.
+process.env.PORT grabs that port number Render assigns.
+If process.env.PORT isn’t set (like when you run locally), it falls back to 3001.
+If you hardcode app.listen(3001), Render might get mad because it expects you to listen on their
+assigned port, not a fixed one. That can cause deployment to fail or your app not working properly.*/
+
+//process.env.PORT is a special environment variable that stores the port number your app should listen on
+//usually set by the hosting service (like Render, Heroku, Vercel, etc).
+const PORT = process.env.PORT || 3001;
+app.listen(PORT, () => {
+  console.log(`🚀 Server running on port ${PORT}`);
 });
