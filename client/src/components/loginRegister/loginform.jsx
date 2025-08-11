@@ -12,10 +12,24 @@ const LoginForm=() => {
    const [password,setPassword]=useState("");
 
   const navigate= useNavigate();//hook in react
-
+  /*
+  Why import.meta.env and not process.env?
+   -In Node.js backend, you use process.env to get env vars.
+   -In modern frontend setups using Vite, process.env isn’t available by default because
+   frontend code runs in browsers, not Node.js.
+   -So Vite provides import.meta.env as a safe way to inject env vars into your frontend bundle during build time.
+   */
+  /*
+  Vite injecting env vars starting with VITE_
+   -Vite is your frontend build tool. It takes your React code and turns it into stuff browsers can understand.
+   -Env vars (environment variables) are like secret settings you don’t wanna hardcode in your code. Stuff like API URLs, keys, etc.
+   -When you run vite build, Vite looks for env vars in your system or .env files.
+   -But Vite only passes (injects) env vars starting with VITE_ into the frontend bundle — this means only variables like VITE_BACKEND_URL become visible to your React app code.
+   */
+  const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:3001";
   const handleLogin=(e)=>{
       e.preventDefault();
-      axios.post("http://localhost:3001/login", { email, password })
+      axios.post(`${BACKEND_URL}/login`, { email, password })
       .then(result => {
       console.log(result)
       if(result.data.message === "Login successful"){
@@ -111,7 +125,14 @@ const loginWithGoogle = useGoogleLogin({
       const { name, email, picture }=res.data;
 
       // Send Google user data to our server to get JWT token
-      const serverResponse = await axios.post("http://localhost:3001/google-login", {
+      /*
+       Why import.meta.env and not process.env?
+        -In Node.js backend, you use process.env to get env vars.
+        -In modern frontend setups using Vite, process.env isn’t available by default because
+        frontend code runs in browsers, not Node.js.
+        -So Vite provides import.meta.env as a safe way to inject env vars into your frontend bundle during build time.
+      */
+      const serverResponse = await axios.post(`${BACKEND_URL}/google-login`, {
         email,
         name,
         picture

@@ -2,7 +2,23 @@ Areas to explore more:-
 -react routers
 -use effect hook
 -------------------------------------------------------------------------------------------------
+What Vite actually does
+Development mode:
+-It runs a dev server so you can open your React/Vue/Svelte app in the browser instantly.
+-It doesn’t bundle everything up front — it sends files to the browser as you need them (using ES modules).
+-This means no more waiting 30 seconds after every change — hot reloads are almost instant.
 
+Production build mode:
+-When you run vite build, it takes all your code, bundles it into optimized files, minifies it, and prepares it for deployment.
+-It uses Rollup under the hood for the production build.
+-Env variable handling:
+-It has special rules for .env files — only variables prefixed with VITE_ get exposed to your frontend code.
+
+Why it’s popular
+-Fast refresh → saves you from rage-quitting while coding.
+-Simple config → most things work without touching a config file.
+-Modern by default → uses ES modules, ships minimal code, and supports TypeScript, JSX, CSS, etc. out of the box.
+-------------------------------------------------------------------------------------------------
 BASICALLY EXPLAINING WHY/WHEN WE NEED USESTATE IN REACT------------------------------------------
 🧠 React's "Declarative UI" System
 React works with a declarative approach to building UIs. This means that:
