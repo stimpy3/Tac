@@ -29,6 +29,8 @@ const RegisterForm = () => {
     axios
       .post(`${BACKEND_URL}/register`, { username, email, password })
       .then((result) => {
+        //risky
+        console.log(result.data);
         if (result.data.message === "User registered successfully") {
           // Store JWT token and user data
           localStorage.setItem("token", result.data.token);
