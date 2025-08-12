@@ -20,14 +20,14 @@ const RegisterForm = () => {
     e.preventDefault();
     setShowFlag(!showFlag);
   };
-
+  const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:3001";
   const handleSubmit = (e) => {
     e.preventDefault();
 
     if (password === "" || email === "" || username === "") return;
 
     axios
-      .post("http://localhost:3001/register", { username, email, password })
+      .post(`${BACKEND_URL}/register`, { username, email, password })
       .then((result) => {
         if (result.data.message === "User registered successfully") {
           // Store JWT token and user data
@@ -81,7 +81,7 @@ Is a bearer token — whoever holds it, can use it
         const { name, email, picture } = res.data;
 
         // Send Google user data to our server to get JWT token
-        const serverResponse = await axios.post("http://localhost:3001/google-login", {
+        const serverResponse = await axios.post(`${BACKEND_URL}/google-login`, {
           email,
           name,
           picture
