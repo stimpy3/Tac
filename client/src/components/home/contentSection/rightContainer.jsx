@@ -20,66 +20,7 @@ const RightSide=()=>{
     setShow(false);
   };
 
- 
-  //VISUALLY ADD EVENT DEADLINE
-  const createEvent=()=>{
-    const selectedCategory=categoryRef.current.value;
-    const selectedName=nameRef.current.value;
-    const selectedDate=(dateRef.current.value).slice(8);
-    const selectedMonth=(dateRef.current.value).slice(5,-3);
-    const monthMap={
-      "01":"Jan",
-      "02":"Feb",
-      "03":"Mar",
-      "04":"Apr",
-      "05":"May",
-      "06":"Jun",
-      "07":"Jul",
-      "08":"Aug",
-      "09":"Sep",
-      "10":"Oct",
-      "11":"Nov",
-      "12":"Dec",
-    };
-    const monthName=monthMap[selectedMonth];
-    let daysArray = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-    let monthsArray=["January", "February", "March", "April", "May", "June","July", "August", "September", "October", "November", "December"];
-    const date=new Date(dateRef.current.value);//convert dte string to date object
-    const dayName=daysArray[date.getDay()];
-    if(selectedName=="" && selectedDate==""){
-        nameRef.current.classList.remove("border-accentBorder2", "dark:border-daccentBorder2");
-        nameRef.current.classList.add("border-red-500");
-        dateRef.current.classList.remove("border-accentBorder2", "dark:border-daccentBorder2");
-        dateRef.current.classList.add("border-red-500");
-        return;
-    }
-    else if(selectedDate=="" ){
-      dateRef.current.classList.remove("border-accentBorder2", "dark:border-daccentBorder2");
-      dateRef.current.classList.add("border-red-500");
-      nameRef.current.classList.remove("border-red-500");
-      nameRef.current.classList.add("border-accentBorder2", "dark:border-daccentBorder2");
-       return;
-    }
-     else if(selectedName=="" ){
-       nameRef.current.classList.remove("border-accentBorder2", "dark:border-daccentBorder2");
-       nameRef.current.classList.add("border-red-500");
-       dateRef.current.classList.remove("border-red-500");
-       dateRef.current.classList.add("border-accentBorder2", "dark:border-daccentBorder2");
-       return;
-    }
-    setEventCount(prev=>prev+1);
-    const newEvent = {
-     icon:categoryData[selectedCategory].icon,
-     color:categoryData[selectedCategory].color,
-     name:selectedName,
-     date:selectedDate,
-     month:monthName,
-     day:dayName,
-      // you can add other properties here like title, date, etc.
-    };
-    setEvents((prevEvents) => [...prevEvents, newEvent]);
-    setShow(false);
-  };
+
 
   //list of icons for deadline category
   const categoryData={
@@ -200,13 +141,7 @@ const RightSide=()=>{
   };
   },[show]); //useeffect will run if anything in the dependency array changes
 
-  //DELETE EVENT DEADLINE
-  //filter syntax array.filter((element, index, array)=>{});
-  //return true to keep the element
-  //return false to remove it
-  const deleteEvent=(indexDelete)=>{
-    setEvents(events.filter((_,index)=>{return index!=indexDelete;}));
-  };
+
 
   const [sunmoon,setSunmoon]=useState("");
   const [sky,setSky]=useState("");
@@ -351,6 +286,117 @@ useEffect(()=>{
   
   return ()=> clearInterval(interval);
 },[]); 
+
+//-----------------------------------------------------------------------------------------------
+//CRUD----------------------------------------------------------------------------------
+ // Fetch deadlines on mount
+ const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
+useEffect(() => {
+  fetch(`${BACKEND_URL}/deadlines`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  })
+    .then((res) => {
+      if (!res.ok) throw new Error("Failed to fetch deadlines");
+      return res.json();
+    })
+    .then((data) => {
+      setEvents(data);
+      setEventCount(data.length);
+    })
+    .catch((err) => console.error(err));
+}, []);
+
+// Create new deadline
+const createEvent = async () => {
+  const selectedCategory = categoryRef.current.value;
+  const selectedName = nameRef.current.value;
+  const selectedDate = dateRef.current.value.slice(8);
+  const selectedMonth = dateRef.current.value.slice(5, -3);
+
+  const monthMap = {
+    "01": "Jan", "02": "Feb", "03": "Mar", "04": "Apr", "05": "May", "06": "Jun",
+    "07": "Jul", "08": "Aug", "09": "Sep", "10": "Oct", "11": "Nov", "12": "Dec"
+  };
+  const monthName = monthMap[selectedMonth];
+
+  const daysArray = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+  const dateObj = new Date(dateRef.current.value);
+  const dayName = daysArray[dateObj.getDay()];
+
+  // Validation
+  if (selectedName === "" && selectedDate === "") {
+    nameRef.current.classList.add("border-red-500");
+    dateRef.current.classList.add("border-red-500");
+    return;
+  }
+  if (selectedDate === "") {
+    dateRef.current.classList.add("border-red-500");
+    nameRef.current.classList.remove("border-red-500");
+    return;
+  }
+  if (selectedName === "") {
+    nameRef.current.classList.add("border-red-500");
+    dateRef.current.classList.remove("border-red-500");
+    return;
+  }
+
+  const newEvent = {
+    icon: categoryData[selectedCategory].icon,
+    color: categoryData[selectedCategory].color,
+    name: selectedName,
+    date: selectedDate,
+    month: monthName,
+    day: dayName,
+  };
+
+  try {
+    const res = await fetch(`${BACKEND_URL}/deadlines`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(newEvent),
+    });
+
+    if (!res.ok) throw new Error("Failed to create deadline");
+
+    const saved = await res.json();
+    setEvents((prev) => [...prev, saved]);
+    setEventCount((prev) => prev + 1);
+    setShow(false);
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+// Delete deadline
+//DELETE EVENT DEADLINE
+//filter syntax array.filter((element, index, array)=>{});
+//return true to keep the element
+//return false to remove it
+const deleteEvent = async (id) => {
+  try {
+    const res = await fetch(`${BACKEND_URL}/deadlines/${id}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!res.ok) throw new Error("Failed to delete deadline");
+
+    setEvents((prev) => prev.filter((e) => e._id !== id));
+    setEventCount((prev) => prev - 1);
+  } catch (err) {
+    console.error(err);
+  }
+};
+  //-----------------------------------------------------------------------------------------------
+  //-----------------------------------------------------------------------------------------------
+
 
 return(
 <div data-label='rightSide' className="flex flex-col w-[265px] h-fit min-w-[265px] items-center">
