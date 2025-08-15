@@ -159,6 +159,15 @@ app.post("/verify-token", (req, res) => {
     res.status(403).json({ message: "Token is invalid or expired" });
   }
 });
+//-----------------Deadline Routes-----------------
+// Mount the router here
+import deadlineRoutes from "./routes/deadlineRoutes.js";
+app.use("/deadlines", deadlineRoutes);
+// Now:
+// POST   /api/deadlines
+// GET    /api/deadlines
+// DELETE /api/deadlines/:id
+//-------------------------------------------------
 
 // ---------------- Server ----------------
 // app.listen(3001, () => {
