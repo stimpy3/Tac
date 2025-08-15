@@ -1,7 +1,7 @@
 // routes/deadlineRoutes.js
-import express from "express";
-import authMiddleware from "../middleware/authMiddleware.js";
-import Deadline from "../models/deadlineModel.js";
+const express = require("express");
+const authMiddleware = require("../middleware/authMiddleware.js");
+const Deadline = require("../models/deadlineModel.js");
 
 const router = express.Router();
 
