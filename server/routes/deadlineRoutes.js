@@ -24,4 +24,4 @@ router.delete("/:id", authMiddleware, async (req, res) => {
   res.json({ message: "Deleted successfully" });
 });
 
-export default router;
+module.exports = router;
