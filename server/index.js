@@ -4,7 +4,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
-const userModel = require("./models/user");
+const userModel = require("./models/user.js");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const path = require("path");
@@ -161,7 +161,7 @@ app.post("/verify-token", (req, res) => {
 });
 //-----------------Deadline Routes-----------------
 // Mount the router here
-import deadlineRoutes from "./routes/deadlineRoutes.js";
+const deadlineRoutes = require("./routes/deadlineRoutes.js");
 app.use("/deadlines", deadlineRoutes);
 // Now:
 // POST   /api/deadlines
