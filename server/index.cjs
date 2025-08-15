@@ -46,7 +46,6 @@ mongoose
   .catch((err) => console.error("❌ MongoDB connection error:", err));
 
 // ---------------- Routes ----------------
-
 app.post("/register", async (req, res) => {
   try {
     const hashedPassword = await bcrypt.hash(req.body.password, 10);
@@ -55,11 +54,25 @@ app.post("/register", async (req, res) => {
       email: req.body.email,
       password: hashedPassword,
     });
-    res.json(user);
+
+    // Create a JWT
+    const token = jwt.sign(
+      { id: user._id, email: user.email },
+      process.env.JWT_SECRET,
+      { expiresIn: "1h" }
+    );
+
+    res.json({
+      message: "User registered successfully",
+      token,
+      user: { id: user._id, username: user.username, email: user.email }
+    });
   } catch (err) {
-    res.status(500).json(err);
+    console.error(err);
+    res.status(500).json({ message: "Registration failed", error: err.message });
   }
 });
+
 
 app.post("/login", async (req, res) => {
   const { email, password } = req.body;
