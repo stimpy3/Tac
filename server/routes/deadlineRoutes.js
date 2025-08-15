@@ -1,7 +1,7 @@
 // routes/deadlineRoutes.js
 const express = require("express");
 const authMiddleware = require("../middleware/authMiddleware.js");
-const Deadline = require("../models/deadlineModel.js");
+const Deadline = require("../models/Deadline.js");
 
 const router = express.Router();
 
