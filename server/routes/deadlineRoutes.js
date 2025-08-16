@@ -14,7 +14,7 @@ router.post("/", authMiddleware, async (req, res) => {
       await deadline.save();//await deadline.save() → writes to MongoDB.
       res.json(deadline);//sends the saved document (with _id and timestamps) back to frontend.
     }
-    catch (error) { //good to undertand what went wrong
+    catch (err) { //good to undertand what went wrong
        console.error("Deadline creation failed:", err); 
        res.status(500).json({ message: "Failed to create deadline", error: err.message });
        //err.message gives a more specific error message
