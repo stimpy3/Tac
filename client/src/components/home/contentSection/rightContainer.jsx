@@ -289,10 +289,20 @@ useEffect(()=>{
 
 //-----------------------------------------------------------------------------------------------
 //CRUD----------------------------------------------------------------------------------
- // Fetch deadlines on mount
- const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
+
+//token for authentication
+//This token is used to authenticate the user when making requests to the backend
+//It is stored in localStorage after the user logs in
+//The token is retrieved from localStorage when the component mounts
+//If the token is not present, it will be an empty string
+//we need tokens so only authenticated users can create or fetch deadlines.
+//Without a token, the backend has no way to know which user is making the request.
+//token contains the user ID and email in its payload,so your server can associate the new deadline with that user
+
+const [token, setToken] = useState(localStorage.getItem("token") || "");
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000"; //Fetch deadlines on mount
 useEffect(() => {
-   if (!token) return; // wait for login to set token first
+   if (!token) return; //wait for login to set token first
   fetch(`${BACKEND_URL}/deadlines`, {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -307,7 +317,7 @@ useEffect(() => {
       setEventCount(data.length);
     })
     .catch((err) => console.error(err));
-}, []);
+}, [token]);
 
 // Create new deadline
 const createEvent = async () => {
@@ -386,13 +396,28 @@ const deleteEvent = async (id) => {
         Authorization: `Bearer ${token}`,
       },
     });
+    /*
+      Every HTTP request usually returns something from the server. For example:
+      { "success": true }
+      
+      res.json() reads that response and turns it into a JavaScript object.
+      If you don’t call res.json(), the response body stays “unread” — technically it won’t break the UI immediately
+      but: You cannot see what the server said. Some browsers may give warnings about unused response bodies.
+      If the server sends an error message in JSON, you won’t know what it said
+     */
+    const data = await res.json();  // consume response
+    console.log(data); // log the response from the server
 
+    // Check if the response was successful
+    //res.ok ensures you don’t remove from UI if deletion failed
     if (!res.ok) throw new Error("Failed to delete deadline");
 
-    setEvents((prev) => prev.filter((e) => e._id !== id));
+    setEvents((prev) => prev.filter((e) => e._id !== id));   //_id because id is stored as _id in res.json()
     setEventCount((prev) => prev - 1);
   } catch (err) {
     console.error(err);
+    return; // stop execution here
+    //without return, any code after catch runs, even though deletion failed
   }
 };
   //-----------------------------------------------------------------------------------------------
