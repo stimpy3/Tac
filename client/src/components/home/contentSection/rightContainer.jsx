@@ -305,7 +305,8 @@ useEffect(()=>{
 const [token, setToken] = useState(localStorage.getItem("token") || "");
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000"; //Fetch deadlines on mount
 useEffect(() => {
-   if (!token) return; //wait for login to set token first
+  if (!token) return; // wait for login to set token first
+
   fetch(`${BACKEND_URL}/deadlines`, {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -316,8 +317,30 @@ useEffect(() => {
       return res.json();
     })
     .then((data) => {
-      setEvents(data); // Set the fetched deadlines to state
-      setEventCount(data.length);// Set the count of deadlines
+      const monthMap = {
+        "01": "Jan", "02": "Feb", "03": "Mar", "04": "Apr", "05": "May", "06": "Jun",
+        "07": "Jul", "08": "Aug", "09": "Sep", "10": "Oct", "11": "Nov", "12": "Dec"
+      };
+      const daysArray = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+      const eventsUI = data.map((event) => {
+        const dateObj = new Date(event.date); // convert string → Date object
+        const dayNumber = dateObj.getDate();
+        const dayName = daysArray[dateObj.getDay()];
+        const monthName = monthMap[String(dateObj.getMonth() + 1).padStart(2, "0")];
+
+        return {
+          ...event, // keep all backend fields (_id, name, date, category, etc.)
+          icon: categoryData[event.category]?.icon || categoryData["other"].icon,
+          color: categoryData[event.category]?.color || categoryData["other"].color,
+          day: dayName,
+          month: monthName,
+          dayNumber: dayNumber,
+        };
+      });
+
+      setEvents(eventsUI); // ✅ now events have icons/colors/dates ready for UI
+      setEventCount(eventsUI.length);
     })
     .catch((err) => console.error(err));
 }, [token]);
