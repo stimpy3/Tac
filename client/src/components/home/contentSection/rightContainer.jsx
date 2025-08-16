@@ -323,19 +323,19 @@ useEffect(() => {
 }, [token]);
 
 
+const monthMap = {
+  "01": "Jan", "02": "Feb", "03": "Mar", "04": "Apr", "05": "May", "06": "Jun",
+  "07": "Jul", "08": "Aug", "09": "Sep", "10": "Oct", "11": "Nov", "12": "Dec"
+};
+
 // Create new deadline
 const createEvent = async () => {
+  // 1. Get form values
   const selectedCategory = categoryRef.current.value;
   const selectedName = nameRef.current.value;
   const dateValue = dateRef.current.value; // full date string, e.g., "2025-08-16" 
-  //because mongoose expects data type Date, we need to convert it to a Date object
 
-  const monthMap = {
-    "01": "Jan", "02": "Feb", "03": "Mar", "04": "Apr", "05": "May", "06": "Jun",
-    "07": "Jul", "08": "Aug", "09": "Sep", "10": "Oct", "11": "Nov", "12": "Dec"
-  };
-
-  // Validation
+  // 2. Validation
   if (!selectedName && !dateValue) {
     nameRef.current.classList.add("border-red-500");
     dateRef.current.classList.add("border-red-500");
@@ -352,23 +352,24 @@ const createEvent = async () => {
     return;
   }
 
-  const dateObj = new Date(dateValue); // Convert date string to Date object for mongoose
+  // 3. Parse date info
+  const dateObj = new Date(dateValue); 
   /* dateObj will be a Date object representing the selected date.
-  For example, if dateValue is "2025-08-16", dateObj will be:
-  Date object for August 16, 2025, at midnight (00:00:00) in the local timezone.
-  You can use dateObj.getFullYear(), dateObj.getMonth(), etc. to get specific parts of the date.
-  If you need the day of the month, you can use dateObj.getDate() which returns the day as a number (1-31).
-  For example, if dateValue is "2025-08-16", dateObj.getDate() will return 16.
-  If you need the day of the week, you can use dateObj.getDay() which returns a number (0-6) where 0 is Sunday, 1 is Monday, etc.
-  You can then map this number to a string like "Sun", "Mon", etc. using an array or switch statement.
-   */
+     For example, if dateValue is "2025-08-16", dateObj will be:
+     Date object for August 16, 2025, at midnight (00:00:00) in the local timezone.
+     You can use dateObj.getFullYear(), dateObj.getMonth(), etc. to get specific parts of the date.
+     If you need the day of the month, you can use dateObj.getDate() which returns the day as a number (1-31).
+     For example, if dateValue is "2025-08-16", dateObj.getDate() will return 16.
+     If you need the day of the week, you can use dateObj.getDay() which returns a number (0-6) where 0 is Sunday, 1 is Monday, etc.
+     You can then map this number to a string like "Sun", "Mon", etc. using an array or switch statement.
+  */
   const dayNumber = dateObj.getDate(); // 16, 24, etc.
   const daysArray = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
   const dayName = daysArray[dateObj.getDay()];
-
   const monthName = monthMap[dateValue.slice(5, 7)];
 
-   //Prepare object to send to backend (matches schema)
+
+  // 4. Prepare object to send to backend (matches schema)
   const newEventBackend = {
     name: selectedName,
     date: dateObj,            // full Date object
@@ -376,17 +377,8 @@ const createEvent = async () => {
     details: "",              // optional
   };
 
-  // Prepare object for frontend display (with icon/color and day/month)
-  const newEventUI = {
-    ...newEventBackend,
-    icon: categoryData[selectedCategory].icon,
-    color: categoryData[selectedCategory].color,
-    day: dayName,
-    month: monthName,
-    dayNumber: dayNumber,
-  };
-
   try {
+    // 5. Send request to backend
     const res = await fetch(`${BACKEND_URL}/deadlines`, {
       method: "POST",
       headers: {
@@ -397,12 +389,26 @@ const createEvent = async () => {
     });
 
     const data = await res.json();
-    if(!res.ok){
-       throw new Error(data.error || data.message || "Failed to create deadline");
+    if (!res.ok) {
+      throw new Error(data.error || data.message || "Failed to create deadline");
     }
+
+
+    // 6. Prepare object for frontend display (with icon/color and day/month)
+    const newEventUI = {
+      ...data, // use backend response (includes _id)
+      icon: categoryData[data.category].icon,
+      color: categoryData[data.category].color,
+      day: dayName,
+      month: monthName,
+      dayNumber: dayNumber,
+    };
+
+    // 7. Update state
     setEvents((prev) => [...prev, newEventUI]); // Add the new event to the UI state
     setEventCount((prev) => prev + 1);
     setShow(false);
+
   } catch (err) {
     console.error(err);
   }
