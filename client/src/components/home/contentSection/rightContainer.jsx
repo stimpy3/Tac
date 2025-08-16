@@ -393,14 +393,14 @@ const createEvent = async () => {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify(newEventUI),
+      body: JSON.stringify(newEventBackend), // Send the backend object
     });
 
     const data = await res.json();
     if(!res.ok){
        throw new Error(data.error || data.message || "Failed to create deadline");
     }
-    setEvents((prev) => [...prev, data]);
+    setEvents((prev) => [...prev, newEventUI]); // Add the new event to the UI state
     setEventCount((prev) => prev + 1);
     setShow(false);
   } catch (err) {
@@ -500,17 +500,16 @@ return(
                           <p className='h-fit text-accentTxt dark:text-daccentTxt'>{event.name}</p>
                           <div className='text-[0.7rem] text-accent2 font-bold'>
                             {(() => {
-                              const today = new Date();
-                              const eventDate = new Date(event.year, event.month - 1, event.dayNumber); 
-                              // months are 0-indexed in JS
-                              
-                              const diffTime = eventDate - today; 
-                              const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); // ms → days
-                          
-                              if (diffDays > 1) return `${diffDays} days left`;
-                              if (diffDays === 1) return "1 day left";
-                              if (diffDays === 0) return "Today!";
-                              return "deadline has passed";
+                             const today = new Date();
+                             const eventDate = new Date(event.date);  // use full date from DB
+                             
+                             const diffTime = eventDate - today;
+                             const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                             
+                             if (diffDays > 1) return `${diffDays} days left`;
+                             if (diffDays === 1) return "1 day left";
+                             if (diffDays === 0) return "Today!";
+                             return "Deadline has passed";
                             })()}
                           </div>
                         </div> 
