@@ -377,20 +377,10 @@ const createEvent = async () => {
 
   // 3. Parse date info
   const dateObj = new Date(dateValue); 
-  /* dateObj will be a Date object representing the selected date.
-     For example, if dateValue is "2025-08-16", dateObj will be:
-     Date object for August 16, 2025, at midnight (00:00:00) in the local timezone.
-     You can use dateObj.getFullYear(), dateObj.getMonth(), etc. to get specific parts of the date.
-     If you need the day of the month, you can use dateObj.getDate() which returns the day as a number (1-31).
-     For example, if dateValue is "2025-08-16", dateObj.getDate() will return 16.
-     If you need the day of the week, you can use dateObj.getDay() which returns a number (0-6) where 0 is Sunday, 1 is Monday, etc.
-     You can then map this number to a string like "Sun", "Mon", etc. using an array or switch statement.
-  */
   const dayNumber = dateObj.getDate(); // 16, 24, etc.
   const daysArray = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
   const dayName = daysArray[dateObj.getDay()];
   const monthName = monthMap[dateValue.slice(5, 7)];
-
 
   // 4. Prepare object to send to backend (matches schema)
   const newEventBackend = {
@@ -399,6 +389,23 @@ const createEvent = async () => {
     category: selectedCategory,
     details: "",              // optional
   };
+
+  // 🔹 Prepare object for frontend display (optimistic placeholder)
+  const tempId = `temp-${Date.now()}`; // temporary ID until backend responds
+  const newEventUI = {
+    _id: tempId, // fake id for UI
+    ...newEventBackend,
+    icon: categoryData[selectedCategory]?.icon || categoryData["other"].icon,
+    color: categoryData[selectedCategory]?.color || categoryData["other"].color,
+    day: dayName,
+    month: monthName,
+    dayNumber: dayNumber,
+  };
+
+  // 🔹 Optimistically add to UI immediately
+  setEvents((prev) => [...prev, newEventUI]);
+  setEventCount((prev) => prev + 1);
+  setShow(false);
 
   try {
     // 5. Send request to backend
@@ -416,24 +423,27 @@ const createEvent = async () => {
       throw new Error(data.error || data.message || "Failed to create deadline");
     }
 
-
-    // 6. Prepare object for frontend display (with icon/color and day/month)
-    const newEventUI = {
-      ...data, // use backend response (includes _id)
-      icon: categoryData[data.category].icon,
-      color: categoryData[data.category].color,
-      day: dayName,
-      month: monthName,
-      dayNumber: dayNumber,
-    };
-
-    // 7. Update state
-    setEvents((prev) => [...prev, newEventUI]); // Add the new event to the UI state
-    setEventCount((prev) => prev + 1);
-    setShow(false);
-
+    // 6. Replace optimistic temp event with real backend response
+    setEvents((prev) =>
+      prev.map((e) =>
+        e._id === tempId
+          ? {
+              ...data, // backend response includes real _id
+              icon: categoryData[data.category]?.icon || categoryData["other"].icon,
+              color: categoryData[data.category]?.color || categoryData["other"].color,
+              day: dayName,
+              month: monthName,
+              dayNumber: dayNumber,
+            }
+          : e
+      )
+    );
   } catch (err) {
     console.error(err);
+
+    // 🔹 Rollback UI if request failed
+    setEvents((prev) => prev.filter((e) => e._id !== tempId));
+    setEventCount((prev) => prev - 1);
   }
 };
 
@@ -443,6 +453,11 @@ const createEvent = async () => {
 //return true to keep the element
 //return false to remove it
 const deleteEvent = async (id) => {
+  // 🔹 Optimistically remove event from UI first
+  const deletedEvent = events.find((e) => e._id === id); // keep backup for rollback
+  setEvents((prev) => prev.filter((e) => e._id !== id));
+  setEventCount((prev) => prev - 1);
+
   try {
     const res = await fetch(`${BACKEND_URL}/deadlines/${id}`, {
       method: "DELETE",
@@ -450,6 +465,7 @@ const deleteEvent = async (id) => {
         Authorization: `Bearer ${token}`,
       },
     });
+
     /*
       Every HTTP request usually returns something from the server. For example:
       { "success": true }
@@ -466,10 +482,12 @@ const deleteEvent = async (id) => {
     //res.ok ensures you don’t remove from UI if deletion failed
     if (!res.ok) throw new Error("Failed to delete deadline");
 
-    setEvents((prev) => prev.filter((e) => e._id !== id));   //_id because id is stored as _id in res.json()
-    setEventCount((prev) => prev - 1);
   } catch (err) {
     console.error(err);
+
+    // 🔹 Rollback UI if deletion failed
+    setEvents((prev) => [...prev, deletedEvent]);
+    setEventCount((prev) => prev + 1);
     return; // stop execution here
     //without return, any code after catch runs, even though deletion failed
   }
