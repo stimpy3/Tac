@@ -393,14 +393,13 @@ const createEvent = async () => {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify(newEventBackend),// send backend object
+      body: JSON.stringify(newEventUI),
     });
 
     const data = await res.json();
     if(!res.ok){
        throw new Error(data.error || data.message || "Failed to create deadline");
     }
-
     setEvents((prev) => [...prev, data]);
     setEventCount((prev) => prev + 1);
     setShow(false);
