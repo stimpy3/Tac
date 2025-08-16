@@ -10,7 +10,14 @@ router.post("/", authMiddleware, async (req, res) => {
     console.log("req.user:", req.user); // <-- add this
     console.log("req.body:", req.body); // <-- add this
     try{
-      const deadline = new Deadline({ ...req.body, user: req.user.id });//user is a field in Deadline schema
+      const deadline = new Deadline({ ...req.body, user: req.user.userId });//user is a field in Deadline schema
+      //userId is defined in my JWT payload (see index.js)
+      /*in index.js you will find:
+       const token = jwt.sign(
+            { userId: user._id, email: user.email, username: user.username },
+            JWT_SECRET,
+            { expiresIn: "24h" }
+          ); */
       // req.body should contain { name, date, category, details }
       // user is automatically set to the logged-in user's ID
       await deadline.save();//await deadline.save() → writes to MongoDB.
@@ -25,13 +32,13 @@ router.post("/", authMiddleware, async (req, res) => {
 
 // Get all deadlines for logged-in user
 router.get("/", authMiddleware, async (req, res) => {
-  const deadlines = await Deadline.find({ user: req.user.id });
+  const deadlines = await Deadline.find({ user: req.user.userId });
   res.json(deadlines);
 });
 
 // Delete a deadline
 router.delete("/:id", authMiddleware, async (req, res) => {
-  await Deadline.findOneAndDelete({ _id: req.params.id, user: req.user.id });
+  await Deadline.findOneAndDelete({ _id: req.params.id, user: req.user.userId });
   res.json({ message: "Deleted successfully" });
 });
 
