@@ -62,7 +62,7 @@ app.use(
 );
 
 // after your app.use(cors(...))
-app.options("/*", cors()); 
+app.options("/(.*)/", cors()); 
 // This allows preflight requests to pass through
 // Preflight requests are sent by the browser to check if the actual request is safe to send
 // It’s like saying “yes, you can talk to me” for all routes
