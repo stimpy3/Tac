@@ -494,21 +494,33 @@ return(
                       <div data-label='date&Event' className='w-full h-[40px] flex'>
                         <div className="w-[40px] h-[40px] flex flex-col justify-center items-center border-r-[1.5px] border-r-accentS2 dark:border-r-daccentS3">
                           <div className='text-[0.9rem] text-accentTxt dark:text-daccentTxt'>{event.day}</div>
-                          <p className='text-[0.6rem] text-accentTxt dark:text-daccentTxt'>{event.date} {event.month}</p>
+                          <p className='text-[0.6rem] text-accentTxt dark:text-daccentTxt'>{event.dayNumber} {event.month}</p>
                         </div>
                         <div className='pl-[10px]'>
                           <p className='h-fit text-accentTxt dark:text-daccentTxt'>{event.name}</p>
-                          <div className='text-[0.7rem] text-accent2 font-bold'>{
-                          ((parseInt(event.date) - new Date().getDate())>=0)?
-                          (((parseInt(event.date) - new Date().getDate())==1)?"1 day left":`${(parseInt(event.date) - new Date().getDate())} days left`)
-                          :
-                          "deadline has passed"}
+                          <div className='text-[0.7rem] text-accent2 font-bold'>
+                            {(() => {
+                              const today = new Date();
+                              const eventDate = new Date(event.year, event.month - 1, event.dayNumber); 
+                              // months are 0-indexed in JS
+                              
+                              const diffTime = eventDate - today; 
+                              const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); // ms → days
+                          
+                              if (diffDays > 1) return `${diffDays} days left`;
+                              if (diffDays === 1) return "1 day left";
+                              if (diffDays === 0) return "Today!";
+                              return "deadline has passed";
+                            })()}
                           </div>
                         </div> 
                       </div>
 
                   </section>
                   <button className='hover:text-bluePurple text-[1.2rem] text-accentTxt dark:text-daccentTxt' onClick={()=>deleteEvent(event._id)}><X/></button>
+                  {/* event._id is id defined by mongoose when the event is created
+                  It is a unique identifier for each event, so we use it to delete the correct event 
+                  */}
               </div>
               ))
              }
