@@ -292,6 +292,7 @@ useEffect(()=>{
  // Fetch deadlines on mount
  const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
 useEffect(() => {
+   if (!token) return; // wait for login to set token first
   fetch(`${BACKEND_URL}/deadlines`, {
     headers: {
       Authorization: `Bearer ${token}`,
