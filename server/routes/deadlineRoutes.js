@@ -8,8 +8,8 @@ const router = express.Router();
 // Create deadline
 router.post("/", authMiddleware, async (req, res) => {
   const deadline = new Deadline({ ...req.body, userId: req.user.id });
-  await deadline.save();
-  res.json(deadline);
+  await deadline.save();//await deadline.save() → writes to MongoDB.
+  res.json(deadline);//sends the saved document (with _id and timestamps) back to frontend.
 });
 
 // Get all deadlines for logged-in user
