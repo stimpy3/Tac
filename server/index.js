@@ -20,12 +20,34 @@ const app = express();
 app.use(express.json());
 app.use(cookieParser());
 
-// CORS
+// CORS 
+//must be written before routes because it needs to be applied to all incoming requests
+/*
+What’s happening
+Your frontend lives here → https://stay-tac.netlify.app
+Your backend lives here → https://tac-8pbr.onrender.com
+
+Because they’re different domains, the browser asks your backend:
+“Hey backend, is it okay if this frontend talks to you?”
+Your backend needs to reply with a special header:
+Access-Control-Allow-Origin: https://stay-tac.netlify.app
+
+If the backend doesn’t send that, the browser blocks the request = CORS error.
+ */
 const allowedOrigins = [
   "http://localhost:5173",
   "https://stay-tac.netlify.app",
 ];
 
+//this section allows your backend to accept requests from specific origins
+//This is important because browsers enforce CORS to prevent malicious sites from accessing your backend
+//So you need to tell your backend which sites are allowed to make requests
+//This is done using the cors middleware
+//syntax goes like this:
+//app.use(cors({ origin: "https://your-frontend.com" }));
+//This allows requests from https://your-frontend.com to your backend
+//You can also allow multiple origins by passing an array of allowed origins
+//app.use(cors({ origin: ["https://your-frontend.com", "https://another-site.com"] }));
 app.use(
   cors({
     origin: function (origin, callback) {
@@ -38,6 +60,45 @@ app.use(
     credentials: true,
   })
 );
+
+// after your app.use(cors(...))
+app.options("*", cors()); 
+// This allows preflight requests to pass through
+// Preflight requests are sent by the browser to check if the actual request is safe to send
+// It’s like saying “yes, you can talk to me” for all routes
+/*
+Key takeaway (for beginners)
+Simple GET requests → browser just delivers.
+POST/DELETE with JSON or Authorization → browser knocks first (OPTIONS request).
+app.options("*", cors()) → backend answers the knock so browser feels safe and lets the real request through.
+
+If the backend doesn’t respond to the knock (OPTIONS), the security guard (browser) refuses to send the real package.
+You might already allow http://localhost:5173 in CORS settings, but the preflight OPTIONS request needs its own answer.
+Without it, the browser blocks the request — your POST never even reaches your backend.
+
+CORS Access-Control-Allow-Origin is like saying:
+
+“I trust this origin, it’s allowed to talk to me.”
+
+So allowing the origin only answers the question: “Is this frontend allowed to talk to me at all?”
+// But it doesn’t say what actions the frontend can do.
+// That’s what the next part does.
+*/
+/*CORS Access-Control-Allow-Methods is like saying:
+“Not only are you allowed to come in (origin), you are allowed to do these specific actions (GET, POST, DELETE).”
+This is important because it tells the browser which HTTP methods are allowed for that origin.
+// If you don’t specify this, the browser might block requests that use methods other than GET or POST.
+// So you need to tell the browser which methods are allowed for that origin.
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+  next();
+});
+Request type = what kind of action the frontend is trying to do
+Examples: GET, POST, PUT, DELETE
+Also includes headers like Content-Type: application/json or Authorization: Bearer token
+CORS Access-Control-Allow-Methods is like saying:
+“Not only are you allowed to come in (origin), you are allowed to do these specific actions (GET, POST, DELETE).”
+ */
 
 // MongoDB Connection
 mongoose
