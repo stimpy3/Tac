@@ -299,6 +299,9 @@ useEffect(()=>{
 //Without a token, the backend has no way to know which user is making the request.
 //token contains the user ID and email in its payload,so your server can associate the new deadline with that user
 
+
+//------------------------------------------------------------------------------------------------------
+//This section is responsible for fetching all deadlines for the logged-in user when the component mounts
 const [token, setToken] = useState(localStorage.getItem("token") || "");
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000"; //Fetch deadlines on mount
 useEffect(() => {
@@ -313,53 +316,74 @@ useEffect(() => {
       return res.json();
     })
     .then((data) => {
-      setEvents(data);
-      setEventCount(data.length);
+      setEvents(data); // Set the fetched deadlines to state
+      setEventCount(data.length);// Set the count of deadlines
     })
     .catch((err) => console.error(err));
 }, [token]);
+
 
 // Create new deadline
 const createEvent = async () => {
   const selectedCategory = categoryRef.current.value;
   const selectedName = nameRef.current.value;
-  const selectedDate = dateRef.current.value.slice(8);
-  const selectedMonth = dateRef.current.value.slice(5, -3);
+  const dateValue = dateRef.current.value; // full date string, e.g., "2025-08-16" 
+  //because mongoose expects data type Date, we need to convert it to a Date object
 
   const monthMap = {
     "01": "Jan", "02": "Feb", "03": "Mar", "04": "Apr", "05": "May", "06": "Jun",
     "07": "Jul", "08": "Aug", "09": "Sep", "10": "Oct", "11": "Nov", "12": "Dec"
   };
-  const monthName = monthMap[selectedMonth];
-
-  const daysArray = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-  const dateObj = new Date(dateRef.current.value);
-  const dayName = daysArray[dateObj.getDay()];
 
   // Validation
-  if (selectedName === "" && selectedDate === "") {
+  if (!selectedName && !dateValue) {
     nameRef.current.classList.add("border-red-500");
     dateRef.current.classList.add("border-red-500");
     return;
   }
-  if (selectedDate === "") {
+  if (!dateValue) {
     dateRef.current.classList.add("border-red-500");
     nameRef.current.classList.remove("border-red-500");
     return;
   }
-  if (selectedName === "") {
+  if (!selectedName) {
     nameRef.current.classList.add("border-red-500");
     dateRef.current.classList.remove("border-red-500");
     return;
   }
 
-  const newEvent = {
+  const dateObj = new Date(dateValue); // Convert date string to Date object for mongoose
+  /* dateObj will be a Date object representing the selected date.
+  For example, if dateValue is "2025-08-16", dateObj will be:
+  Date object for August 16, 2025, at midnight (00:00:00) in the local timezone.
+  You can use dateObj.getFullYear(), dateObj.getMonth(), etc. to get specific parts of the date.
+  If you need the day of the month, you can use dateObj.getDate() which returns the day as a number (1-31).
+  For example, if dateValue is "2025-08-16", dateObj.getDate() will return 16.
+  If you need the day of the week, you can use dateObj.getDay() which returns a number (0-6) where 0 is Sunday, 1 is Monday, etc.
+  You can then map this number to a string like "Sun", "Mon", etc. using an array or switch statement.
+   */
+  const dayNumber = dateObj.getDate(); // 16, 24, etc.
+  const daysArray = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+  const dayName = daysArray[dateObj.getDay()];
+
+  const monthName = monthMap[dateValue.slice(5, 7)];
+
+   //Prepare object to send to backend (matches schema)
+  const newEventBackend = {
+    name: selectedName,
+    date: dateObj,            // full Date object
+    category: selectedCategory,
+    details: "",              // optional
+  };
+
+  // Prepare object for frontend display (with icon/color and day/month)
+  const newEventUI = {
+    ...newEventBackend,
     icon: categoryData[selectedCategory].icon,
     color: categoryData[selectedCategory].color,
-    name: selectedName,
-    date: selectedDate,
-    month: monthName,
     day: dayName,
+    month: monthName,
+    dayNumber: dayNumber,
   };
 
   try {
@@ -369,7 +393,7 @@ const createEvent = async () => {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify(newEvent),
+      body: JSON.stringify(newEventBackend),// send backend object
     });
 
     if (!res.ok) throw new Error("Failed to create deadline");
