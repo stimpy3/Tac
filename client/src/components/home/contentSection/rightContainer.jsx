@@ -401,8 +401,7 @@ const createEvent = async () => {
        throw new Error(data.error || data.message || "Failed to create deadline");
     }
 
-    const saved = await res.json();
-    setEvents((prev) => [...prev, saved]);
+    setEvents((prev) => [...prev, data]);
     setEventCount((prev) => prev + 1);
     setShow(false);
   } catch (err) {
