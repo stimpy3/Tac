@@ -23,13 +23,13 @@ router.post("/", authMiddleware, async (req, res) => {
 
 // Get all deadlines for logged-in user
 router.get("/", authMiddleware, async (req, res) => {
-  const deadlines = await Deadline.find({ userId: req.user.id });
+  const deadlines = await Deadline.find({ user: req.user.id });
   res.json(deadlines);
 });
 
 // Delete a deadline
 router.delete("/:id", authMiddleware, async (req, res) => {
-  await Deadline.findOneAndDelete({ _id: req.params.id, userId: req.user.id });
+  await Deadline.findOneAndDelete({ _id: req.params.id, user: req.user.id });
   res.json({ message: "Deleted successfully" });
 });
 
