@@ -396,6 +396,7 @@ const createEvent = async () => {
       body: JSON.stringify(newEventBackend),// send backend object
     });
 
+    const data = await res.json();
     if(!res.ok){
        throw new Error(data.error || data.message || "Failed to create deadline");
     }
