@@ -117,6 +117,31 @@ app.post("/register", async (req, res) => {
     });
 
     // Create a JWT
+    /*SYNTAX:
+    jwt.sign(payload, secretOrPrivateKey, [options, callback])
+    jwt.sign=function from jsonwebtoken that creates a JWT (JSON Web Token).
+    Arguments:
+       Payload → data you want to include in the token.
+       Secret → the secret key to sign the token (process.env.JWT_SECRET).
+       Options → additional settings, like expiration time.
+
+    2. Payload: { id: user._id, email: user.email }
+    This is the data you want inside the token.
+    user=an object that represents the logged-in user (fetched from MongoDB).
+    In MongoDB + Mongoose, every document automatically has a field _id (with an underscore).
+    This is a unique identifier for that document.
+    It’s like the primary key in SQL.
+    Example:
+    {
+      "_id": "64c8a9f3b2d7a92c6e3f8a1d",
+      "email": "test@gmail.com",
+      "password": "hashedpass..."
+      }
+      So:
+      user._id = the unique ID of the user in the DB.
+      user.email = the user’s email address.
+      You’re putting both into the JWT payload, so later you can know “which user this token belongs to”.
+     */
     const token = jwt.sign(
       { id: user._id, email: user.email },
       process.env.JWT_SECRET,

@@ -135,6 +135,10 @@ const RightSide=()=>{
   /*With cleanup: FIXED
   Open overlay → scroll is locked
   Close overlay → cleanup runs → scroll is restored
+  Problem scenario:
+   User opens modal (show = true) → scroll gets disabled
+   User navigates to different page → ModalComponent gets completely destroyed
+   useEffect never runs again because component is gone!
   */
   return () => {
     document.body.style.overflowY= 'auto';
@@ -290,6 +294,7 @@ useEffect(()=>{
 //-----------------------------------------------------------------------------------------------
 //CRUD----------------------------------------------------------------------------------
 
+//RED FLAG
 //token for authentication
 //This token is used to authenticate the user when making requests to the backend
 //It is stored in localStorage after the user logs in

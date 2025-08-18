@@ -7,8 +7,8 @@ const router = express.Router();
 
 // Create deadline
 router.post("/", authMiddleware, async (req, res) => {
-    console.log("req.user:", req.user); // <-- add this
-    console.log("req.body:", req.body); // <-- add this
+    // console.log("req.user:", req.user); // <-- add this
+    // console.log("req.body:", req.body); // <-- add this
     try{
       const deadline = new Deadline({ ...req.body, user: req.user.userId });//user is a field in Deadline schema
       //userId is defined in my JWT payload (see index.js)
