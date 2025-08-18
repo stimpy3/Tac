@@ -500,7 +500,7 @@ const Carousel=()=>{
                 <ResponsiveContainer width="90%" height="90%">
                   <LineChart data={generateActualData(task.frequency, task.problemsSolved, getElapsedDays(task.startDate))}
                    margin={{ top: 0, right: 40, bottom: 0, left: 0 }} >
-                    <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
+                    <CartesianGrid strokeDasharray="3 3" stroke="#424242" />
                     <XAxis 
                       dataKey="day" 
                       stroke="#9CA3AF"
@@ -527,7 +527,7 @@ const Carousel=()=>{
                     <Line 
                       type="monotone" 
                       dataKey="projected" 
-                      stroke="#6B7280" 
+                      stroke="#9176b0" 
                       strokeWidth={2}
                       strokeDasharray="5 5"
                       dot={(props) => {
@@ -544,7 +544,7 @@ const Carousel=()=>{
                     <Line 
                       type="monotone" 
                       dataKey="actual" 
-                      stroke="#60A5FA" 
+                      stroke="#7407f0" 
                       strokeWidth={1.5}
                       dot={{ fill: '#60A5FA', strokeWidth: 1, r: 3 }}
                       name="Actual"
