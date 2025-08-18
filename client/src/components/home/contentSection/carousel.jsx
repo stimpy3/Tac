@@ -472,7 +472,7 @@ const Carousel=()=>{
         </div>
       ) : ( //bg-[url('/gradient5.png')] shadow-purple-500/50 shadow-lg
         tasks.map((task) => (
-          <div data-label='task' key={task.id} className="relative flex flex-col rounded-xl bg-accentM dark:bg-daccentM h-full aspect-[4/5] text-accentTxt dark:text-daccentTxt p-[10px] mr-[20px] bg-cover bg-no-repeat">
+          <div data-label='task' key={task.id} className="relative flex flex-col rounded-xl bg-accentM dark:bg-daccentM h-full aspect-[4/5] text-accentTxt dark:text-daccentTxt p-[10px] mr-[20px] bg-cover bg-no-repeat border-[1px] border-accentBorder2 dark:border-daccentBorder2 ">
             <div data-label='graphContainer' className='w-full h-[65%] flex items-center justify-center'>
               <div
                  className={`
@@ -582,10 +582,10 @@ const Carousel=()=>{
                   <p className='mt-[5px] flex items-center justify-start w-full bebas-neue-regular text-[1.5rem] h-fit 
                   text-accentTxt dark:text-daccentTxt leading-none'>{task.name.length > 20 ? task.name.slice(0, 20) + "..."  : task.name}</p>
                   <p className='mt-[5px] w-full inter text-[0.8rem] h-fit 
-                  dark:bg-daccentM text-accentTxt2  leading-none'>{task.description.length > 35 ? task.description.slice(0, 35) + "..."  : task.description}</p>
+                  text-accentTxt2 dark:text-daccentTxt  leading-none'>{task.description.length > 35 ? task.description.slice(0, 35) + "..."  : task.description}</p>
               </div>
               <div className='flex items-center justify-between w-full h-[30%]'>
-                  <div className='text-[1rem] bebas-neue-regular dark:bg-daccentM text-accentTxt2 '>DAY: {getElapsedDays(task.startDate)}/30</div>
+                  <div className='text-[1rem] bebas-neue-regular text-accentTxt2 dark:text-daccentTxt '>DAY: {getElapsedDays(task.startDate)}/30</div>
                   <button 
                     onClick={() => markToday(task.id)}
                     className='text-[1rem] bebas-neue-regular bg-accent1 text-white p-[2px] px-[5px] rounded hover:bg-accent0 transition-colors'
