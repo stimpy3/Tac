@@ -476,8 +476,8 @@ const Carousel=()=>{
             <div data-label='graphContainer' className='w-full h-[65%] flex items-center justify-center'>
               <div
                  className={`
-                   h-[50px] aspect-[4/5] bg-contain bg-no-repeat absolute top-[10px] left-[10px]
-                   text-[1rem] text-black dark:text-daccentTxt bebas-neue-regular
+                   h-[30px] aspect-[4/5] bg-contain bg-no-repeat absolute top-[10px] left-[10px]
+                   text-[1rem] dark:text-daccentTxt text-accentTxt bebas-neue-regular
                    ${task.streak === 0
                      ? "bg-[url('/streak/empty.png')]"
                      : task.streak <= 5
@@ -487,7 +487,7 @@ const Carousel=()=>{
                      : "bg-[url('/streak/streak15plus.png')]"}
                  `}
                >
-                 <p className="w-full h-full flex justify-center items-end font-bold leading-none text-[1.2rem] text-[#000000]">
+                 <p className="w-full h-full flex justify-center items-end font-bold leading-none text-[1.2rem]">
                    {task.streak}
                  </p>
                </div>
