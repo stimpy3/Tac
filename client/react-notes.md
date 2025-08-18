@@ -178,7 +178,7 @@ run only once — when the component first mounts. But we
 ---------------------------------------------------------
 
 --------------------------------------------------------------------------------------------------
-REACT GROUPS
+TAILWIND GROUP CLASSES:When parent is hovered, style the child"
 
 Common states with group:
 1. group-hover: → when parent is hovered

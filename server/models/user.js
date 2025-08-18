@@ -28,7 +28,8 @@ const userSchema= new mongoose.Schema({
 //so this userModel is more like a class which has mnay inbuilt functions like CRUD
 //so dont need to write SQL
 const userModel=mongoose.model("users",userSchema)
-
+//NOW userModel collection this model will work with
+//The model is like a class that gives us functions to create, read, update, delete users
 // Export the model so it can be used in other files (like index.js)
 module.exports=userModel
 /*
