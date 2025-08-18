@@ -476,8 +476,8 @@ const Carousel=()=>{
             <div data-label='graphContainer' className='w-full h-[65%] flex items-center justify-center'>
               <div
                  className={`
-                   h-[30px] aspect-[4/5] bg-contain bg-no-repeat absolute top-[10px] left-[10px]
-                   text-[1rem] dark:text-daccentTxt text-accentTxt bebas-neue-regular
+                   min-h-[40px] aspect-[4/5] bg-contain bg-no-repeat absolute top-[10px] left-[10px]
+                   text-[1rem] text-accentTxt bebas-neue-regular
                    ${task.streak === 0
                      ? "bg-[url('/streak/empty.png')]"
                      : task.streak <= 5
@@ -487,7 +487,7 @@ const Carousel=()=>{
                      : "bg-[url('/streak/streak15plus.png')]"}
                  `}
                >
-                 <p className="w-full h-full flex justify-center items-end font-bold leading-none text-[1.2rem]">
+                 <p className="w-full h-full flex justify-center items-end font-bold text-[1.2rem]">
                    {task.streak}
                  </p>
                </div>
@@ -509,14 +509,14 @@ const Carousel=()=>{
                     <CartesianGrid strokeDasharray="3 3" stroke="#c997d1" />
                     <XAxis
                       dataKey="day"
-                      stroke="#9CA3AF"
+                      stroke="#c997d1"
                       fontSize={10}
-                      tick={{ fill: '#9CA3AF' }}
+                      tick={{ fill: '#c997d1' }}
                     />
                     <YAxis
-                      stroke="#9CA3AF"
+                      stroke="#c997d1"
                       fontSize={10}
-                      tick={{ fill: '#9CA3AF' }}
+                      tick={{ fill: '#c997d1' }}
                     />
                     <Tooltip
                       contentStyle={{
@@ -524,7 +524,7 @@ const Carousel=()=>{
                         border: "1px solid #374151",
                         borderRadius: "8px",
                         color: "#F9FAFB",
-                        opacity: 0.7,
+                        opacity: 0.9,
                       }}
                     />
                     <Legend
@@ -577,15 +577,15 @@ const Carousel=()=>{
                   </LineChart>
                 </ResponsiveContainer>
             </div>
-            <div data-label='taskDescriptionContainer' className='p-[5px] h-[35%] rounded-lg bg-accentS2 dark:bg-daccentS2 w-full flex flex-col items-center justify-center'>
+            <div data-label='taskDescriptionContainer' className='p-[5px] h-[35%] rounded-lg border-accentBorder2 dark:border-daccentBorder2 bg-accentS2 dark:bg-daccentS2 w-full flex flex-col items-center justify-center'>
               <div className='w-full h-[70%]'>
                   <p className='mt-[5px] flex items-center justify-start w-full bebas-neue-regular text-[1.5rem] h-fit 
                   text-accentTxt dark:text-daccentTxt leading-none'>{task.name.length > 20 ? task.name.slice(0, 20) + "..."  : task.name}</p>
                   <p className='mt-[5px] w-full inter text-[0.8rem] h-fit 
-                  text-accentTxt dark:text-daccentTxt leading-none'>{task.description.length > 35 ? task.description.slice(0, 35) + "..."  : task.description}</p>
+                  dark:bg-daccentM text-accentTxt2  leading-none'>{task.description.length > 35 ? task.description.slice(0, 35) + "..."  : task.description}</p>
               </div>
               <div className='flex items-center justify-between w-full h-[30%]'>
-                  <div className='text-[1rem] bebas-neue-regular'>DAY: {getElapsedDays(task.startDate)}/30</div>
+                  <div className='text-[1rem] bebas-neue-regular dark:bg-daccentM text-accentTxt2 '>DAY: {getElapsedDays(task.startDate)}/30</div>
                   <button 
                     onClick={() => markToday(task.id)}
                     className='text-[1rem] bebas-neue-regular bg-accent1 text-white p-[2px] px-[5px] rounded hover:bg-accent0 transition-colors'
