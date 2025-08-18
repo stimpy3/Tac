@@ -475,18 +475,22 @@ const Carousel=()=>{
           <div data-label='task' key={task.id} className="relative flex flex-col rounded-xl bg-accentM dark:bg-daccentM h-full aspect-[4/5] text-accentTxt dark:text-daccentTxt p-[10px] mr-[20px] bg-cover bg-no-repeat">
             <div data-label='graphContainer' className='w-full h-[65%] flex items-center justify-center'>
               <div
-                className={`absolute top-[10px] left-[10px] text-[1rem] text-accentTxt dark:text-daccentTxt bebas-neue-regular ${
-                  task.streak === 0
-                    ? "bg-[url('/streak/empty.png')]"
-                    : task.streak >= 1 && task.streak <= 5
-                    ? "bg-[url('/streak/streak1-5.png')]"
-                    : task.streak >= 6 && task.streak <= 15
-                    ? "bg-[url('/streak/streak5-15.png')]"
-                    : "bg-[url('/streak/streak15plus.png')]"
-                }`}
-              >
-                {task.streak}
-              </div>
+                 className={`
+                   h-[50px] aspect-[4/5] bg-contain bg-no-repeat absolute top-[10px] left-[10px]
+                   text-[1rem] text-black dark:text-daccentTxt bebas-neue-regular
+                   ${task.streak === 0
+                     ? "bg-[url('/streak/empty.png')]"
+                     : task.streak <= 5
+                     ? "bg-[url('/streak/streak1-5.png')]"
+                     : task.streak <= 15
+                     ? "bg-[url('/streak/streak5-15.png')]"
+                     : "bg-[url('/streak/streak15plus.png')]"}
+                 `}
+               >
+                 <p className="w-full h-full flex justify-center items-end font-bold leading-none text-[1.2rem] text-[#000000]">
+                   {task.streak}
+                 </p>
+               </div>
                 <button 
                   onClick={() => removeTask(task.id)}
                   className="absolute top-[10px] right-[10px] text-accentTxt dark:text-daccentTxt hover:text-red-500 transition-colors"
