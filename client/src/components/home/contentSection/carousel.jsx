@@ -498,36 +498,61 @@ const Carousel=()=>{
                   <X size={16} />
                 </button> 
                 <ResponsiveContainer width="90%" height="90%">
-                  <LineChart data={generateActualData(task.frequency, task.problemsSolved, getElapsedDays(task.startDate))}
-                   margin={{ top: 0, right: 40, bottom: 0, left: 0 }} >
-                    <CartesianGrid strokeDasharray="3 3" stroke="#424242" />
-                    <XAxis 
-                      dataKey="day" 
+                  <LineChart
+                    data={generateActualData(
+                      task.frequency,
+                      task.problemsSolved,
+                      getElapsedDays(task.startDate)
+                    )}
+                    margin={{ top: 0, right: 40, bottom: 0, left: 0 }}
+                  >
+                    <CartesianGrid strokeDasharray="3 3" stroke="#c997d1" />
+                    <XAxis
+                      dataKey="day"
                       stroke="#9CA3AF"
                       fontSize={10}
                       tick={{ fill: '#9CA3AF' }}
                     />
-                    <YAxis 
+                    <YAxis
                       stroke="#9CA3AF"
                       fontSize={10}
                       tick={{ fill: '#9CA3AF' }}
                     />
-                    <Tooltip 
-                      contentStyle={{ 
-                        backgroundColor: '#1F2937', 
-                        border: '1px solid #374151',
-                        borderRadius: '8px',
-                        color: '#F9FAFB',
-                        opacity: 0.7 ,
+                    <Tooltip
+                      contentStyle={{
+                        backgroundColor: "#1F2937",
+                        border: "1px solid #374151",
+                        borderRadius: "8px",
+                        color: "#F9FAFB",
+                        opacity: 0.7,
                       }}
                     />
-                    <Legend 
-                      wrapperStyle={{ color: '#9CA3AF', fontSize: '10px' }}
+                    <Legend
+                      wrapperStyle={{
+                        fontSize: "10px",
+                      }}
+                      formatter={(value) => {
+                        if (value === "Projected") {
+                          return (
+                            <span style={{ color: "#d073de" }}>
+                              Projected
+                            </span>
+                          );
+                        }
+                        if (value === "Actual") {
+                          return (
+                            <span style={{ color: "#680cb3" }}>
+                              Actual
+                            </span>
+                          );
+                        }
+                        return value;
+                      }}
                     />
-                    <Line 
-                      type="monotone" 
-                      dataKey="projected" 
-                      stroke="#9176b0" 
+                    <Line
+                      type="monotone"
+                      dataKey="projected"
+                      stroke="#d073de"
                       strokeWidth={2}
                       strokeDasharray="5 5"
                       dot={(props) => {
@@ -535,18 +560,18 @@ const Carousel=()=>{
                         const day = payload.day;
                         // Only show dots every 5 days
                         if ([0, 5, 10, 15, 20, 25, 30].includes(day)) {
-                          return <circle cx={cx} cy={cy} r={3} fill="#6B7280" />;
+                          return <circle cx={cx} cy={cy} r={3} fill="#c997d1" />;
                         }
                         return null;
                       }}
                       name="Projected"
                     />
-                    <Line 
-                      type="monotone" 
-                      dataKey="actual" 
-                      stroke="#7407f0" 
+                    <Line
+                      type="monotone"
+                      dataKey="actual"
+                      stroke="#680cb3"
                       strokeWidth={1.5}
-                      dot={{ fill: '#60A5FA', strokeWidth: 1, r: 3 }}
+                      dot={{ fill: "#9f59d9", strokeWidth: 1, r: 3 }}
                       name="Actual"
                     />
                   </LineChart>
