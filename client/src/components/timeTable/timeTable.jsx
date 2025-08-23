@@ -1,9 +1,13 @@
 import React,{useState,useRef,useEffect} from 'react';
 import Sidebar from '../home/sidebar'; 
 import Calendar from '../calendar';
-import {CalendarDays,CalendarOff,ChevronRight,ChevronLeft,Plus,X} from 'lucide-react';
+import {CalendarDays,CalendarOff,ChevronRight,ChevronLeft,Plus,X,Trash} from 'lucide-react';
+import Tooltip from "../tooltip";
 
 const TimeTable=()=>{
+  const hoursCurr=new Date().getHours();
+  const minutesCurr=new Date().getMinutes();
+
   const [showCalender,setShowCalendar]=useState(false);
   const [leftDistance, setLeftDistance] = useState(0);
   const contentRef=useRef(null);
@@ -89,40 +93,111 @@ const handleEndTemp=(e)=>{
     setTempTask((prev)=>({...prev,timeend: e.target.value}));
 }
 
-const handleCreateTask=()=>{
+const handleCreateTask = () => {
   const [starthours, startminutes] = tempTask.tstart.split(':').map(Number);
   const startInMins = starthours * 60 + startminutes;
   const [endhours, endminutes] = tempTask.timeend.split(':').map(Number);
   const endInMins = endhours * 60 + endminutes;
 
-  if(tempTask.name=="" || (endInMins<startInMins) || isNaN(endInMins) || isNaN(startInMins)){//atleast 1 wrong
-     if(tempTask.name=="" && ((endInMins<startInMins)|| isNaN(endInMins) || isNaN(startInMins))){
-        setErrorModal(1);//both wrong
-     }
-     else{ //only 1 wrong
-         if(tempTask.name==""){//only name missing
-            setErrorModal(2);
-        }
-        else{//only timing wrong
-           setErrorModal(3);
-        } 
-     }
+  // Check for overlaps with existing tasks on the same day
+  const overlappingTask = tasks.find(existingTask => {
+    if (existingTask.day !== tempTask.day) return false; // Different day, no overlap
     
-  }
-  else{ //both correct
-  setErrorModal(0);
-  const newTask={
-    name: tempTask.name,
-    day: tempTask.day,
-    tstart: tempTask.tstart,
-    timeend: tempTask.timeend,
-  };
-  setTasks((prev)=>[...prev,newTask]);
-  setTempTask({ name: "", day: "Monday", tstart: "", timeend:"" }); //Clear it
-  setShowTaskModal(prev=>!prev);
-  }   
+    const [exStartHours, exStartMinutes] = existingTask.tstart.split(':').map(Number);
+    const exStartInMins = exStartHours * 60 + exStartMinutes;
+    const [exEndHours, exEndMinutes] = existingTask.timeend.split(':').map(Number);
+    const exEndInMins = exEndHours * 60 + exEndMinutes;
+    
+    // Overlap condition: new task starts before existing ends AND new task ends after existing starts
+    return (startInMins < exEndInMins && endInMins > exStartInMins);
+  });
 
-}
+  const hasOverlap = !!overlappingTask;
+
+  if(tempTask.name=="" || (endInMins<startInMins) || isNaN(endInMins) || isNaN(startInMins) || hasOverlap){
+    // Multiple error conditions
+    if(tempTask.name=="" && ((endInMins<startInMins) || isNaN(endInMins) || isNaN(startInMins) || hasOverlap)){
+      if(hasOverlap) {
+        setErrorModal(5); // Name missing + overlap
+      } else {
+        setErrorModal(1); // Name missing + timing wrong (original)
+      }
+    }
+    else{ 
+      if(tempTask.name==""){
+        setErrorModal(2); // Only name missing (original)
+      }
+      else if(hasOverlap) {
+        setErrorModal(4); // Only overlap error
+      }
+      else{
+        setErrorModal(3); // Only timing wrong (original)
+      }
+    }
+  }
+  else{ 
+    // All correct
+    setErrorModal(0);
+    const newTask={
+      name: tempTask.name,
+      day: tempTask.day,
+      tstart: tempTask.tstart,
+      timeend: tempTask.timeend,
+    };
+    setTasks((prev)=>[...prev,newTask]);
+    setTempTask({ name: "", day: "Monday", tstart: "", timeend:"" });
+    setShowTaskModal(prev=>!prev);
+  }
+};
+
+// Error message function
+const getErrorMessage = () => {
+  switch(errorModal) {
+    case 1:
+      return "Please fill in the task name and fix the time inputs";
+    case 2:
+      return "Please enter a task name";
+    case 3:
+      return "End time must be after start time";
+    case 4:
+  // Only calculate overlapping task if we have valid time inputs
+  if (!tempTask.tstart || !tempTask.timeend) {
+    return "Please select valid start and end times";
+  }
+  
+  // Check if start time is after end time
+  const [starthours, startminutes] = tempTask.tstart.split(':').map(Number);
+  const startInMins = starthours * 60 + startminutes;
+  const [endhours, endminutes] = tempTask.timeend.split(':').map(Number);
+  const endInMins = endhours * 60 + endminutes;
+  
+  if (endInMins <= startInMins) {
+    return "End time must be after start time";
+  }
+  
+  const overlappingTask = tasks.find(task => {
+    if (task.day !== tempTask.day) return false;
+    
+    const [exStartHours, exStartMinutes] = task.tstart.split(':').map(Number);
+    const exStartInMins = exStartHours * 60 + exStartMinutes;
+    const [exEndHours, exEndMinutes] = task.timeend.split(':').map(Number);
+    const exEndInMins = exEndHours * 60 + exEndMinutes;
+    
+    return (startInMins < exEndInMins && endInMins > exStartInMins);
+  });
+  
+  if (overlappingTask) {
+    return `Time slot conflicts with "${overlappingTask.name}" (${overlappingTask.tstart} - ${overlappingTask.timeend})`;
+  } else {
+    return "Time slot conflict detected";
+  }
+
+    case 5:
+      return "Please fill in the task name and choose a non-conflicting time slot";
+    default:
+      return "";
+  }
+};
 
 const mondayTasks = () => {
   const monColors = ["#8B7CB6","#B084C7","#E8A5C4","#F4D1E8","#A8D0F0","#9BB5E6","#D3E4CD","#F6EAC2","#FAD9C1"];
@@ -258,11 +333,11 @@ const wednesdayTasks=()=>{
             
                    <div data-label="visual" className="h-full rounded-lg border-[1px] border-accentS3 dark:divide-accentTxt2" style={{ backgroundColor: wedColors[index % wedColors.length] }}>
                    </div>
-                   <div data-label="tooltip" className="absolute p-[5px] bg-daccentM dark:bg-accentM text-daccentTxt dark:text-accentTxt text-[0.8rem] flex flex-col rounded-sm
+                   <div data-label="tooltip" className="absolute p-[5px] bg-daccentM dark:bg-accentM text-daccentTxt dark:text-accentTxt text-[0.7rem] flex flex-col rounded-sm
                      z-[10] opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity"
                      style={{ left:0, top: -20}}>
                                <p>{(task.name.length>15)?(task.name.slice(0,15)+"..."):task.name+":"}</p>
-                               <p>{((Number(shours)<12)? 
+                               <p className="text-[0.5rem]">{((Number(shours)<12)? 
                                          (((shours==0)?shours+12:shours)+":"+String(sminutes).padStart(2, '0')+" AM")
                                          :
                                          (((shours==12)?shours:shours-12)+":"+String(sminutes).padStart(2, '0')+" PM"))
@@ -490,83 +565,92 @@ const sundayTasks=()=>{
 //PERSONALISED ERROR CODE DEFINED AS:
   //0 for all correct
   //1 for wrong
-const renderTaskModal=()=>{
-return (showTaskModal)?  //gotta return where called
+const renderTaskModal = () => {
+  return (showTaskModal) ?
     <div className="absolute w-full h-full inset-0 bg-black bg-opacity-20 z-[50] backdrop-blur-lg flex items-center justify-center">
-        <div className='absolute inset-0' onClick={handleTaskModal}></div>
-        <div className='bg-accentS dark:bg-daccentS min-w-[450px] h-[70%] w-[40%] max-h-[400px] max-w-[700px] rounded-lg shadow-lg overflow-hidden relative z-10'>
-            <div className='bg-[url("/modalBG.png")] bg-cover  bg-no-repeat  px-[12px] h-[60px] flex items-center justify-between border-b-gray-500  dark:border-b-daccentBorder2 border-b-[1px]'>
-                  <div className='flex'>
-                  <div>
-                  <p className='text-[1.2rem] text-white font-bold'>Add Event</p>
-                  <p className='text-[0.7rem] text-gray-100'> turn intention into action.</p>
-                  </div>
-                  </div>
-                  <button onClick={handleTaskModal} className='text-white text-[1.6rem]'><X /></button>
+      
+      {/* Top error message for overlap */}
+      {errorModal !== 0 && (
+        <div className="absolute top-4 left-1/2 transform -translate-x-1/2 bg-red-500 text-white px-6 py-3 rounded-lg shadow-lg z-[60] font-medium">
+          {getErrorMessage()}
+        </div>
+      )}
+      
+      <div className='absolute inset-0' onClick={handleTaskModal}></div>
+      <div className='bg-accentS dark:bg-daccentS min-w-[450px] h-[70%] w-[40%] max-h-[400px] max-w-[700px] rounded-lg shadow-lg overflow-hidden relative z-10'>
+        <div className='bg-[url("/modalBG.png")] bg-cover bg-no-repeat px-[12px] h-[60px] flex items-center justify-between border-b-gray-500 dark:border-b-daccentBorder2 border-b-[1px]'>
+          <div className='flex'>
+            <div>
+              <p className='text-[1.2rem] text-white font-bold'>Add Event</p>
+              <p className='text-[0.7rem] text-gray-100'> turn intention into action.</p>
             </div>
-            <div data-label='timetableInputContainer' className='bg-accentS dark:bg-daccentS2 px-[15px] py-[15px] w-full h-[65%] flex flex-col justify-around'>
-               <div>
-                 <label className="text-accentTxt dark:text-daccentTxt">Task name:</label>
-                 <input type="text" onChange={handleNameTemp}
-                  className={(errorModal === 1 || errorModal === 2)? 
-                    "border-[1.5px] min-h-[27px] py-[2px] px-[5px] bg-accentS dark:bg-daccentS2 text-accentTxt dark:text-daccentTxt placeholder-red-500 placeholder:text-[0.9rem] rounded-md w-full border-red-500"
-                    :
-                    "border-[1px] min-h-[27px] py-[2px] px-[5px] bg-accentS dark:bg-daccentS2 dark:border-daccentBorder2 text-accentTxt dark:text-daccentTxt rounded-md w-full border-accentS3"
-                    }
-                    placeholder={(errorModal === 1 || errorModal === 2)?"task needs to be named":"e.g. meditation"}
-                    />
-                   
-               </div>
-
-               <div className='flex justify-between'>
-                <div  className='flex'>
-                 <label className="text-accentTxt dark:text-daccentTxt">Day:&nbsp;</label>
-                 <select type="text" onChange={handleDayTemp} className="ml-[5px] text-accentTxt dark:text-daccentTxt bg-accentS dark:bg-daccentS2 max-h-[27px] p-[2px] border-[1px] rounded-md border-accentS3 dark:border-daccentBorder2">
-                    <option>Monday</option>
-                    <option>Tuesday</option>
-                    <option>Wednesday</option>
-                    <option>Thursday</option>
-                    <option>Friday</option>
-                    <option>Saturday</option>
-                    <option>Sunday</option>
-                 </select>
-                </div>
-                 
-                <div data-label="timeInputcontainer" className="w-fit flex flex-col h-[90px] justify-between">
-                  <div className="flex justify-between">
-                    <label className="text-accentTxt dark:text-daccentTxt">Start Time:&nbsp;</label>
-                    <input type="time" onChange={handleStartTemp} 
-                    className={(errorModal === 0 || errorModal === 2)? 
-                    "ml-[5px] border-[1px] rounded-md bg-accentS dark:bg-daccentS2 text-accentTxt dark:text-daccentTxt border-accentS3 dark:border-daccentBorder2"
-                    :
-                    "ml-[5px] border-[1.5px] rounded-md bg-accentS dark:bg-daccentS2 text-accentTxt dark:text-daccentTxt border-red-500"
-                    }/>
-                 </div>
-                 <div className="flex justify-between">
-                    <label className="text-accentTxt dark:text-daccentTxt">End time:&nbsp;</label>
-                    <input type="time" onChange={handleEndTemp} 
-                    className={(errorModal === 1 || errorModal === 3)? 
-                    "ml-[5px] border-[1.5px] rounded-md bg-accentS dark:bg-daccentS2 text-accentTxt dark:text-daccentTxt border-red-500"
-                    :
-                    "ml-[5px] border-[1px] rounded-md bg-accentS dark:bg-daccentS2 text-accentTxt dark:text-daccentTxt border-accentS3 dark:border-daccentBorder2"
-                    }
-                    />
-                 </div>
-               </div>
-
-             </div>
-               
-            </div>
-            <div className= 'bg-accentS dark:bg-daccentS2 flex px-[15px] py-[15px] h-fit text-[1.1rem] space-x-5 justify-center items-center border-t-[1px] border-accentS3 dark:border-daccentBorder2 '>
-                <button onClick={handleCreateTask} className='bg-gradient-to-r from-accent0 via-accent1 to-accent0  w-full text-white px-4 py-2 rounded '>Create</button>
-                <button  onClick={handleTaskModal} className=' bg-black text-white w-full px-4 py-2 rounded border-[1px] border-black'>Cancel</button>
-            </div>
-
           </div>
+          <button onClick={handleTaskModal} className='text-white text-[1.6rem]'><X /></button>
+        </div>
+        
+        <div data-label='timetableInputContainer' className='bg-accentS dark:bg-daccentS2 px-[15px] py-[15px] w-full h-[65%] flex flex-col justify-around'>
+          <div>
+            <label className="text-accentTxt dark:text-daccentTxt">Task name:</label>
+            <input type="text" onChange={handleNameTemp}
+              className={(errorModal === 1 || errorModal === 2 || errorModal === 5) ? 
+                "border-[1.5px] min-h-[27px] py-[2px] px-[5px] bg-accentS dark:bg-daccentS2 text-accentTxt dark:text-daccentTxt placeholder-red-500 placeholder:text-[0.9rem] rounded-md w-full border-red-500"
+                :
+                "border-[1px] min-h-[27px] py-[2px] px-[5px] bg-accentS dark:bg-daccentS2 dark:border-daccentBorder2 text-accentTxt dark:text-daccentTxt rounded-md w-full border-accentS3"
+              }
+              placeholder={(errorModal === 1 || errorModal === 2 || errorModal === 5) ? "task needs to be named" : "e.g. meditation"}
+            />
+          </div>
+
+          <div className='flex justify-between'>
+            <div className='flex'>
+              <label className="text-accentTxt dark:text-daccentTxt">Day:&nbsp;</label>
+              <select type="text" onChange={handleDayTemp} className="ml-[5px] text-accentTxt dark:text-daccentTxt bg-accentS dark:bg-daccentS2 max-h-[27px] p-[2px] border-[1px] rounded-md border-accentS3 dark:border-daccentBorder2">
+                <option>Monday</option>
+                <option>Tuesday</option>
+                <option>Wednesday</option>
+                <option>Thursday</option>
+                <option>Friday</option>
+                <option>Saturday</option>
+                <option>Sunday</option>
+              </select>
+            </div>
+             
+            <div data-label="timeInputcontainer" className="w-fit flex flex-col h-[90px] justify-between">
+              <div className="flex justify-between">
+                <label className="text-accentTxt dark:text-daccentTxt">Start Time:&nbsp;</label>
+                <input type="time" step="300" onChange={handleStartTemp} 
+                  className={(errorModal === 0 || errorModal === 2) ? 
+                    "ml-[5px] border-[1px] rounded-md bg-accentS dark:bg-daccentS2 text-accentTxt dark:text-daccentTxt border-accentS3 dark:border-daccentBorder2"
+                    :
+                    "ml-[5px] border-[1.5px] rounded-md bg-accentS dark:bg-daccentS2 text-accentTxt dark:text-daccentTxt border-red-500"
+                  }/>
+              </div>
+              <div className="flex justify-between">
+                <label className="text-accentTxt dark:text-daccentTxt">End time:&nbsp;</label>
+                <input type="time" step="300" onChange={handleEndTemp} 
+                  className={(errorModal === 0 || errorModal === 2) ?
+                    "ml-[5px] border-[1px] rounded-md bg-accentS dark:bg-daccentS2 text-accentTxt dark:text-daccentTxt border-accentS3 dark:border-daccentBorder2"
+                    :
+                    "ml-[5px] border-[1.5px] rounded-md bg-accentS dark:bg-daccentS2 text-accentTxt dark:text-daccentTxt border-red-500"
+                  }
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Remove the error message from here since it's now at the top */}
+
+        </div>
+               
+        <div className='bg-accentS dark:bg-daccentS2 flex px-[15px] py-[15px] h-fit text-[1.1rem] space-x-5 justify-center items-center border-t-[1px] border-accentS3 dark:border-daccentBorder2'>
+          <button onClick={handleCreateTask} className='bg-gradient-to-r from-accent0 via-accent1 to-accent0 w-full text-white px-4 py-2 rounded'>Create</button>
+          <button onClick={handleTaskModal} className='bg-black text-white w-full px-4 py-2 rounded border-[1px] border-black'>Cancel</button>
+        </div>
+      </div>
     </div>
     :
     <div className="hidden absolute w-full h-full bg-gray-800 opacity-50 blur-lg z-[15]">
-    </div>     
+    </div>;
 };
 
     return(
@@ -595,21 +679,33 @@ return (showTaskModal)?  //gotta return where called
                  </div>
                  }
                  <section data-label='daysNameContainer' className='h-[476px] w-full bg-accent2 dark:bg-daccent2 flex flex-col items-center text-accent0 text-[1.2rem]'>
-                    <div className='h-[68px] text-[1.3rem] w-full flex items-center justify-center'>Mon</div>
-                    <div className='h-[68px] text-[1.3rem] w-full flex items-center justify-center border-t-[1px] border-accent0'>Tue</div>
-                    <div className='h-[68px] text-[1.3rem] w-full flex items-center justify-center border-t-[1px] border-accent0'>Wed</div>
-                    <div className='h-[68px] text-[1.3rem] w-full flex items-center justify-center border-t-[1px] border-accent0'>Thu</div>
-                    <div className='h-[68px] text-[1.3rem] w-full flex items-center justify-center border-t-[1px] border-accent0'>Fri</div>
-                    <div className='h-[68px] text-[1.3rem] w-full flex items-center justify-center border-t-[1px] border-accent0'>Sat</div>
-                    <div className='h-[68px] text-[1.3rem] w-full flex items-center justify-center border-y-[1px] border-accent0'>Sun</div>
+                    <div className='h-[68px] text-[1.3rem] w-full flex border-t-[1px] border-accent0 justify-between'><div className="h-full bg-black text-accent2 hover:bg-red-500 hover:w-[20%] hover:text-white transition-all duration-300"><Trash className="scale-[0.7] h-full"/></div><p className="h-full w-[90%] justify-center flex items-center">Mon</p></div>
+                    <div className='h-[68px] text-[1.3rem] w-full flex border-t-[1px] border-accent0 justify-between'><div className="h-full bg-black text-accent2 hover:bg-red-500 hover:text-white transition-all duration-300"><Trash className="scale-[0.7] h-full"/></div><p className="h-full w-[90%] justify-center flex items-center">Tue</p></div>
+                    <div className='h-[68px] text-[1.3rem] w-full flex border-t-[1px] border-accent0 justify-between'><div className="h-full bg-black text-accent2 hover:bg-red-500 hover:text-white  transition-all duration-300"><Trash className="scale-[0.7] h-full"/></div><p className="h-full w-[90%] justify-center flex items-center">Wed</p></div>
+                    <div className='h-[68px] text-[1.3rem] w-full flex border-t-[1px] border-accent0 justify-between'><div className="h-full bg-black text-accent2 hover:bg-red-500 hover:text-white transition-all duration-300"><Trash className="scale-[0.7] h-full"/></div><p className="h-full w-[90%] justify-center flex items-center">Thu</p></div>
+                    <div className='h-[68px] text-[1.3rem] w-full flex border-t-[1px] border-accent0 justify-between'><div className="h-full bg-black text-accent2 hover:bg-red-500 hover:text-white transition-all duration-300"><Trash className="scale-[0.7] h-full"/></div><p className="h-full w-[90%] justify-center flex items-center">Fri</p></div>
+                    <div className='h-[68px] text-[1.3rem] w-full flex border-t-[1px] border-accent0 justify-between'><div className="h-full bg-black text-accent2 hover:bg-red-500 hover:text-white transition-all duration-300"><Trash className="scale-[0.7] h-full"/></div><p className="h-full w-[90%] justify-center flex items-center">Sat</p></div>
+                    <div className='h-[68px] text-[1.3rem] w-full flex border-t-[1px] border-accent0 justify-between'><div className="h-full bg-black text-accent2 hover:bg-red-500 hover:text-white transition-all duration-300"><Trash className="scale-[0.7] h-full"/></div><p className="h-full w-[90%] justify-center flex items-center">Sun</p></div>
                  </section>
               </div>
 
               <div data-label='contentContainer' ref={contentRef} className='min-w-[900px] overflow-y-hidden overflow-x-hidden h-full bg-accentS flex flex-col relative'>
-                <div data-label="currentLineContainer" className="absolute z-[6] w-fit h-[480px] bottom-0 flex flex-col items-center"   style={{ left: `${leftDistance-6.5}px` }}>
+               
+                <div data-label="currentLineContainer" className=" group absolute z-[6] w-fit h-[480px] bottom-0 flex flex-col items-center"   style={{ left: `${leftDistance-6.5}px` }}>
                    <div data-label="currentLineCircle" className="w-[12px] h-[12px] border-[3px] border-accent2 bg-transparent rounded-full"></div>
                    <div data-label="currentLine" className="h-full w-[3px] bg-accent2"></div>
-                </div>    
+                   <div data-label="tooltip" className="absolute p-[5px] bg-daccentM dark:bg-accentM text-daccentTxt dark:text-accentTxt text-[0.7rem] whitespace-nowrap flex flex-col rounded-sm
+                     z-[10] opacity-0 group-hover:opacity-70 pointer-events-none transition-opacity"
+                     style={{ left:6, top: 12}}>
+                               <p className="text-[0.7rem]">{((Number(hoursCurr)<12)? 
+                                         (((hoursCurr==0)?hoursCurr+12:hoursCurr)+":"+String(minutesCurr).padStart(2, '0')+" AM")
+                                         :
+                                         (((hoursCurr==12)?hoursCurr:hoursCurr-12)+":"+String(minutesCurr).padStart(2, '0')+" PM"))
+                                  }
+                               </p>
+                   </div>
+                </div>
+                   
                 {lines}
                 <section data-label='timeContainer' className='overflow-y-clip w-[2400px] min-h-[40px] bg-accent4 text-white flex border-black border-b-[1px]'>
                     <div className='w-[100px] text-[1rem] flex flex-col items-center justify-center'>12-1<span className='text-[0.6rem]'>AM</span></div>

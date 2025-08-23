@@ -1,33 +1,124 @@
 import React,{useState,useRef,useEffect} from 'react';
-import {ChevronRight,ChevronLeft,SquarePen} from 'lucide-react';
+import {ChevronRight,ChevronLeft,SquarePen,CircleHelp} from 'lucide-react';
+import Tooltip from "../../tooltip";
 import gsap from "gsap";
 
 const TodaySchedule =()=>{
- 
+
+const hoursCurr=new Date().getHours();
+const minutesCurr=new Date().getMinutes();
+
+const scheduleRef=useRef(null); 
+const handleLeftScroll=()=>{
+    if(scheduleRef.current){
+      scheduleRef.current.scrollBy({
+        left:-360,
+        behavior:'smooth',
+      });
+    }
+  };
+
+  const handleRightScroll=()=>{
+    if(scheduleRef.current){
+      scheduleRef.current.scrollBy({
+        left:360,
+        behavior:'smooth',
+      });
+    }
+  };
+
+  let width=100;
+  const [leftDistance, setLeftDistance] = useState(0);
+
+   useEffect(() => {
+      const now = new Date();
+      const hours = now.getHours();
+      const minutes = now.getMinutes();
+      const minsSinceMidnight = hours * 60 + minutes + 6.64;
+      const left = +(minsSinceMidnight * (width / 60)).toFixed(2);
+      setLeftDistance(left); //cant just write set state in body gotta wrap it in a function or useEfect
+      /*If you do setState directly in the body of a React component (outside of hooks like useEffect),
+       it causes an infinite render loop. Here’s why:
+        -React renders your component.
+        -In the component body, you call setState.
+        -Calling setState schedules a re-render.
+        -React renders again.
+        -Again, setState is called in the component body.
+        -This repeats endlessly until React stops it with an error: "Too many re-renders."
+        useEffect(() => { ... }) runs after every render (initial + updates).
+        useEffect(() => { ... }, []) runs only once after first render. */
+    }, []);
+  
+    useEffect(() => {
+      if (scheduleRef.current) {
+        scheduleRef.current.scrollLeft=leftDistance-200;
+      }
+    }, [leftDistance]);
+
 return(
-     <div className="relative todaysScheduleContainer flex flex-col w-full h-fit mt-[30px] overflow-hidden rounded-xl bg-accentS2 dark:bg-daccentS2 shadow-none">
-       <div className='absolute w-fit h-[90px]'>
-          <div className='flex items-center w-fit h-[60px] bg-accentS dark:bg-daccentS rounded-br-xl pb-[5px] pr-[20px]'>
-              <div className='flex mr-[10px] h-full'>{/*HEADING */}
-                   <p className='flex items-center text-[1.5rem] text-accentTxt dark:text-daccentTxt w-fit h-full whitespace-nowrap'>
+     <div className="relative todaysScheduleContainer flex flex-col w-full h-fit mt-[30px] rounded-xl bg-accentM dark:bg-daccentM shadow-none">
+       <div data-label="lable&ScrollBtnContainer" className='absolute h-[60px] w-[60%]'>
+          <div  data-label="INNERlable&ScrollBtnContainer" className='flex items-center justify-between w-full h-[60px] bg-accentS dark:bg-daccentS rounded-br-xl pb-[5px] pr-[20px]'>
+              <div data-label="labelContainer" className='flex mr-[10px] h-full items-center'>{/*HEADING */}
+                   <p className='mr-[5px] flex items-center text-[1.5rem] text-accentTxt dark:text-daccentTxt w-fit h-full whitespace-nowrap'>
                     Today's Schedule
                    </p>
+                   <Tooltip text="Need to edit in the schedule section to see today’s schedule">
+                     <CircleHelp className="text-accentS3 dark:text-daccentS3 cursor-pointer" />
+                   </Tooltip>           
               </div>  
-              <div className='ml-[10px] min-w-[80px] h-full flex items-center'>{/*BUTTONS*/}
-                 <button className='flex items-center justify-center border-[1px] border-gray-500 shadow-lg w-[35px] aspect-square rounded-full bg-accentS2 dark:bg-daccentS2 text-accentTxt dark:text-daccentTxt mr-[5px] hover:bg-accent1 dark:hover:bg-accent1 hover:text-white transition-colors duration-400'><ChevronLeft /></button>
-                 <button className='flex items-center justify-center border-[1px] border-gray-500 shadow-lg w-[35px] aspect-square rounded-full bg-accentS2 dark:bg-daccentS2 text-accentTxt dark:text-daccentTxt hover:bg-accent1 dark:hover:bg-accent1 hover:text-white transition-colors duration-400'><ChevronRight /></button>
+              <div data-label="btnContainer" className='ml-[10px] min-w-[80px] h-full flex items-center'>{/*BUTTONS*/}
+                 <button onClick={handleLeftScroll} className='flex items-center justify-center border-[1px] border-gray-500 shadow-lg w-[35px] aspect-square rounded-full bg-accentS2 dark:bg-daccentS2 text-accentTxt dark:text-daccentTxt mr-[5px] hover:bg-accent1 dark:hover:bg-accent1 hover:text-white transition-colors duration-400'><ChevronLeft /></button>
+                 <button onClick={handleRightScroll} className='flex items-center justify-center border-[1px] border-gray-500 shadow-lg w-[35px] aspect-square rounded-full bg-accentS2 dark:bg-daccentS2 text-accentTxt dark:text-daccentTxt hover:bg-accent1 dark:hover:bg-accent1 hover:text-white transition-colors duration-400'><ChevronRight /></button>
               </div>
 
            </div>
         </div>
-        <button data-lable="editBtn" className="absolute top-[10px] right-[10px] text-accentTxt2  dark:text-daccentS3 "><SquarePen /></button>
-        <div className="bg-accentS dark:bg-daccentS w-[15px] h-[15px] absolute left-[305px]">
-          <div className="w-[15px] h-[15px] rounded-tl-xl bg-accentS2 dark:bg-daccentS2"></div>
+        <div data-label="topLeftCurveContainer" className="bg-accentS dark:bg-daccentS w-[10px] h-[10px] absolute left-[60%]">
+          <div data-label="topLeftCurve" className="w-[10px] h-[10px] rounded-tl-xl bg-accentM dark:bg-daccentM"></div>
         </div>
-        <div  className="bg-accentS dark:bg-daccentS w-[15px] h-[15px] absolute top-[60px] left-[0px]">
-          <div className="w-[15px] h-[15px] rounded-tl-xl  bg-accentS2 dark:bg-daccentS2"></div>
+        <div data-label="topBottomLeftCurveContainer" className="bg-accentS dark:bg-daccentS w-[15px] h-[15px] absolute top-[60px] left-[0px]">
+          <div data-label="topBottomLeftCurve" className="w-[15px] h-[15px] rounded-tl-xl  bg-accentM dark:bg-daccentM"></div>
         </div>
-        <div className="h-[150px] w-full mt-[10px]">           
+        <div data-label="schedulerContainer" className="h-[150px] w-full  flex flex-col">
+         <div data-label="topDescContainer" className="flex h-[60px] w-[100%] p-[10px] pb-[0px] ">
+            <div data-label="description" className="flex items-center justify-between p-[5px] ml-[calc(60%+12px)] bg-accentS2 dark:bg-daccentS2 w-full h-full rounded-[7px]">
+                  <p className="text-accentTxt w-full dark:text-daccentTxt text-[1rem] flex justify-center">Task Description</p>
+                  <div className="flex items-center min-w-[130px] border-l-[2px] border-daccentS3">
+                      <div className="ml-[10px] w-[30px] h-[30px] rounded-full bg-accent1 relative overflow-hidden">
+                        {/* slice */}
+                        <div className="absolute inset-0 bg-accent2 [clip-path:polygon(50%_50%,100%_50%,100%_0)]"></div>
+                      </div>
+                      <p className="text-accentTxt dark:text-daccentTxt text-[0.7rem] ml-[5px]"> 2hrs 31mins left</p>
+                  </div>
+            </div>
+         </div>  
+         <div  ref={scheduleRef} data-label="bottomScheduleContainer" className="w-full h-[calc(150px-60px)] px-[10px] py-[30px]
+         scrollbar-hide overflow-auto relative">
+         
+            <div data-label="currentLineContainer" className="group absolute z-[6] w-fit h-[calc(150px-60px)] bottom-0 flex flex-col items-center"   style={{ left: `${leftDistance-6.5}px` }}>
+                   <div data-label="currentLineCircle" className="w-[12px] h-[12px] top-[50%] border-[3px] border-accent2 bg-transparent rounded-full"></div>          
+                   <div data-label="currentLine" className="h-full w-[3px] bg-accent2"></div>
+                   <div data-label="tooltip" className="absolute p-[5px] bg-daccentM dark:bg-accentM text-daccentTxt dark:text-accentTxt text-[0.7rem] whitespace-nowrap flex flex-col rounded-sm
+                     z-[10] opacity-0 group-hover:opacity-70 pointer-events-none transition-opacity"
+                     style={{ left:6, top: 12}}>
+                               <p className="text-[0.7rem]">{((Number(hoursCurr)<12)? 
+                                         (((hoursCurr==0)?hoursCurr+12:hoursCurr)+":"+String(minutesCurr).padStart(2, '0')+" AM")
+                                         :
+                                         (((hoursCurr==12)?hoursCurr:hoursCurr-12)+":"+String(minutesCurr).padStart(2, '0')+" PM"))
+                                  }
+                               </p>
+                   </div>
+            </div>
+          
+            <div data-label="scheduleLineContainer" className="w-[2400px] h-full">
+              <div className="w-fit h-full flex rounded-lg overflow-hidden">
+               <div data-label="scheduleLine" className="h-full bg-blue-400 w-[600px]"></div>
+               <div data-label="scheduleLine" className="h-full bg-blue-300 w-[600px]"></div>
+               <div data-label="scheduleLine" className="h-full  bg-blue-200 w-[600px]"></div>
+             </div>
+             </div>    
+         </div>       
         </div>
        
      </div>

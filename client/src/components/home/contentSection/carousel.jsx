@@ -479,7 +479,7 @@ const Carousel=()=>{
                    min-h-[40px] aspect-[4/5] bg-contain bg-no-repeat absolute top-[10px] left-[10px]
                    text-[1rem] text-accentTxt bebas-neue-regular
                    ${task.streak === 0
-                     ? "bg-[url('/streak/empty.png')]"
+                     ? "bg-[url('/streak/empty.png')] text-accentTxt2 dark:text-daccentTxt"
                      : task.streak <= 5
                      ? "bg-[url('/streak/streak1-5.png')]"
                      : task.streak <= 15
@@ -577,7 +577,7 @@ const Carousel=()=>{
                   </LineChart>
                 </ResponsiveContainer>
             </div>
-            <div data-label='taskDescriptionContainer' className='p-[5px] h-[35%] rounded-lg border-accentBorder2 dark:border-daccentBorder2 bg-accentS2 dark:bg-daccentS2 w-full flex flex-col items-center justify-center'>
+            <div data-label='taskDescriptionContainer' className='p-[5px] h-[35%] rounded-lg border-[1px] border-accentS3 bg-accentS2 dark:bg-daccentS2 w-full flex flex-col items-center justify-center'>
               <div className='w-full h-[70%]'>
                   <p className='mt-[5px] flex items-center justify-start w-full bebas-neue-regular text-[1.5rem] h-fit 
                   text-accentTxt dark:text-daccentTxt leading-none'>{task.name.length > 20 ? task.name.slice(0, 20) + "..."  : task.name}</p>
