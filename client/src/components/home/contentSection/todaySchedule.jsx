@@ -45,7 +45,6 @@ const TodaySchedule = () => {
         const [eh, em] = task.endTime.split(":").map(Number);
         const startMinutes = sh * 60 + sm;
         const endMinutes = eh * 60 + em;
-
         return startMinutes <= nowMinutes && nowMinutes <= endMinutes;
       });
 
@@ -136,7 +135,20 @@ const TodaySchedule = () => {
               <div className="ml-[10px] w-[30px] h-[30px] rounded-full bg-accent1 relative overflow-hidden">
                 <div className="absolute inset-0 bg-accent2 [clip-path:polygon(50%_50%,100%_50%,100%_0)]"></div>
               </div>
-              <p className="text-accentTxt dark:text-daccentTxt text-[0.7rem] ml-[5px]">.....</p>
+              <p className="text-accentTxt dark:text-daccentTxt text-[0.7rem] ml-[5px]">
+                               {currTasks && (() => {
+                   const toMinutes = (timeStr) => {
+                     const [hours, mins] = timeStr.split(":").map(Number);
+                     return hours * 60 + mins;
+                   };
+               
+                   const endMins = toMinutes(currTasks.endTime);
+                   const nowMins = new Date().getHours() * 60 + new Date().getMinutes();
+                   const diff = endMins - nowMins;
+               
+                   return diff > 0 ? `${diff} mins left` : "Task ended";
+                 })()}
+              </p>
             </div>
           </div>
         </div>
