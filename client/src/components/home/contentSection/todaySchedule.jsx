@@ -124,7 +124,7 @@ const TodaySchedule = () => {
             </div>
           </div>
           <div data-label="scheduleLineContainer" className="w-[2400px] h-full relative">
-            <div className="w-fit h-full flex rounded-lg overflow-hidden relative">
+            <div className="h-full flex rounded-lg overflow-hidden relative">
               {
                 todaysTasks.map((task, index) => {
                   if (!task.startTime || !task.endTime) {
@@ -159,13 +159,14 @@ const TodaySchedule = () => {
                       >
                         <div
                           data-label="visual"
-                          className="h-full rounded-lg border-2 border-black"
+                          className="h-full rounded-lg relative"
                           style={{ backgroundColor: colors[index % colors.length] }}
                         >
                         </div>
                         <div
                           data-label="tooltip"
-                          className="absolute p-[5px] bg-daccentM dark:bg-accentM text-daccentTxt dark:text-accentTxt text-[0.8rem] flex flex-col rounded-sm z-[10] opacity-0 group-hover:opacity-90 whitespace-nowrap pointer-events-none transition-opacity"
+                          className="absolute p-[2
+                          px] bg-daccentM dark:bg-accentM text-daccentTxt dark:text-accentTxt text-[0.7rem] flex flex-col rounded-sm z-[10] opacity-0 group-hover:opacity-90 whitespace-nowrap pointer-events-none transition-opacity"
                           style={{ left: 0, top: -20 }}
                         >
                           <p>
