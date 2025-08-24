@@ -18,23 +18,23 @@ function App() {
     <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
     <DarkModeProvider> {/*context useContext*/}
     <Router>
+      <TasksProvider>
       <Routes>
          <Route path="/" element={<LandingPage/>}/>
          <Route path="/login" element={<LoginPage/>}/>
          <Route path="/register" element={<RegisterPage/>}/> 
-         <TasksProvider>
-             <Route path="/home" element={
-                  <PrivateRoute>
-                     <HomePage />
-                  </PrivateRoute>
-             }/>
-             <Route path="/timetable" element={
-                  <PrivateRoute>
-                     <TimeTable />
-                  </PrivateRoute>
-             }/>
-          </TasksProvider> 
+         <Route path="/home" element={
+              <PrivateRoute>
+                 <HomePage />
+              </PrivateRoute>
+         }/>
+         <Route path="/timetable" element={
+              <PrivateRoute>
+                 <TimeTable />
+              </PrivateRoute>
+         }/>
        </Routes>
+       </TasksProvider> 
     </Router>
     </DarkModeProvider>
     </GoogleOAuthProvider>
