@@ -13,6 +13,7 @@ const [todaysTasks, setTodaysTasks] = useState([]);
 useEffect(() => {
   const today = new Date().toLocaleDateString("en-US", { weekday: "long" });
   setTodaysTasks(tasks.filter(task => task.day === today));
+  console.log("Filtered today's tasks:", todaysTasks);
 }, [tasks]); // runs every time tasks changes
 
 //remove
@@ -57,18 +58,7 @@ const handleLeftScroll=()=>{
       const minutes = now.getMinutes();
       const minsSinceMidnight = hours * 60 + minutes + 6.64;
       const left = +(minsSinceMidnight * (width / 60)).toFixed(2);
-
-      //remove
-    console.log(`Task`, {
-    name: task.name,
-    startTime: task.startTime,
-    endTime: task.endTime,
-    startTimeInMins,
-    endTimeInMins,
-    widthPx,
-    leftPx,
-    willRender: widthPx > 0 && leftPx >= 0
-  });
+  
 
       setLeftDistance(left); //cant just write set state in body gotta wrap it in a function or useEfect
       /*If you do setState directly in the body of a React component (outside of hooks like useEffect),
@@ -146,7 +136,7 @@ return(
             </div>
             <div data-label="scheduleLineContainer" className="w-[2400px] h-full relative">
                  <div className="w-fit h-full flex rounded-lg overflow-hidden relative">
-                   {testTasks.map((task, index) => {
+                   {todaysTasks.map((task, index) => {
                        const [shours, sminutes] = task.startTime.split(":").map(Number);
                        const startTimeInMins = shours * 60 + sminutes;
                
