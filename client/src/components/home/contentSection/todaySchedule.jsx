@@ -9,11 +9,12 @@ const TodaySchedule =()=>{
 const { tasks, setTasks } = useContext(TasksContext);
 console.log("TodaySchedule tasks:", tasks);
 
-//useMemo to avoid recalculating on every render
-const today = new Date().toLocaleDateString("en-US", { weekday: "long" });
-const todaysTasks = useMemo(() => {
-  return tasks.filter(task => task.day === today);
-}, [tasks, today]);
+const [todaysTasks, setTodaysTasks] = useState([]);
+useEffect(() => {
+  const today = new Date().toLocaleDateString("en-US", { weekday: "long" });
+  setTodaysTasks(tasks.filter(task => task.day === today));
+}, [tasks]); // runs every time tasks changes
+
 
 const hoursCurr=new Date().getHours();
 const minutesCurr=new Date().getMinutes();
@@ -147,7 +148,7 @@ return(
                
                        return (
                          <div
-                           key={index}
+                           key={task._id || index}
                            className="absolute group"
                            style={{
                              left: `${leftPx}px`,
