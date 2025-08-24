@@ -124,7 +124,7 @@ const TodaySchedule = () => {
             </div>
           </div>
           <div data-label="scheduleLineContainer" className="w-[2400px] h-full relative">
-            <div className="h-full flex rounded-lg overflow-hidden relative">
+            <div className="h-full flex rounded-lg relative">
               {
                 todaysTasks.map((task, index) => {
                   if (!task.startTime || !task.endTime) {
@@ -152,9 +152,8 @@ const TodaySchedule = () => {
                         style={{
                           left: `${leftPx}px`,
                           width: `${widthPx}px`,
-                          height: "40px",
+                          height: "100%",
                           zIndex: 2,
-                          backgroundColor: 'lime'
                         }}
                       >
                         <div
