@@ -59,7 +59,7 @@ const handleLeftScroll=()=>{
       const left = +(minsSinceMidnight * (width / 60)).toFixed(2);
 
       //remove
-    console.log(`Task ${index}:`, {
+    console.log(`Task`, {
     name: task.name,
     startTime: task.startTime,
     endTime: task.endTime,
