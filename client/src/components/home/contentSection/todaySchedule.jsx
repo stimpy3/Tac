@@ -10,22 +10,20 @@ const { tasks, setTasks } = useContext(TasksContext);
 console.log("TodaySchedule tasks:", tasks);
 
 const [todaysTasks, setTodaysTasks] = useState([]);
+
+// FIXED: Properly filter and log tasks
 useEffect(() => {
   const today = new Date().toLocaleDateString("en-US", { weekday: "long" });
-  setTodaysTasks(tasks.filter(task => task.day === today));
-  console.log("Filtered today's tasks:", todaysTasks);
-}, [tasks]); // runs every time tasks changes
+  const filtered = tasks.filter(task => task.day === today);
+  console.log("Today is:", today);
+  console.log("Filtered today's tasks:", filtered); // Log the actual filtered result
+  setTodaysTasks(filtered);
+}, [tasks]);
 
-//remove
-const testTasks = [
-  {
-    _id: 'test1',
-    name: 'Test Task',
-    startTime: '10:00',
-    endTime: '11:00',
-    day: 'Monday'
-  }
-];
+// Log when todaysTasks actually changes
+useEffect(() => {
+  console.log("todaysTasks state updated:", todaysTasks);
+}, [todaysTasks]);
 
 const hoursCurr=new Date().getHours();
 const minutesCurr=new Date().getMinutes();
@@ -58,19 +56,7 @@ const handleLeftScroll=()=>{
       const minutes = now.getMinutes();
       const minsSinceMidnight = hours * 60 + minutes + 6.64;
       const left = +(minsSinceMidnight * (width / 60)).toFixed(2);
-  
-
-      setLeftDistance(left); //cant just write set state in body gotta wrap it in a function or useEfect
-      /*If you do setState directly in the body of a React component (outside of hooks like useEffect),
-       it causes an infinite render loop. Here’s why:
-        -React renders your component.
-        -In the component body, you call setState.
-        -Calling setState schedules a re-render.
-        -React renders again.
-        -Again, setState is called in the component body.
-        -This repeats endlessly until React stops it with an error: "Too many re-renders."
-        useEffect(() => { ... }) runs after every render (initial + updates).
-        useEffect(() => { ... }, []) runs only once after first render. */
+      setLeftDistance(left);
     }, []);
   
     useEffect(() => {
@@ -83,19 +69,18 @@ return(
      <div className="relative todaysScheduleContainer flex flex-col w-full h-fit mt-[30px] rounded-xl bg-accentM dark:bg-daccentM shadow-none">
        <div data-label="lable&ScrollBtnContainer" className='absolute h-[60px] w-[60%]'>
           <div  data-label="INNERlable&ScrollBtnContainer" className='flex items-center justify-between w-full h-[60px] bg-accentS dark:bg-daccentS rounded-br-xl pb-[5px] pr-[20px]'>
-              <div data-label="labelContainer" className='flex mr-[10px] h-full items-center'>{/*HEADING */}
+              <div data-label="labelContainer" className='flex mr-[10px] h-full items-center'>
                    <p className='mr-[5px] flex items-center text-[1.5rem] text-accentTxt dark:text-daccentTxt w-fit h-full whitespace-nowrap'>
                     Today's Schedule
                    </p>
-                   <Tooltip text="Need to edit in the schedule section to see today’s schedule">
+                   <Tooltip text="Need to edit in the schedule section to see today's schedule">
                      <CircleHelp className="text-accentS3 dark:text-daccentS3 cursor-pointer" />
                    </Tooltip>           
               </div>  
-              <div data-label="btnContainer" className='ml-[10px] min-w-[80px] h-full flex items-center'>{/*BUTTONS*/}
+              <div data-label="btnContainer" className='ml-[10px] min-w-[80px] h-full flex items-center'>
                  <button onClick={handleLeftScroll} className='flex items-center justify-center border-[1px] border-gray-500 shadow-lg w-[35px] aspect-square rounded-full bg-accentS2 dark:bg-daccentS2 text-accentTxt dark:text-daccentTxt mr-[5px] hover:bg-accent1 dark:hover:bg-accent1 hover:text-white transition-colors duration-400'><ChevronLeft /></button>
                  <button onClick={handleRightScroll} className='flex items-center justify-center border-[1px] border-gray-500 shadow-lg w-[35px] aspect-square rounded-full bg-accentS2 dark:bg-daccentS2 text-accentTxt dark:text-daccentTxt hover:bg-accent1 dark:hover:bg-accent1 hover:text-white transition-colors duration-400'><ChevronRight /></button>
               </div>
-
            </div>
         </div>
         <div data-label="topLeftCurveContainer" className="bg-accentS dark:bg-daccentS w-[10px] h-[10px] absolute left-[60%]">
@@ -110,22 +95,18 @@ return(
                   <p className="text-accentTxt w-full dark:text-daccentTxt text-[1rem] flex justify-center">Task Description</p>
                   <div className="flex items-center min-w-[130px] border-l-[2px] border-daccentS3">
                       <div className="ml-[10px] w-[30px] h-[30px] rounded-full bg-accent1 relative overflow-hidden">
-                        {/* slice */}
                         <div className="absolute inset-0 bg-accent2 [clip-path:polygon(50%_50%,100%_50%,100%_0)]"></div>
                       </div>
                       <p className="text-accentTxt dark:text-daccentTxt text-[0.7rem] ml-[5px]"> 2hrs 31mins left</p>
                   </div>
             </div>
          </div>  
-         <div  ref={scheduleRef} data-label="bottomScheduleContainer" className="w-full h-[calc(150px-60px)] px-[10px] py-[30px]
-         scrollbar-hide overflow-auto relative">
+         <div  ref={scheduleRef} data-label="bottomScheduleContainer" className="w-full h-[calc(150px-60px)] px-[10px] py-[30px] scrollbar-hide overflow-auto relative">
          
-            <div data-label="currentLineContainer" className="group absolute z-[6] w-fit h-[calc(150px-60px)] bottom-0 flex flex-col items-center"   style={{ left: `${leftDistance-6.5}px` }}>
+            <div data-label="currentLineContainer" className="group absolute z-[6] w-fit h-[calc(150px-60px)] bottom-0 flex flex-col items-center" style={{ left: `${leftDistance-6.5}px` }}>
                    <div data-label="currentLineCircle" className="w-[12px] h-[12px] top-[50%] border-[3px] border-accent2 bg-transparent rounded-full"></div>          
                    <div data-label="currentLine" className="h-full w-[3px] bg-accent2"></div>
-                   <div data-label="tooltip" className="absolute p-[5px] bg-daccentM dark:bg-accentM text-daccentTxt dark:text-accentTxt text-[0.7rem] whitespace-nowrap flex flex-col rounded-sm
-                     z-[10] opacity-0 group-hover:opacity-70 pointer-events-none transition-opacity"
-                     style={{ left:6, top: 12}}>
+                   <div data-label="tooltip" className="absolute p-[5px] bg-daccentM dark:bg-accentM text-daccentTxt dark:text-accentTxt text-[0.7rem] whitespace-nowrap flex flex-col rounded-sm z-[10] opacity-0 group-hover:opacity-70 pointer-events-none transition-opacity" style={{ left:6, top: 12}}>
                                <p className="text-[0.7rem]">{((Number(hoursCurr)<12)? 
                                          (((hoursCurr==0)?hoursCurr+12:hoursCurr)+":"+String(minutesCurr).padStart(2, '0')+" AM")
                                          :
@@ -134,113 +115,108 @@ return(
                                </p>
                    </div>
             </div>
+            
             <div data-label="scheduleLineContainer" className="w-[2400px] h-full relative">
                  <div className="w-fit h-full flex rounded-lg overflow-hidden relative">
-                   {(() => {
-  console.log("Starting render debug...");
-  
-  // Test 1: Can we render anything at all?
-  const test1 = <div key="test">BASIC TEST</div>;
-  console.log("Test 1 created:", test1);
-  
-  // Test 2: Can we map over a simple array?
-  const simpleArray = [1, 2, 3];
-  const test2 = simpleArray.map(num => <div key={num}>Number: {num}</div>);
-  console.log("Test 2 created:", test2);
-  
-  // Test 3: Can we map over todaysTasks with minimal logic?
-  console.log("About to map todaysTasks...");
-  const test3 = todaysTasks.map((task, index) => {
-    console.log(`Mapping task ${index}:`, task.name);
-    return <div key={`simple-${index}`}>Task: {task.name}</div>;
-  });
-  console.log("Test 3 result:", test3);
-  
-  // Return the simple test
-  return test3;
-})()}
+                   
+                   {/* FIXED: Proper task rendering */}
+                   {console.log("RENDERING - todaysTasks:", todaysTasks)}
+                   {console.log("RENDERING - todaysTasks.length:", todaysTasks.length)}
+                   
+                   {todaysTasks.length === 0 ? (
+                     <div style={{position: 'absolute', left: '100px', backgroundColor: 'orange', padding: '10px', zIndex: 5}}>
+                       No tasks for today
+                     </div>
+                   ) : (
+                     todaysTasks.map((task, index) => {
+                       console.log(`Rendering task ${index}:`, task);
+                       
+                       if (!task.startTime || !task.endTime) {
+                         console.log("Skipping task - missing time data");
+                         return null;
+                       }
+                       
+                       try {
+                         const [shours, sminutes] = task.startTime.split(":").map(Number);
+                         const startTimeInMins = shours * 60 + sminutes;
+                 
+                         const [ehours, eminutes] = task.endTime.split(":").map(Number);
+                         const endTimeInMins = ehours * 60 + eminutes;
+                 
+                         const widthPx = (endTimeInMins - startTimeInMins) * (100 / 60);
+                         const leftPx = startTimeInMins * (100 / 60);
+                 
+                         console.log(`Task ${index} positioning:`, { leftPx, widthPx, startTimeInMins, endTimeInMins });
+                 
+                         const colors = [
+                           "#8B7CB6", "#B084C7", "#E8A5C4", "#F4D1E8", "#A8D0F0",
+                           "#9BB5E6", "#D3E4CD", "#F6EAC2", "#FAD9C1"
+                         ];
+                 
+                         return (
+                           <div
+                             key={task._id || `task-${index}`}
+                             className="absolute group"
+                             style={{
+                               left: `${leftPx}px`,
+                               width: `${widthPx}px`,
+                               height: "40px",
+                               zIndex: 2,
+                               backgroundColor: 'lime' // Temporary bright color to see it
+                             }}
+                           >
+                             <div
+                               data-label="visual"
+                               className="h-full rounded-lg border-2 border-black"
+                               style={{ backgroundColor: colors[index % colors.length] }}
+                             >
+                               <span style={{color: 'black', fontSize: '12px', fontWeight: 'bold'}}>
+                                 {task.name}
+                               </span>
+                             </div>
+                 
+                             <div
+                               data-label="tooltip"
+                               className="absolute p-[5px] bg-daccentM dark:bg-accentM text-daccentTxt dark:text-accentTxt text-[0.8rem] flex flex-col rounded-sm z-[10] opacity-0 group-hover:opacity-90 whitespace-nowrap pointer-events-none transition-opacity"
+                               style={{ left: 0, top: -20 }}
+                             >
+                               <p>
+                                 {task.name.length > 15
+                                   ? task.name.slice(0, 15) + "..."
+                                   : task.name + ":"}
+                               </p>
+                               <p>
+                                 {(Number(shours) < 12
+                                   ? (shours === 0 ? shours + 12 : shours) +
+                                     ":" +
+                                     String(sminutes).padStart(2, "0") +
+                                     " AM"
+                                   : (shours === 12 ? shours : shours - 12) +
+                                     ":" +
+                                     String(sminutes).padStart(2, "0") +
+                                     " PM") +
+                                   "-" +
+                                   (Number(ehours) < 12
+                                     ? task.endTime + " AM"
+                                     : (ehours === 12 ? ehours : ehours - 12) +
+                                       ":" +
+                                       String(eminutes).padStart(2, "0") +
+                                       " PM")}
+                               </p>
+                             </div>
+                           </div>
+                         );
+                       } catch (error) {
+                         console.error("Error rendering task:", error, task);
+                         return null;
+                       }
+                     })
+                   )}
                  </div>
              </div>
-
-
          </div>       
         </div>
-       
      </div>
 );
 }
 export default TodaySchedule;
-
-// {todaysTasks.map((task, index) => {
-//                        const [shours, sminutes] = task.startTime.split(":").map(Number);
-//                        const startTimeInMins = shours * 60 + sminutes;
-               
-//                        const [ehours, eminutes] = task.endTime.split(":").map(Number);
-//                        const endTimeInMins = ehours * 60 + eminutes;
-               
-//                        // scaling: 100px = 1 hour (same idea as hardcoded widths)
-//                        const widthPx = (endTimeInMins - startTimeInMins) * (100 / 60);
-//                        const leftPx = startTimeInMins * (100 / 60);
-               
-//                        const colors = [
-//                          "#8B7CB6",
-//                          "#B084C7",
-//                          "#E8A5C4",
-//                          "#F4D1E8",
-//                          "#A8D0F0",
-//                          "#9BB5E6",
-//                          "#D3E4CD",
-//                          "#F6EAC2",
-//                          "#FAD9C1",
-//                        ];
-               
-//                        return (
-//                          <div
-//                            key={task._id || index}
-//                            className="absolute group"
-//                            style={{
-//                              left: `${leftPx}px`,
-//                              width: `${widthPx}px`,
-//                              height: "40px",
-//                              zIndex: 2,
-//                            }}
-//                          >
-//                            <div
-//                              data-label="visual"
-//                              className="h-full rounded-lg border border-accentS3"
-//                              style={{ backgroundColor: colors[index % colors.length] }}
-//                            ></div>
-               
-//                            <div
-//                              data-label="tooltip"
-//                              className="absolute p-[5px] bg-daccentM dark:bg-accentM text-daccentTxt dark:text-accentTxt text-[0.8rem] flex flex-col rounded-sm
-//                                     z-[10] opacity-0 group-hover:opacity-90 whitespace-nowrap pointer-events-none transition-opacity"
-//                              style={{ left: 0, top: -20 }}
-//                            >
-//                              <p>
-//                                {task.name.length > 15
-//                                  ? task.name.slice(0, 15) + "..."
-//                                  : task.name + ":"}
-//                              </p>
-//                              <p>
-//                                {(Number(shours) < 12
-//                                  ? (shours === 0 ? shours + 12 : shours) +
-//                                    ":" +
-//                                    String(sminutes).padStart(2, "0") +
-//                                    " AM"
-//                                  : (shours === 12 ? shours : shours - 12) +
-//                                    ":" +
-//                                    String(sminutes).padStart(2, "0") +
-//                                    " PM") +
-//                                  "-" +
-//                                  (Number(ehours) < 12
-//                                    ? task.endTime + " AM"
-//                                    : (ehours === 12 ? ehours : ehours - 12) +
-//                                      ":" +
-//                                      String(eminutes).padStart(2, "0") +
-//                                      " PM")}
-//                              </p>
-//                            </div>
-//                          </div>
-//                        );
-//                      })}
