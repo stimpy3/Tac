@@ -136,79 +136,29 @@ return(
             </div>
             <div data-label="scheduleLineContainer" className="w-[2400px] h-full relative">
                  <div className="w-fit h-full flex rounded-lg overflow-hidden relative">
-                   {todaysTasks.map((task, index) => {
-                       const [shours, sminutes] = task.startTime.split(":").map(Number);
-                       const startTimeInMins = shours * 60 + sminutes;
-               
-                       const [ehours, eminutes] = task.endTime.split(":").map(Number);
-                       const endTimeInMins = ehours * 60 + eminutes;
-               
-                       // scaling: 100px = 1 hour (same idea as hardcoded widths)
-                       const widthPx = (endTimeInMins - startTimeInMins) * (100 / 60);
-                       const leftPx = startTimeInMins * (100 / 60);
-               
-                       const colors = [
-                         "#8B7CB6",
-                         "#B084C7",
-                         "#E8A5C4",
-                         "#F4D1E8",
-                         "#A8D0F0",
-                         "#9BB5E6",
-                         "#D3E4CD",
-                         "#F6EAC2",
-                         "#FAD9C1",
-                       ];
-               
-                       return (
-                         <div
-                           key={task._id || index}
-                           className="absolute group"
-                           style={{
-                             left: `${leftPx}px`,
-                             width: `${widthPx}px`,
-                             height: "40px",
-                             zIndex: 2,
-                           }}
-                         >
-                           <div
-                             data-label="visual"
-                             className="h-full rounded-lg border border-accentS3"
-                             style={{ backgroundColor: colors[index % colors.length] }}
-                           ></div>
-               
-                           <div
-                             data-label="tooltip"
-                             className="absolute p-[5px] bg-daccentM dark:bg-accentM text-daccentTxt dark:text-accentTxt text-[0.8rem] flex flex-col rounded-sm
-                                    z-[10] opacity-0 group-hover:opacity-90 whitespace-nowrap pointer-events-none transition-opacity"
-                             style={{ left: 0, top: -20 }}
-                           >
-                             <p>
-                               {task.name.length > 15
-                                 ? task.name.slice(0, 15) + "..."
-                                 : task.name + ":"}
-                             </p>
-                             <p>
-                               {(Number(shours) < 12
-                                 ? (shours === 0 ? shours + 12 : shours) +
-                                   ":" +
-                                   String(sminutes).padStart(2, "0") +
-                                   " AM"
-                                 : (shours === 12 ? shours : shours - 12) +
-                                   ":" +
-                                   String(sminutes).padStart(2, "0") +
-                                   " PM") +
-                                 "-" +
-                                 (Number(ehours) < 12
-                                   ? task.endTime + " AM"
-                                   : (ehours === 12 ? ehours : ehours - 12) +
-                                     ":" +
-                                     String(eminutes).padStart(2, "0") +
-                                     " PM")}
-                             </p>
-                           </div>
-                         </div>
-                       );
-                     })}
+                   {(() => {
+  console.log("Starting render debug...");
+  
+  // Test 1: Can we render anything at all?
+  const test1 = <div key="test">BASIC TEST</div>;
+  console.log("Test 1 created:", test1);
+  
+  // Test 2: Can we map over a simple array?
+  const simpleArray = [1, 2, 3];
+  const test2 = simpleArray.map(num => <div key={num}>Number: {num}</div>);
+  console.log("Test 2 created:", test2);
+  
+  // Test 3: Can we map over todaysTasks with minimal logic?
+  console.log("About to map todaysTasks...");
+  const test3 = todaysTasks.map((task, index) => {
+    console.log(`Mapping task ${index}:`, task.name);
+    return <div key={`simple-${index}`}>Task: {task.name}</div>;
+  });
+  console.log("Test 3 result:", test3);
+  
+  // Return the simple test
+  return test3;
+})()}
                  </div>
              </div>
 
@@ -220,3 +170,77 @@ return(
 );
 }
 export default TodaySchedule;
+
+// {todaysTasks.map((task, index) => {
+//                        const [shours, sminutes] = task.startTime.split(":").map(Number);
+//                        const startTimeInMins = shours * 60 + sminutes;
+               
+//                        const [ehours, eminutes] = task.endTime.split(":").map(Number);
+//                        const endTimeInMins = ehours * 60 + eminutes;
+               
+//                        // scaling: 100px = 1 hour (same idea as hardcoded widths)
+//                        const widthPx = (endTimeInMins - startTimeInMins) * (100 / 60);
+//                        const leftPx = startTimeInMins * (100 / 60);
+               
+//                        const colors = [
+//                          "#8B7CB6",
+//                          "#B084C7",
+//                          "#E8A5C4",
+//                          "#F4D1E8",
+//                          "#A8D0F0",
+//                          "#9BB5E6",
+//                          "#D3E4CD",
+//                          "#F6EAC2",
+//                          "#FAD9C1",
+//                        ];
+               
+//                        return (
+//                          <div
+//                            key={task._id || index}
+//                            className="absolute group"
+//                            style={{
+//                              left: `${leftPx}px`,
+//                              width: `${widthPx}px`,
+//                              height: "40px",
+//                              zIndex: 2,
+//                            }}
+//                          >
+//                            <div
+//                              data-label="visual"
+//                              className="h-full rounded-lg border border-accentS3"
+//                              style={{ backgroundColor: colors[index % colors.length] }}
+//                            ></div>
+               
+//                            <div
+//                              data-label="tooltip"
+//                              className="absolute p-[5px] bg-daccentM dark:bg-accentM text-daccentTxt dark:text-accentTxt text-[0.8rem] flex flex-col rounded-sm
+//                                     z-[10] opacity-0 group-hover:opacity-90 whitespace-nowrap pointer-events-none transition-opacity"
+//                              style={{ left: 0, top: -20 }}
+//                            >
+//                              <p>
+//                                {task.name.length > 15
+//                                  ? task.name.slice(0, 15) + "..."
+//                                  : task.name + ":"}
+//                              </p>
+//                              <p>
+//                                {(Number(shours) < 12
+//                                  ? (shours === 0 ? shours + 12 : shours) +
+//                                    ":" +
+//                                    String(sminutes).padStart(2, "0") +
+//                                    " AM"
+//                                  : (shours === 12 ? shours : shours - 12) +
+//                                    ":" +
+//                                    String(sminutes).padStart(2, "0") +
+//                                    " PM") +
+//                                  "-" +
+//                                  (Number(ehours) < 12
+//                                    ? task.endTime + " AM"
+//                                    : (ehours === 12 ? ehours : ehours - 12) +
+//                                      ":" +
+//                                      String(eminutes).padStart(2, "0") +
+//                                      " PM")}
+//                              </p>
+//                            </div>
+//                          </div>
+//                        );
+//                      })}
