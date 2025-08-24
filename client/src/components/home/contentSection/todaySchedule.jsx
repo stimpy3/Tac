@@ -7,6 +7,7 @@ import { TasksContext } from '../../../contexts/tasksContext';
 
 const TodaySchedule =()=>{
 const { tasks } = useContext(TasksContext);
+console.log("TodaySchedule tasks:", tasks);
 const hoursCurr=new Date().getHours();
 const minutesCurr=new Date().getMinutes();
 
