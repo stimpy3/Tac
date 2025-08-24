@@ -117,10 +117,7 @@ return(
                    {tasks
                      .filter(
                        (task) =>
-                         task.day.toLowerCase() ===
-                         new Date().toLocaleDateString("en-US", { weekday: "long" }).toLowerCase()
-                     )
-                     .map((task, index) => {
+                         task.day.toLowerCase() === "Monday").map((task, index) => {
                        const [shours, sminutes] = task.startTime.split(":").map(Number);
                        const startTimeInMins = shours * 60 + sminutes;
                
