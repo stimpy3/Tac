@@ -125,19 +125,7 @@ const TodaySchedule = () => {
           </div>
           <div data-label="scheduleLineContainer" className="w-[2400px] h-full relative">
             <div className="w-fit h-full flex rounded-lg overflow-hidden relative">
-              {loading ? (
-                <div style={{ position: 'absolute', left: '100px', backgroundColor: 'orange', padding: '10px', zIndex: 5 }}>
-                  Loading tasks...
-                </div>
-              ) : error ? (
-                <div style={{ position: 'absolute', left: '100px', backgroundColor: 'red', padding: '10px', zIndex: 5 }}>
-                  {error}
-                </div>
-              ) : todaysTasks.length === 0 ? (
-                <div style={{ position: 'absolute', left: '100px', backgroundColor: 'orange', padding: '10px', zIndex: 5 }}>
-                  No tasks for today
-                </div>
-              ) : (
+              {
                 todaysTasks.map((task, index) => {
                   if (!task.startTime || !task.endTime) {
                     return null;
@@ -174,9 +162,6 @@ const TodaySchedule = () => {
                           className="h-full rounded-lg border-2 border-black"
                           style={{ backgroundColor: colors[index % colors.length] }}
                         >
-                          <span style={{ color: 'black', fontSize: '12px', fontWeight: 'bold' }}>
-                            {task.name}
-                          </span>
                         </div>
                         <div
                           data-label="tooltip"
@@ -214,7 +199,7 @@ const TodaySchedule = () => {
                     return null;
                   }
                 })
-              )}
+              }
             </div>
           </div>
         </div>
