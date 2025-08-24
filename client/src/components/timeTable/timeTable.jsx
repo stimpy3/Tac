@@ -105,7 +105,11 @@ useEffect(() => {
       const res = await axios.get(`${BACKEND_URL}/schedules`, {
         headers: { Authorization: `Bearer ${getToken()}` }
       });
-      setTasks(res.data);
+      setTasks(res.data.map(task => ({
+                ...task,
+                tstart: task.startTime,
+                timeend: task.endTime
+              })));
     } catch (err) {
       console.error('Failed to fetch schedules:', err);
     }
@@ -179,8 +183,10 @@ const handleCreateTask = async () => {
       });
       // Replace optimistic task with real one from backend
       setTasks(prev => prev.map(task =>
-        task._id === optimisticTask._id ? res.data : task
-      ));
+               task._id === optimisticTask._id
+                 ? { ...res.data, tstart: res.data.startTime, timeend: res.data.endTime }
+                 : task
+             ));
     } catch (err) {
       // Rollback optimistic update if failed
       setTasks(prev => prev.filter(task => task._id !== optimisticTask._id));
