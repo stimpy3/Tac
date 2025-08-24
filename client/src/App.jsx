@@ -8,7 +8,7 @@ import LandingPage from "./components/landingPage/landingpage.jsx";
 import TimeTable from "./components/timeTable/timeTable.jsx";
 import PrivateRoute from "./components/auth/privateRoutes.jsx"; //Import it for protection
 import { DarkModeProvider } from "./darkModeContext.jsx"; //context useContext
-import { TasksProvider } from './context/tasksContext';
+import { TasksProvider } from './contexts/tasksContext';
 
 function App() {
   

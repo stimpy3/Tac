@@ -5,7 +5,7 @@ import {CalendarDays,CalendarOff,ChevronRight,ChevronLeft,Plus,X,Trash} from 'lu
 import Tooltip from "../tooltip";
 import axios from 'axios';
 import { useContext } from 'react';
-import { TasksContext } from '../../context/tasksContext';
+import { TasksContext } from '../../contexts/tasksContext';
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000"; 
 
