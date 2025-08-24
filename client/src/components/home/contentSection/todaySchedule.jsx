@@ -2,12 +2,19 @@ import React,{useState,useRef,useEffect} from 'react';
 import {ChevronRight,ChevronLeft,SquarePen,CircleHelp} from 'lucide-react';
 import Tooltip from "../../tooltip";
 import gsap from "gsap";
-import { useContext } from 'react';
+import { useContext, useMemo } from 'react';
 import { TasksContext } from '../../../contexts/tasksContext';
 
 const TodaySchedule =()=>{
-const { tasks } = useContext(TasksContext);
+const { tasks, setTasks } = useContext(TasksContext);
 console.log("TodaySchedule tasks:", tasks);
+
+//useMemo to avoid recalculating on every render
+const today = new Date().toLocaleDateString("en-US", { weekday: "long" });
+const todaysTasks = useMemo(() => {
+  return tasks.filter(task => task.day === today);
+}, [tasks, today]);
+
 const hoursCurr=new Date().getHours();
 const minutesCurr=new Date().getMinutes();
 
@@ -115,10 +122,7 @@ return(
             </div>
             <div data-label="scheduleLineContainer" className="w-[2400px] h-full relative">
                  <div className="w-fit h-full flex rounded-lg overflow-hidden relative">
-                   {tasks
-                     .filter(
-                       (task) =>
-                         task.day.toLowerCase() === "Monday").map((task, index) => {
+                   {todaysTasks.map((task, index) => {
                        const [shours, sminutes] = task.startTime.split(":").map(Number);
                        const startTimeInMins = shours * 60 + sminutes;
                
