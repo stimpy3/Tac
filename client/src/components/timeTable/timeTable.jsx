@@ -13,7 +13,7 @@ const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
 const getToken = () => localStorage.getItem('token');
 
 const TimeTable=()=>{
-  const { tasks } = useContext(TasksContext);
+  const { tasks,setTasks } = useContext(TasksContext);
   const hoursCurr=new Date().getHours();
   const minutesCurr=new Date().getMinutes();
 
