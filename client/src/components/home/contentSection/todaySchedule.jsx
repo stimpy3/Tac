@@ -15,6 +15,16 @@ useEffect(() => {
   setTodaysTasks(tasks.filter(task => task.day === today));
 }, [tasks]); // runs every time tasks changes
 
+//remove
+const testTasks = [
+  {
+    _id: 'test1',
+    name: 'Test Task',
+    startTime: '10:00',
+    endTime: '11:00',
+    day: 'Monday'
+  }
+];
 
 const hoursCurr=new Date().getHours();
 const minutesCurr=new Date().getMinutes();
@@ -47,6 +57,19 @@ const handleLeftScroll=()=>{
       const minutes = now.getMinutes();
       const minsSinceMidnight = hours * 60 + minutes + 6.64;
       const left = +(minsSinceMidnight * (width / 60)).toFixed(2);
+
+      //remove
+    console.log(`Task ${index}:`, {
+    name: task.name,
+    startTime: task.startTime,
+    endTime: task.endTime,
+    startTimeInMins,
+    endTimeInMins,
+    widthPx,
+    leftPx,
+    willRender: widthPx > 0 && leftPx >= 0
+  });
+
       setLeftDistance(left); //cant just write set state in body gotta wrap it in a function or useEfect
       /*If you do setState directly in the body of a React component (outside of hooks like useEffect),
        it causes an infinite render loop. Here’s why:
@@ -123,7 +146,7 @@ return(
             </div>
             <div data-label="scheduleLineContainer" className="w-[2400px] h-full relative">
                  <div className="w-fit h-full flex rounded-lg overflow-hidden relative">
-                   {todaysTasks.map((task, index) => {
+                   {testTasks.map((task, index) => {
                        const [shours, sminutes] = task.startTime.split(":").map(Number);
                        const startTimeInMins = shours * 60 + sminutes;
                
