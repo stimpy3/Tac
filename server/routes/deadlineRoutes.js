@@ -37,9 +37,46 @@ router.get("/", authMiddleware, async (req, res) => {
 });
 
 // Delete a deadline
+/*
+1. What does :id mean?
+In Express routes, a colon (:) means route parameter (dynamic value)
+router.delete("/:id", ...)
+
+:id is a placeholder.
+If you call DELETE /deadlines/12345, then inside your code:
+req.params.id === "12345"
+*/
 router.delete("/:id", authMiddleware, async (req, res) => {
   await Deadline.findOneAndDelete({ _id: req.params.id, user: req.user.userId });
   res.json({ message: "Deleted successfully" });
 });
+/*
+2. Why only in DELETE (and not in POST or GET all)?
 
+POST /deadlines → creates a new deadline.
+✅ No id yet, because the deadline doesn’t exist.
+
+GET /deadlines → gets all deadlines for the logged-in user.
+✅ No id needed, because we’re fetching multiple.
+
+DELETE /deadlines/:id → deletes one specific deadline.
+✅ We must tell the backend which one to delete → so we pass its id in the URL.
+ */
 module.exports = router;
+
+/*
+How they combine with our index.js
+Think of it like math:
+
+app.use("/deadlines", router)
+router.get("/")
+= GET /deadlines
+
+app.use("/deadlines", router)
+router.post("/")
+= POST /deadlines
+
+app.use("/deadlines", router)
+router.delete("/:id")
+= DELETE /deadlines/:id
+*/
