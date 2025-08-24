@@ -2,9 +2,11 @@ import React,{useState,useRef,useEffect} from 'react';
 import {ChevronRight,ChevronLeft,SquarePen,CircleHelp} from 'lucide-react';
 import Tooltip from "../../tooltip";
 import gsap from "gsap";
+import { useContext } from 'react';
+import { TasksContext } from '../../../contexts/tasksContext';
 
 const TodaySchedule =()=>{
-
+const { tasks } = useContext(TasksContext);
 const hoursCurr=new Date().getHours();
 const minutesCurr=new Date().getMinutes();
 
@@ -113,9 +115,48 @@ return(
           
             <div data-label="scheduleLineContainer" className="w-[2400px] h-full">
               <div className="w-fit h-full flex rounded-lg overflow-hidden">
-               <div data-label="scheduleLine" className="h-full bg-blue-400 w-[600px]"></div>
-               <div data-label="scheduleLine" className="h-full bg-blue-300 w-[600px]"></div>
-               <div data-label="scheduleLine" className="h-full  bg-blue-200 w-[600px]"></div>
+                  {tasks.filter(task => task.day === new Date().toLocaleDateString('en-US', { weekday: 'long' }))
+                   .map((task, index) => {
+                       const [shours, sminutes] = task.startTime.split(':').map(Number);
+                       const startTimeInMins = shours * 60 + sminutes;
+             
+                       const [ehours, eminutes] = task.endTime.split(':').map(Number);
+                       const endTimeInMins = ehours * 60 + eminutes;
+             
+                       const widthPx = (endTimeInMins - startTimeInMins) * (100/60);
+                       const leftPx = startTimeInMins * (100/60);
+                       const colors = ["#8B7CB6","#B084C7","#E8A5C4","#F4D1E8","#A8D0F0","#9BB5E6","#D3E4CD","#F6EAC2","#FAD9C1"];
+                       return(   
+                         <div key={index} className="absolute group"
+                             style={{
+                                      left: `${leftPx}px`,
+                                      width: `${widthPx}px`,
+                                      height: "40px",
+                                      zIndex: 2,
+                                    }}>
+            
+                   <div data-label="visual" className="h-full rounded-lg border-[1px] border-accentS3 dark:divide-accentTxt2" style={{ backgroundColor: colors[index % colors.length] }}>
+                   </div>
+                   <div data-label="tooltip" className="absolute p-[5px] bg-daccentM dark:bg-accentM text-daccentTxt dark:text-accentTxt text-[0.8rem] flex flex-col rounded-sm
+                     z-[10] opacity-0 group-hover:opacity-90 whitespace-nowrap pointer-events-none transition-opacity"
+                     style={{ left:0, top: -20}}>
+                               <p>{(task.name.length>15)?(task.name.slice(0,15)+"..."):task.name+":"}</p>
+                               <p>{((Number(shours)<12)? 
+                                         (((shours==0)?shours+12:shours)+":"+String(sminutes).padStart(2, '0')+" AM")
+                                         :
+                                         (((shours==12)?shours:shours-12)+":"+String(sminutes).padStart(2, '0')+" PM"))
+                                         +"-"+
+                                    ((Number(ehours)<12)? 
+                                         (task.endTime+" AM")
+                                         :
+                                         (((ehours==12)?ehours:ehours-12)+":"+String(eminutes).padStart(2, '0')+" PM"))
+                                  }
+                               </p>
+                   </div>
+            </div>
+
+          );
+        })}
              </div>
              </div>    
          </div>       

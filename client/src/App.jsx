@@ -8,6 +8,7 @@ import LandingPage from "./components/landingPage/landingpage.jsx";
 import TimeTable from "./components/timeTable/timeTable.jsx";
 import PrivateRoute from "./components/auth/privateRoutes.jsx"; //Import it for protection
 import { DarkModeProvider } from "./darkModeContext.jsx"; //context useContext
+import { TasksProvider } from './contexts/tasksContext';
 
 function App() {
   
@@ -21,16 +22,18 @@ function App() {
          <Route path="/" element={<LandingPage/>}/>
          <Route path="/login" element={<LoginPage/>}/>
          <Route path="/register" element={<RegisterPage/>}/> 
-         <Route path="/home" element={
-              <PrivateRoute>
-                 <HomePage />
-              </PrivateRoute>
-         }/>
-         <Route path="/timetable" element={
-              <PrivateRoute>
-                 <TimeTable />
-              </PrivateRoute>
-         }/> 
+         <TasksProvider>
+             <Route path="/home" element={
+                  <PrivateRoute>
+                     <HomePage />
+                  </PrivateRoute>
+             }/>
+             <Route path="/timetable" element={
+                  <PrivateRoute>
+                     <TimeTable />
+                  </PrivateRoute>
+             }/>
+          </TasksProvider> 
        </Routes>
     </Router>
     </DarkModeProvider>
