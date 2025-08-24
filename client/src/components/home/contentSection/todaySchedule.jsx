@@ -3,7 +3,7 @@ import {ChevronRight,ChevronLeft,SquarePen,CircleHelp} from 'lucide-react';
 import Tooltip from "../../tooltip";
 import gsap from "gsap";
 import { useContext } from 'react';
-import { TasksContext } from '../../../context/TasksContext';
+import { TasksContext } from '../../../context/tasksContext';
 
 const TodaySchedule =()=>{
 const { tasks } = useContext(TasksContext);
