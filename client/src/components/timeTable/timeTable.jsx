@@ -76,12 +76,12 @@ const [errorModal,setErrorModal]=useState(0);
 const [tempTask, setTempTask] = useState({
     name:"",
     day:"Monday",
-    tstart:"",
-    timeend:"",
+    startTime:"",
+    endTime:"",
   })
 
 const handleTaskModal=()=>{
-  setTempTask({ name: "", day: "Monday", tstart: "", timeend:"" }); //Clear it
+  setTempTask({ name: "", day: "Monday", startTime: "", endTime:"" }); //Clear it
   setShowTaskModal(prev=>!prev);
   setErrorModal(0);
 };
@@ -93,10 +93,10 @@ const handleDayTemp=(e)=>{
     setTempTask((prev)=>({...prev,day: e.target.value}));
 }
 const handleStartTemp=(e)=>{
-    setTempTask((prev)=>({...prev,tstart: e.target.value}));
+    setTempTask((prev)=>({...prev,startTime: e.target.value}));
 }
 const handleEndTemp=(e)=>{
-    setTempTask((prev)=>({...prev,timeend: e.target.value}));
+    setTempTask((prev)=>({...prev,endTime: e.target.value}));
 }
 
 useEffect(() => {
@@ -107,8 +107,8 @@ useEffect(() => {
       });
       setTasks(res.data.map(task => ({
                 ...task,
-                tstart: task.startTime,
-                timeend: task.endTime
+                startTime: task.startTime,
+                endTime: task.endTime
               })));
     } catch (err) {
       console.error('Failed to fetch schedules:', err);
@@ -118,18 +118,18 @@ useEffect(() => {
 }, []);
 
 const handleCreateTask = async () => {
-  const [starthours, startminutes] = tempTask.tstart.split(':').map(Number);
+  const [starthours, startminutes] = tempTask.startTime.split(':').map(Number);
   const startInMins = starthours * 60 + startminutes;
-  const [endhours, endminutes] = tempTask.timeend.split(':').map(Number);
+  const [endhours, endminutes] = tempTask.endTime.split(':').map(Number);
   const endInMins = endhours * 60 + endminutes;
 
   // Check for overlaps with existing tasks on the same day
   const overlappingTask = tasks.find(existingTask => {
     if (existingTask.day !== tempTask.day) return false; // Different day, no overlap
     
-    const [exStartHours, exStartMinutes] = existingTask.tstart.split(':').map(Number);
+    const [exStartHours, exStartMinutes] = existingTask.startTime.split(':').map(Number);
     const exStartInMins = exStartHours * 60 + exStartMinutes;
-    const [exEndHours, exEndMinutes] = existingTask.timeend.split(':').map(Number);
+    const [exEndHours, exEndMinutes] = existingTask.endTime.split(':').map(Number);
     const exEndInMins = exEndHours * 60 + exEndMinutes;
     
     // Overlap condition: new task starts before existing ends AND new task ends after existing starts
@@ -166,17 +166,17 @@ const handleCreateTask = async () => {
       _id: Math.random().toString(36).substr(2, 9), // temp id
       name: tempTask.name,
       day: tempTask.day,
-      tstart: tempTask.tstart,
-      timeend: tempTask.timeend
+      startTime: tempTask.startTime,
+      endTime: tempTask.endTime
     };
     setTasks(prev => [...prev, optimisticTask]);
-    setTempTask({ name: "", day: "Monday", tstart: "", timeend:"" });
+    setTempTask({ name: "", day: "Monday", startTime: "", endTime:"" });
     setShowTaskModal(prev=>!prev);
     try {
       const res = await axios.post(`${BACKEND_URL}/schedules`, {
         day: tempTask.day,
-        startTime: tempTask.tstart,
-        endTime: tempTask.timeend,
+        startTime: tempTask.startTime,
+        endTime: tempTask.endTime,
         name: tempTask.name
       }, {
         headers: { Authorization: `Bearer ${getToken()}` }
@@ -184,7 +184,7 @@ const handleCreateTask = async () => {
       // Replace optimistic task with real one from backend
       setTasks(prev => prev.map(task =>
                task._id === optimisticTask._id
-                 ? { ...res.data, tstart: res.data.startTime, timeend: res.data.endTime }
+                 ? { ...res.data, startTime: res.data.startTime, endTime: res.data.endTime }
                  : task
              ));
     } catch (err) {
@@ -222,14 +222,14 @@ const getErrorMessage = () => {
       return "End time must be after start time";
     case 4:
   // Only calculate overlapping task if we have valid time inputs
-  if (!tempTask.tstart || !tempTask.timeend) {
+  if (!tempTask.startTime || !tempTask.endTime) {
     return "Please select valid start and end times";
   }
   
   // Check if start time is after end time
-  const [starthours, startminutes] = tempTask.tstart.split(':').map(Number);
+  const [starthours, startminutes] = tempTask.startTime.split(':').map(Number);
   const startInMins = starthours * 60 + startminutes;
-  const [endhours, endminutes] = tempTask.timeend.split(':').map(Number);
+  const [endhours, endminutes] = tempTask.endTime.split(':').map(Number);
   const endInMins = endhours * 60 + endminutes;
   
   if (endInMins <= startInMins) {
@@ -239,16 +239,16 @@ const getErrorMessage = () => {
   const overlappingTask = tasks.find(task => {
     if (task.day !== tempTask.day) return false;
     
-    const [exStartHours, exStartMinutes] = task.tstart.split(':').map(Number);
+    const [exStartHours, exStartMinutes] = task.startTime.split(':').map(Number);
     const exStartInMins = exStartHours * 60 + exStartMinutes;
-    const [exEndHours, exEndMinutes] = task.timeend.split(':').map(Number);
+    const [exEndHours, exEndMinutes] = task.endTime.split(':').map(Number);
     const exEndInMins = exEndHours * 60 + exEndMinutes;
     
     return (startInMins < exEndInMins && endInMins > exStartInMins);
   });
   
   if (overlappingTask) {
-    return `Time slot conflicts with "${overlappingTask.name}" (${overlappingTask.tstart} - ${overlappingTask.timeend})`;
+    return `Time slot conflicts with "${overlappingTask.name}" (${overlappingTask.startTime} - ${overlappingTask.endTime})`;
   } else {
     return "Time slot conflict detected";
   }
@@ -268,10 +268,10 @@ const mondayTasks = () => {
       {tasks
         .filter(task => task.day === "Monday")
         .map((task, index) => {
-          const [shours, sminutes] = task.tstart.split(':').map(Number);
+          const [shours, sminutes] = task.startTime.split(':').map(Number);
           const startTimeInMins = shours * 60 + sminutes;
 
-          const [ehours, eminutes] = task.timeend.split(':').map(Number);
+          const [ehours, eminutes] = task.endTime.split(':').map(Number);
           const endTimeInMins = ehours * 60 + eminutes;
 
           const widthPx = (endTimeInMins - startTimeInMins) * (100/60);
@@ -298,7 +298,7 @@ const mondayTasks = () => {
                                          (((shours==12)?shours:shours-12)+":"+String(sminutes).padStart(2, '0')+" PM"))
                                          +"-"+
                                     ((Number(ehours)<12)? 
-                                         (task.timeend+" AM")
+                                         (task.endTime+" AM")
                                          :
                                          (((ehours==12)?ehours:ehours-12)+":"+String(eminutes).padStart(2, '0')+" PM"))
                                   }
@@ -322,10 +322,10 @@ const tuesdayTasks=()=>{
       {tasks
         .filter(task => task.day === "Tuesday")
         .map((task, index) => {
-          const [shours, sminutes] = task.tstart.split(':').map(Number);
+          const [shours, sminutes] = task.startTime.split(':').map(Number);
           const startTimeInMins = shours * 60 + sminutes;
 
-          const [ehours, eminutes] = task.timeend.split(':').map(Number);
+          const [ehours, eminutes] = task.endTime.split(':').map(Number);
           const endTimeInMins = ehours * 60 + eminutes;
 
           const widthPx = (endTimeInMins - startTimeInMins) * (100/60);
@@ -352,7 +352,7 @@ const tuesdayTasks=()=>{
                                          (((shours==12)?shours:shours-12)+":"+String(sminutes).padStart(2, '0')+" PM"))
                                          +"-"+
                                     ((Number(ehours)<12)? 
-                                         (task.timeend+" AM")
+                                         (task.endTime+" AM")
                                          :
                                          (((ehours==12)?ehours:ehours-12)+":"+String(eminutes).padStart(2, '0')+" PM"))
                                   }
@@ -374,10 +374,10 @@ const wednesdayTasks=()=>{
       {tasks
         .filter(task => task.day === "Wednesday")
         .map((task, index) => {
-          const [shours, sminutes] = task.tstart.split(':').map(Number);
+          const [shours, sminutes] = task.startTime.split(':').map(Number);
           const startTimeInMins = shours * 60 + sminutes;
 
-          const [ehours, eminutes] = task.timeend.split(':').map(Number);
+          const [ehours, eminutes] = task.endTime.split(':').map(Number);
           const endTimeInMins = ehours * 60 + eminutes;
 
           const widthPx = (endTimeInMins - startTimeInMins) * (100/60);
@@ -404,7 +404,7 @@ const wednesdayTasks=()=>{
                                          (((shours==12)?shours:shours-12)+":"+String(sminutes).padStart(2, '0')+" PM"))
                                          +"-"+
                                     ((Number(ehours)<12)? 
-                                         (task.timeend+" AM")
+                                         (task.endTime+" AM")
                                          :
                                          (((ehours==12)?ehours:ehours-12)+":"+String(eminutes).padStart(2, '0')+" PM"))
                                   }
@@ -425,10 +425,10 @@ const thursdayTasks=()=>{
       {tasks
         .filter(task => task.day === "Thursday")
         .map((task, index) => {
-          const [shours, sminutes] = task.tstart.split(':').map(Number);
+          const [shours, sminutes] = task.startTime.split(':').map(Number);
           const startTimeInMins = shours * 60 + sminutes;
 
-          const [ehours, eminutes] = task.timeend.split(':').map(Number);
+          const [ehours, eminutes] = task.endTime.split(':').map(Number);
           const endTimeInMins = ehours * 60 + eminutes;
 
           const widthPx = (endTimeInMins - startTimeInMins) * (100/60);
@@ -455,7 +455,7 @@ const thursdayTasks=()=>{
                                          (((shours==12)?shours:shours-12)+":"+String(sminutes).padStart(2, '0')+" PM"))
                                          +"-"+
                                     ((Number(ehours)<12)? 
-                                         (task.timeend+" AM")
+                                         (task.endTime+" AM")
                                          :
                                          (((ehours==12)?ehours:ehours-12)+":"+String(eminutes).padStart(2, '0')+" PM"))
                                   }
@@ -477,10 +477,10 @@ const fridayTasks=()=>{
       {tasks
         .filter(task => task.day === "Friday")
         .map((task, index) => {
-          const [shours, sminutes] = task.tstart.split(':').map(Number);
+          const [shours, sminutes] = task.startTime.split(':').map(Number);
           const startTimeInMins = shours * 60 + sminutes;
 
-          const [ehours, eminutes] = task.timeend.split(':').map(Number);
+          const [ehours, eminutes] = task.endTime.split(':').map(Number);
           const endTimeInMins = ehours * 60 + eminutes;
 
           const widthPx = (endTimeInMins - startTimeInMins) * (100/60);
@@ -507,7 +507,7 @@ const fridayTasks=()=>{
                                          (((shours==12)?shours:shours-12)+":"+String(sminutes).padStart(2, '0')+" PM"))
                                          +"-"+
                                     ((Number(ehours)<12)? 
-                                         (task.timeend+" AM")
+                                         (task.endTime+" AM")
                                          :
                                          (((ehours==12)?ehours:ehours-12)+":"+String(eminutes).padStart(2, '0')+" PM"))
                                   }
@@ -528,10 +528,10 @@ const saturdayTasks=()=>{
       {tasks
         .filter(task => task.day === "Saturday")
         .map((task, index) => {
-          const [shours, sminutes] = task.tstart.split(':').map(Number);
+          const [shours, sminutes] = task.startTime.split(':').map(Number);
           const startTimeInMins = shours * 60 + sminutes;
 
-          const [ehours, eminutes] = task.timeend.split(':').map(Number);
+          const [ehours, eminutes] = task.endTime.split(':').map(Number);
           const endTimeInMins = ehours * 60 + eminutes;
 
           const widthPx = (endTimeInMins - startTimeInMins) * (100/60);
@@ -558,7 +558,7 @@ const saturdayTasks=()=>{
                                          (((shours==12)?shours:shours-12)+":"+String(sminutes).padStart(2, '0')+" PM"))
                                          +"-"+
                                     ((Number(ehours)<12)? 
-                                         (task.timeend+" AM")
+                                         (task.endTime+" AM")
                                          :
                                          (((ehours==12)?ehours:ehours-12)+":"+String(eminutes).padStart(2, '0')+" PM"))
                                   }
@@ -579,10 +579,10 @@ const sundayTasks=()=>{
       {tasks
         .filter(task => task.day === "Sunday")
         .map((task, index) => {
-          const [shours, sminutes] = task.tstart.split(':').map(Number);
+          const [shours, sminutes] = task.startTime.split(':').map(Number);
           const startTimeInMins = shours * 60 + sminutes;
 
-          const [ehours, eminutes] = task.timeend.split(':').map(Number);
+          const [ehours, eminutes] = task.endTime.split(':').map(Number);
           const endTimeInMins = ehours * 60 + eminutes;
 
           const widthPx = (endTimeInMins - startTimeInMins) * (100/60);
@@ -609,7 +609,7 @@ const sundayTasks=()=>{
                                          (((shours==12)?shours:shours-12)+":"+String(sminutes).padStart(2, '0')+" PM"))
                                          +"-"+
                                     ((Number(ehours)<12)? 
-                                         (task.timeend+" AM")
+                                         (task.endTime+" AM")
                                          :
                                          (((ehours==12)?ehours:ehours-12)+":"+String(eminutes).padStart(2, '0')+" PM"))
                                   }
