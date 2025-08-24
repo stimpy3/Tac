@@ -11,28 +11,58 @@ const TodaySchedule = () => {
   const [todaysTasks, setTodaysTasks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
+  const [currTasks, setCurrTasks] = useState({});
   // Fetch today's schedule from backend
   useEffect(() => {
-    const fetchTodaySchedule = async () => {
-      setLoading(true);
-      setError(null);
-      try {
-        const today = new Date().toLocaleDateString("en-US", { weekday: "long" });
-        const token = getToken();
-        const res = await axios.get(`${BACKEND_URL}/schedules?day=${today}`, {
-          headers: { Authorization: `Bearer ${token}` }
-        });
-        setTodaysTasks(res.data);
-      } catch (err) {
-        setError("Failed to fetch today's schedule");
-        setTodaysTasks([]);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchTodaySchedule();
-  }, []);
+  const fetchTodaySchedule = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const token = getToken();
+      // Get ALL tasks
+      const res = await axios.get(`${BACKEND_URL}/schedules`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+
+      // Get today's name (e.g., Monday)
+      const today = new Date().toLocaleDateString("en-US", { weekday: "long" });
+      const todayTasks = res.data.filter(task => task.day === today);
+
+      console.log("Today is:", today);
+      console.log("All tasks:", res.data);
+      console.log("Today's tasks:", todayTasks);
+
+      setTodaysTasks(todayTasks);
+
+      // ✅ Find current time in minutes
+      const now = new Date();
+      const nowMinutes = now.getHours() * 60 + now.getMinutes();
+
+      // ✅ Find active task
+      const activeTask = todayTasks.find(task => {
+        // assuming task.startTime & task.endTime are strings like "14:30"
+        const [sh, sm] = task.startTime.split(":").map(Number);
+        const [eh, em] = task.endTime.split(":").map(Number);
+        const startMinutes = sh * 60 + sm;
+        const endMinutes = eh * 60 + em;
+
+        return startMinutes <= nowMinutes && nowMinutes <= endMinutes;
+      });
+
+      setCurrTasks(activeTask || {}); // empty object if no active task
+
+    } catch (err) {
+      setError("Failed to fetch today's schedule");
+      setTodaysTasks([]);
+      setCurrTasks({});
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  fetchTodaySchedule();
+}, []);
+
 
   const hoursCurr = new Date().getHours();
   const minutesCurr = new Date().getMinutes();
@@ -101,12 +131,12 @@ const TodaySchedule = () => {
       <div data-label="schedulerContainer" className="h-[150px] w-full  flex flex-col">
         <div data-label="topDescContainer" className="flex h-[60px] w-[100%] p-[10px] pb-[0px] ">
           <div data-label="description" className="flex items-center justify-between p-[5px] ml-[calc(60%+12px)] bg-accentS2 dark:bg-daccentS2 w-full h-full rounded-[7px]">
-            <p className="text-accentTxt w-full dark:text-daccentTxt text-[1rem] flex justify-center">Task Description</p>
+            <p className="text-accentTxt w-full dark:text-daccentTxt text-[1rem] flex justify-center"> {currTasks && currTasks.name ? currTasks.name : "Task Description"}</p>
             <div className="flex items-center min-w-[130px] border-l-[2px] border-daccentS3">
               <div className="ml-[10px] w-[30px] h-[30px] rounded-full bg-accent1 relative overflow-hidden">
                 <div className="absolute inset-0 bg-accent2 [clip-path:polygon(50%_50%,100%_50%,100%_0)]"></div>
               </div>
-              <p className="text-accentTxt dark:text-daccentTxt text-[0.7rem] ml-[5px]"> 2hrs 31mins left</p>
+              <p className="text-accentTxt dark:text-daccentTxt text-[0.7rem] ml-[5px]">.....</p>
             </div>
           </div>
         </div>
