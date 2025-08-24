@@ -255,6 +255,11 @@ app.use("/deadlines", deadlineRoutes);
 // DELETE /api/deadlines/:id
 //-------------------------------------------------
 
+//-----------------Schedule Routes-----------------
+const scheduleRoutes = require("./routes/scheduleRoutes");
+app.use("/schedules", scheduleRoutes);
+//-------------------------------------------------
+
 // ---------------- Server ----------------
 // app.listen(3001, () => {
 //   console.log("🚀 Server running on port 3001");

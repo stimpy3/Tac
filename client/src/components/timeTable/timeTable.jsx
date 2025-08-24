@@ -3,6 +3,12 @@ import Sidebar from '../home/sidebar';
 import Calendar from '../calendar';
 import {CalendarDays,CalendarOff,ChevronRight,ChevronLeft,Plus,X,Trash} from 'lucide-react';
 import Tooltip from "../tooltip";
+import axios from 'axios';
+
+const BACKEND_URL = 'https://tac-8pbr.onrender.com'; // Change to your backend URL
+
+// Helper to get JWT token (adjust as needed)
+const getToken = () => localStorage.getItem('token');
 
 const TimeTable=()=>{
   const hoursCurr=new Date().getHours();
@@ -93,7 +99,21 @@ const handleEndTemp=(e)=>{
     setTempTask((prev)=>({...prev,timeend: e.target.value}));
 }
 
-const handleCreateTask = () => {
+useEffect(() => {
+  const fetchSchedules = async () => {
+    try {
+      const res = await axios.get(`${BACKEND_URL}/schedules`, {
+        headers: { Authorization: `Bearer ${getToken()}` }
+      });
+      setTasks(res.data);
+    } catch (err) {
+      console.error('Failed to fetch schedules:', err);
+    }
+  };
+  fetchSchedules();
+}, []);
+
+const handleCreateTask = async () => {
   const [starthours, startminutes] = tempTask.tstart.split(':').map(Number);
   const startInMins = starthours * 60 + startminutes;
   const [endhours, endminutes] = tempTask.timeend.split(':').map(Number);
@@ -136,17 +156,52 @@ const handleCreateTask = () => {
     }
   }
   else{ 
-    // All correct
     setErrorModal(0);
-    const newTask={
+    // Optimistically add task to UI
+    const optimisticTask = {
+      _id: Math.random().toString(36).substr(2, 9), // temp id
       name: tempTask.name,
       day: tempTask.day,
       tstart: tempTask.tstart,
-      timeend: tempTask.timeend,
+      timeend: tempTask.timeend
     };
-    setTasks((prev)=>[...prev,newTask]);
+    setTasks(prev => [...prev, optimisticTask]);
     setTempTask({ name: "", day: "Monday", tstart: "", timeend:"" });
     setShowTaskModal(prev=>!prev);
+    try {
+      const res = await axios.post(`${BACKEND_URL}/schedules`, {
+        day: tempTask.day,
+        startTime: tempTask.tstart,
+        endTime: tempTask.timeend,
+        name: tempTask.name
+      }, {
+        headers: { Authorization: `Bearer ${getToken()}` }
+      });
+      // Replace optimistic task with real one from backend
+      setTasks(prev => prev.map(task =>
+        task._id === optimisticTask._id ? res.data : task
+      ));
+    } catch (err) {
+      // Rollback optimistic update if failed
+      setTasks(prev => prev.filter(task => task._id !== optimisticTask._id));
+      console.error('Failed to create schedule:', err);
+    }
+  }
+};
+
+const handleDeleteTask = async (id) => {
+  // Optimistically remove from UI
+  const deletedTask = tasks.find(task => task._id === id);
+  setTasks(prev => prev.filter(task => task._id !== id));
+  try {
+    await axios.delete(`${BACKEND_URL}/schedules/${id}`, {
+      headers: { Authorization: `Bearer ${getToken()}` }
+    });
+    // No further action needed, already removed
+  } catch (err) {
+    // Rollback: re-add the task if delete failed
+    setTasks(prev => [...prev, deletedTask]);
+    console.error('Failed to delete schedule:', err);
   }
 };
 
