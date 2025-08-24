@@ -8,7 +8,6 @@ import LandingPage from "./components/landingPage/landingpage.jsx";
 import TimeTable from "./components/timeTable/timeTable.jsx";
 import PrivateRoute from "./components/auth/privateRoutes.jsx"; //Import it for protection
 import { DarkModeProvider } from "./darkModeContext.jsx"; //context useContext
-import { TasksProvider } from './contexts/tasksContext';
 
 function App() {
   
@@ -18,7 +17,6 @@ function App() {
     <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
     <DarkModeProvider> {/*context useContext*/}
     <Router>
-      <TasksProvider>
       <Routes>
          <Route path="/" element={<LandingPage/>}/>
          <Route path="/login" element={<LoginPage/>}/>
@@ -34,7 +32,6 @@ function App() {
               </PrivateRoute>
          }/>
        </Routes>
-       </TasksProvider> 
     </Router>
     </DarkModeProvider>
     </GoogleOAuthProvider>
