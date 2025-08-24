@@ -5,7 +5,7 @@ import {CalendarDays,CalendarOff,ChevronRight,ChevronLeft,Plus,X,Trash} from 'lu
 import Tooltip from "../tooltip";
 import axios from 'axios';
 
-const BACKEND_URL = 'https://tac-8pbr.onrender.com'; // Change to your backend URL
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000"; 
 
 // Helper to get JWT token (adjust as needed)
 const getToken = () => localStorage.getItem('token');
