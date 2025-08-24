@@ -4,6 +4,8 @@ import Calendar from '../calendar';
 import {CalendarDays,CalendarOff,ChevronRight,ChevronLeft,Plus,X,Trash} from 'lucide-react';
 import Tooltip from "../tooltip";
 import axios from 'axios';
+import { useContext } from 'react';
+import { TasksContext } from '../../context/TasksContext';
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000"; 
 
@@ -11,6 +13,7 @@ const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
 const getToken = () => localStorage.getItem('token');
 
 const TimeTable=()=>{
+  const { tasks } = useContext(TasksContext);
   const hoursCurr=new Date().getHours();
   const minutesCurr=new Date().getMinutes();
 
@@ -71,7 +74,6 @@ const TimeTable=()=>{
   }
 }, [leftDistance]);
 const[showTaskModal,setShowTaskModal]=useState(false);
-const [tasks, setTasks] = useState([]);
 const [errorModal,setErrorModal]=useState(0);
 const [tempTask, setTempTask] = useState({
     name:"",
@@ -99,23 +101,6 @@ const handleEndTemp=(e)=>{
     setTempTask((prev)=>({...prev,endTime: e.target.value}));
 }
 
-useEffect(() => {
-  const fetchSchedules = async () => {
-    try {
-      const res = await axios.get(`${BACKEND_URL}/schedules`, {
-        headers: { Authorization: `Bearer ${getToken()}` }
-      });
-      setTasks(res.data.map(task => ({
-                ...task,
-                startTime: task.startTime,
-                endTime: task.endTime
-              })));
-    } catch (err) {
-      console.error('Failed to fetch schedules:', err);
-    }
-  };
-  fetchSchedules();
-}, []);
 
 const handleCreateTask = async () => {
   const [starthours, startminutes] = tempTask.startTime.split(':').map(Number);
@@ -136,7 +121,7 @@ const handleCreateTask = async () => {
     return (startInMins < exEndInMins && endInMins > exStartInMins);
   });
 
-  const hasOverlap = !!overlappingTask;
+  const hasOverlap = !!overlappingTask; //Convert to boolean for easier checks
 
   if(tempTask.name=="" || (endInMins<startInMins) || isNaN(endInMins) || isNaN(startInMins) || hasOverlap){
     // Multiple error conditions
@@ -289,7 +274,7 @@ const mondayTasks = () => {
                    <div data-label="visual" className="h-full rounded-lg  border-[1px] border-accentS3 dark:divide-accentTxt2" style={{ backgroundColor: monColors[index % monColors.length] }}>
                    </div>
                    <div data-label="tooltip" className="absolute p-[5px] bg-daccentM dark:bg-accentM text-daccentTxt dark:text-accentTxt text-[0.8rem] flex flex-col rounded-sm
-                     z-[10] opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity"
+                     z-[10] opacity-0 group-hover:opacity-90 whitespace-nowrap pointer-events-none transition-opacity"
                      style={{ left:0, top: -20}}>
                                <p>{(task.name.length>15)?(task.name.slice(0,15)+"..."):task.name+":"}</p>
                                <p>{((Number(shours)<12)? 
@@ -343,7 +328,7 @@ const tuesdayTasks=()=>{
                    <div data-label="visual" className="h-full rounded-lg border-[1px] border-accentS3 dark:divide-accentTxt2" style={{ backgroundColor: tueColors[index % tueColors.length] }}>
                    </div>
                    <div data-label="tooltip" className="absolute p-[5px] bg-daccentM dark:bg-accentM text-daccentTxt dark:text-accentTxt text-[0.8rem] flex flex-col rounded-sm
-                     z-[10] opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity"
+                     z-[10] opacity-0 group-hover:opacity-90 whitespace-nowrap pointer-events-none transition-opacity"
                      style={{ left:0, top: -20}}>
                                <p>{(task.name.length>15)?(task.name.slice(0,15)+"..."):task.name+":"}</p>
                                <p>{((Number(shours)<12)? 
@@ -395,7 +380,7 @@ const wednesdayTasks=()=>{
                    <div data-label="visual" className="h-full rounded-lg border-[1px] border-accentS3 dark:divide-accentTxt2" style={{ backgroundColor: wedColors[index % wedColors.length] }}>
                    </div>
                    <div data-label="tooltip" className="absolute p-[5px] bg-daccentM dark:bg-accentM text-daccentTxt dark:text-accentTxt text-[0.7rem] flex flex-col rounded-sm
-                     z-[10] opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity"
+                     z-[10] opacity-0 group-hover:opacity-90 whitespace-nowrap pointer-events-none transition-opacity"
                      style={{ left:0, top: -20}}>
                                <p>{(task.name.length>15)?(task.name.slice(0,15)+"..."):task.name+":"}</p>
                                <p className="text-[0.5rem]">{((Number(shours)<12)? 
@@ -446,7 +431,7 @@ const thursdayTasks=()=>{
                    <div data-label="visual" className="h-full rounded-lg border-[1px] border-accentS3 dark:divide-accentTxt2" style={{ backgroundColor: thuColors[index % thuColors.length] }}>
                    </div>
                    <div data-label="tooltip" className="absolute p-[5px] bg-daccentM dark:bg-accentM text-daccentTxt dark:text-accentTxt text-[0.8rem] flex flex-col rounded-sm
-                     z-[10] opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity"
+                     z-[10] opacity-0 group-hover:opacity-90 whitespace-nowrap pointer-events-none transition-opacity"
                      style={{ left:0, top: -20}}>
                                <p>{(task.name.length>15)?(task.name.slice(0,15)+"..."):task.name+":"}</p>
                                <p>{((Number(shours)<12)? 
@@ -498,7 +483,7 @@ const fridayTasks=()=>{
                    <div data-label="visual" className="h-full rounded-lg border-[1px] border-accentS3 dark:divide-accentTxt2" style={{ backgroundColor: friColors[index % friColors.length] }}>
                    </div>
                    <div data-label="tooltip" className="absolute p-[5px] bg-daccentM dark:bg-accentM text-daccentTxt dark:text-accentTxt text-[0.8rem] flex flex-col rounded-sm
-                     z-[10] opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity"
+                     z-[10] opacity-0 group-hover:opacity-90 whitespace-nowrap pointer-events-none transition-opacity"
                      style={{ left:0, top: -20}}>
                                <p>{(task.name.length>15)?(task.name.slice(0,15)+"..."):task.name+":"}</p>
                                <p>{((Number(shours)<12)? 
@@ -549,7 +534,7 @@ const saturdayTasks=()=>{
                    <div data-label="visual" className="h-full rounded-lg border-[1px] border-accentBorder2 dark:border-daccentBorder2 " style={{ backgroundColor: satColors[index % satColors.length] }}>
                    </div>
                    <div data-label="tooltip" className="absolute bg-daccentM dark:bg-accentM p-[5px] text-accentTxt dark:text-daccentTxt text-[0.8rem] flex flex-col rounded-sm
-                     z-[10] opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity"
+                     z-[10] opacity-0 group-hover:opacity-90 whitespace-nowrap pointer-events-none transition-opacity"
                      style={{ left:0, top: -20}}>
                                <p>{(task.name.length>15)?(task.name.slice(0,15)+"..."):task.name+":"}</p>
                                <p>{((Number(shours)<12)? 
@@ -600,7 +585,7 @@ const sundayTasks=()=>{
                    <div data-label="visual" className="h-full rounded-lg border-[1px] border-accentS3 dark:divide-accentTxt2" style={{ backgroundColor: sunColors[index % sunColors.length] }}>
                    </div>
                    <div data-label="tooltip" className="absolute p-[5px] bg-daccentM dark:bg-accentM text-daccentTxt dark:text-accentTxt text-[0.8rem] flex flex-col rounded-sm
-                     z-[10] opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity"
+                     z-[10] opacity-0 group-hover:opacity-90 whitespace-nowrap pointer-events-none transition-opacity"
                      style={{ left:0, top: -20}}>
                                <p>{(task.name.length>15)?(task.name.slice(0,15)+"..."):task.name+":"}</p>
                                <p>{((Number(shours)<12)? 
