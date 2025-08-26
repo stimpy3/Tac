@@ -132,9 +132,29 @@ const TodaySchedule = () => {
           <div data-label="description" className="flex items-center justify-between p-[5px] ml-[calc(60%+12px)] bg-accentS2 dark:bg-daccentS2 w-full h-full rounded-[7px]">
             <p className="text-accentTxt w-full dark:text-daccentTxt text-[1rem] flex justify-center"> {currTasks && currTasks.name ? currTasks.name : "Task Description"}</p>
             <div className="flex items-center min-w-[130px] border-l-[2px] border-daccentS3">
-              <div className="ml-[10px] w-[30px] h-[30px] rounded-full bg-accent1 relative overflow-hidden">
-                <div className="absolute inset-0 bg-accent2 [clip-path:polygon(50%_50%,100%_50%,100%_0)]"></div>
-              </div>
+              {
+                currTasks?(()=>{
+                   const [sh, sm] = task.startTime.split(":").map(Number);
+                   const [eh, em] = task.endTime.split(":").map(Number);
+             
+                   const startMinutes = sh * 60 + sm;
+                   const endMinutes = eh * 60 + em;
+             
+                   const now = new Date();
+                   const nowMinutes = now.getHours() * 60 + now.getMinutes();
+             
+                   // progress = % of task completed
+                   let progress = ((nowMinutes - startMinutes) / (endMinutes - startMinutes)) * 100;
+                   progress = Math.min(Math.max(progress, 0), 100); // clamp between 0–10
+                   return(
+                   <div
+                    className="ml-[10px] w-[30px] h-[30px] rounded-full relative overflow-hidden"
+                    style={{
+                      background: `conic-gradient(var(--tw-color-accent1) ${progress}%, var(--tw-color-accent2) 0)`
+                    }}>
+                    </div>)
+                })():(<i class="fa-solid fa-chart-pie"></i>)
+              }
               <p className="text-accentTxt dark:text-daccentTxt text-[0.7rem] ml-[5px]">
                  {currTasks?.endTime
                  ? (() => {
@@ -205,7 +225,7 @@ const TodaySchedule = () => {
                         </div>
                         <div
                           data-label="tooltip"
-                          className="absolute p-[2
+                          className="absolute px-[5px] py-[2
                           px] bg-daccentM dark:bg-accentM text-daccentTxt dark:text-accentTxt text-[0.7rem] flex flex-col rounded-sm z-[10] opacity-0 group-hover:opacity-90 whitespace-nowrap pointer-events-none transition-opacity"
                           style={{ left: 0, top: -20 }}
                         >
