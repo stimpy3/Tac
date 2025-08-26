@@ -151,7 +151,7 @@ const TodaySchedule = () => {
                       <div
                         className="ml-[10px] w-[30px] h-[30px] rounded-full relative overflow-hidden"
                         style={{
-                          background: `conic-gradient(var(--tw-color-accent1) ${progress}%, var(--tw-color-accent2) 0)`
+                          background: `conic-gradient( #8b3cfa ${progress}%, #af91fa 0)`
                         }}
                       ></div>
                     );
