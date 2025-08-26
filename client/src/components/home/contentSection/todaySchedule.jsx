@@ -132,29 +132,33 @@ const TodaySchedule = () => {
           <div data-label="description" className="flex items-center justify-between p-[5px] ml-[calc(60%+12px)] bg-accentS2 dark:bg-daccentS2 w-full h-full rounded-[7px]">
             <p className="text-accentTxt w-full dark:text-daccentTxt text-[1rem] flex justify-center"> {currTasks && currTasks.name ? currTasks.name : "Task Description"}</p>
             <div className="flex items-center min-w-[130px] border-l-[2px] border-daccentS3">
-              {
-                currTasks?(()=>{
-                   const [sh, sm] = currTasks.startTime.split(":").map(Number);
-                   const [eh, em] = currTasks.endTime.split(":").map(Number);
-             
-                   const startMinutes = sh * 60 + sm;
-                   const endMinutes = eh * 60 + em;
-             
-                   const now = new Date();
-                   const nowMinutes = now.getHours() * 60 + now.getMinutes();
-             
-                   // progress = % of task completed
-                   let progress = ((nowMinutes - startMinutes) / (endMinutes - startMinutes)) * 100;
-                   progress = Math.min(Math.max(progress, 0), 100); // clamp between 0–10
-                   return(
-                   <div
-                    className="ml-[10px] w-[30px] h-[30px] rounded-full relative overflow-hidden"
-                    style={{
-                      background: `conic-gradient(var(--tw-color-accent1) ${progress}%, var(--tw-color-accent2) 0)`
-                    }}>
-                    </div>)
-                })():(<i class="fa-solid fa-chart-pie"></i>)
-              }
+                {
+                  currTasks && currTasks.startTime && currTasks.endTime ? (() => {
+                    const [sh, sm] = currTasks.startTime.split(":").map(Number);
+                    const [eh, em] = currTasks.endTime.split(":").map(Number);
+                
+                    const startMinutes = sh * 60 + sm;
+                    const endMinutes = eh * 60 + em;
+                
+                    const now = new Date();
+                    const nowMinutes = now.getHours() * 60 + now.getMinutes();
+                
+                    // progress = % of task completed
+                    let progress = ((nowMinutes - startMinutes) / (endMinutes - startMinutes)) * 100;
+                    progress = Math.min(Math.max(progress, 0), 100);
+                
+                    return (
+                      <div
+                        className="ml-[10px] w-[30px] h-[30px] rounded-full relative overflow-hidden"
+                        style={{
+                          background: `conic-gradient(var(--tw-color-accent1) ${progress}%, var(--tw-color-accent2) 0)`
+                        }}
+                      ></div>
+                    );
+                  })() : (
+                    <i className="fa-solid fa-chart-pie"></i>
+                  )
+                }
               <p className="text-accentTxt dark:text-daccentTxt text-[0.7rem] ml-[5px]">
                  {currTasks?.endTime
                  ? (() => {
@@ -225,7 +229,7 @@ const TodaySchedule = () => {
                         </div>
                         <div
                           data-label="tooltip"
-                          className="absolute px-[5px] py-[2
+                          className="absolute p-[2
                           px] bg-daccentM dark:bg-accentM text-daccentTxt dark:text-accentTxt text-[0.7rem] flex flex-col rounded-sm z-[10] opacity-0 group-hover:opacity-90 whitespace-nowrap pointer-events-none transition-opacity"
                           style={{ left: 0, top: -20 }}
                         >
