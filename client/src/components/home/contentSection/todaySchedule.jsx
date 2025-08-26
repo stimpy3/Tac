@@ -134,8 +134,8 @@ const TodaySchedule = () => {
             <div className="flex items-center min-w-[130px] border-l-[2px] border-daccentS3">
               {
                 currTasks?(()=>{
-                   const [sh, sm] = task.startTime.split(":").map(Number);
-                   const [eh, em] = task.endTime.split(":").map(Number);
+                   const [sh, sm] = currTasks.startTime.split(":").map(Number);
+                   const [eh, em] = currTasks.endTime.split(":").map(Number);
              
                    const startMinutes = sh * 60 + sm;
                    const endMinutes = eh * 60 + em;
