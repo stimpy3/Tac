@@ -111,7 +111,7 @@ const TodaySchedule = () => {
             <p className='mr-[5px] flex items-center text-[1.5rem] text-accentTxt dark:text-daccentTxt w-fit h-full whitespace-nowrap'>
               Today's Schedule
             </p>
-            <Tooltip text="Need to edit in the schedule section to see today's schedule">
+            <Tooltip text="Need to edit in the schedule section to see today's schedule here">
               <CircleHelp className="text-accentS3 dark:text-daccentS3 cursor-pointer" />
             </Tooltip>
           </div>
@@ -131,7 +131,7 @@ const TodaySchedule = () => {
         <div data-label="topDescContainer" className="flex h-[60px] w-[100%] p-[10px] pb-[0px] ">
           <div data-label="description" className="flex items-center justify-between p-[5px] ml-[calc(60%+12px)] bg-accentS2 dark:bg-daccentS2 w-full h-full rounded-[7px]">
             <p className="text-accentTxt w-full dark:text-daccentTxt text-[1rem] flex justify-center"> {currTasks && currTasks.name ? currTasks.name : "Task Description"}</p>
-            <div className="flex items-center min-w-[130px] border-l-[2px] border-daccentS3">
+            <div className="flex items-center min-w-[130px] border-l-[2px] border-daccentS3 justify-center">
                 {
                   currTasks && currTasks.startTime && currTasks.endTime ? (() => {
                     const [sh, sm] = currTasks.startTime.split(":").map(Number);
@@ -156,10 +156,10 @@ const TodaySchedule = () => {
                       ></div>
                     );
                   })() : (
-                    <i className="fa-solid fa-chart-pie text-daccentS3 text-[1.5rem]"></i>
+                    <i className="fa-solid fa-chart-pie text-daccentS3 text-[1.5rem] px-[5px]"></i>
                   )
                 }
-              <p className="text-accentTxt dark:text-daccentTxt text-[0.7rem] ml-[5px]">
+              <p className="text-accentTxt text-center dark:text-daccentTxt text-[0.7rem] ml-[5px]">
                  {currTasks?.endTime
                  ? (() => {
                      const [h, m] = currTasks.endTime.split(":").map(Number);
@@ -170,7 +170,7 @@ const TodaySchedule = () => {
               
                      return `${endMinutes - nowMinutes} mins left`;
                    })()
-                 : "....."}
+                 : "----"}
               </p>
             </div>
           </div>
@@ -179,7 +179,7 @@ const TodaySchedule = () => {
           <div data-label="currentLineContainer" className="group absolute z-[6] w-fit h-[calc(150px-60px)] bottom-0 flex flex-col items-center" style={{ left: `${leftDistance - 6.5}px` }}>
             <div data-label="currentLineCircle" className="w-[12px] h-[12px] top-[50%] border-[3px] border-accent2 bg-transparent rounded-full"></div>
             <div data-label="currentLine" className="h-full w-[3px] bg-accent2"></div>
-            <div data-label="tooltip" className="absolute p-[5px] bg-daccentM dark:bg-accentM text-daccentTxt dark:text-accentTxt text-[0.7rem] whitespace-nowrap flex flex-col rounded-sm z-[10] opacity-0 group-hover:opacity-70 pointer-events-none transition-opacity" style={{ left: 6, top: 12 }}>
+            <div data-label="tooltip" className="absolute py-[2px] px-[5px] bg-daccentM dark:bg-accentM text-daccentTxt dark:text-accentTxt text-[0.7rem] whitespace-nowrap flex flex-col rounded-sm z-[10] opacity-0 group-hover:opacity-70 pointer-events-none transition-opacity" style={{ left: 6, top: 12 }}>
               <p className="text-[0.7rem]">{((Number(hoursCurr) < 12) ?
                 (((hoursCurr == 0) ? hoursCurr + 12 : hoursCurr) + ":" + String(minutesCurr).padStart(2, '0') + " AM")
                 :
@@ -235,7 +235,7 @@ const TodaySchedule = () => {
                         >
                           <p>
                             {task.name.length > 15
-                              ? task.name.slice(0, 15) + "..."
+                              ? task.name.slice(0, 15) + "--- ---"
                               : task.name + ":"}
                           </p>
                           <p>

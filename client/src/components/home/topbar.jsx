@@ -77,7 +77,6 @@ const TopBar = () => {
               </p>
               <p className="text-accentS3 dark:text-daccentS3 text-[0.6rem]">{useremail}</p>
             </section>
-            <button><i className="fa-solid fa-angle-down dark:text-daccentTxt"></i></button>
           </section>
         </div>
       </div>
