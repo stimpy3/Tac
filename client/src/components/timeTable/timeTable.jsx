@@ -123,7 +123,7 @@ const TimeTable = () => {
       return (startInMins < exEndInMins && endInMins > exStartInMins);
     });
 
-    const hasOverlap = !!overlappingTask;
+    const hasOverlap = !!overlappingTask;//flip twice to make it boolean
 
     if (tempTask.name == "" || (endInMins < startInMins) || isNaN(endInMins) || isNaN(startInMins) || hasOverlap) {
       if (tempTask.name == "" && ((endInMins < startInMins) || isNaN(endInMins) || isNaN(startInMins) || hasOverlap)) {
@@ -168,7 +168,7 @@ const TimeTable = () => {
         });
         setTasks(prev => prev.map(task =>
           task._id === optimisticTask._id
-            ? { ...res.data, startTime: res.data.startTime, endTime: res.data.endTime }
+            ? { ...res.data }
             : task
         ));
       } catch (err) {
@@ -711,13 +711,13 @@ const TimeTable = () => {
               </div>
             }
             <section data-label='daysNameContainer' className='h-[476px] w-full bg-accent2 dark:bg-daccent2 flex flex-col items-center text-accent0 text-[1.2rem]'>
-              <div className='h-[68px] text-[1.3rem] w-full flex border-t-[1px] border-accent0 justify-between'><button className="h-full bg-black text-accent2 hover:bg-red-500 hover:text-white transition-all duration-300"><Trash className="scale-[0.7] h-full" /></button><p className="h-full w-[90%] justify-center flex items-center">Mon</p></div>
-              <div className='h-[68px] text-[1.3rem] w-full flex border-t-[1px] border-accent0 justify-between'><button className="h-full bg-black text-accent2 hover:bg-red-500 hover:text-white transition-all duration-300"><Trash className="scale-[0.7] h-full" /></button><p className="h-full w-[90%] justify-center flex items-center">Tue</p></div>
-              <div className='h-[68px] text-[1.3rem] w-full flex border-t-[1px] border-accent0 justify-between'><button className="h-full bg-black text-accent2 hover:bg-red-500 hover:text-white  transition-all duration-300"><Trash className="scale-[0.7] h-full" /></button><p className="h-full w-[90%] justify-center flex items-center">Wed</p></div>
-              <div className='h-[68px] text-[1.3rem] w-full flex border-t-[1px] border-accent0 justify-between'><button className="h-full bg-black text-accent2 hover:bg-red-500 hover:text-white transition-all duration-300"><Trash className="scale-[0.7] h-full" /></button><p className="h-full w-[90%] justify-center flex items-center">Thu</p></div>
-              <div className='h-[68px] text-[1.3rem] w-full flex border-t-[1px] border-accent0 justify-between'><button className="h-full bg-black text-accent2 hover:bg-red-500 hover:text-white transition-all duration-300"><Trash className="scale-[0.7] h-full" /></button><p className="h-full w-[90%] justify-center flex items-center">Fri</p></div>
-              <div className='h-[68px] text-[1.3rem] w-full flex border-t-[1px] border-accent0 justify-between'><button className="h-full bg-black text-accent2 hover:bg-red-500 hover:text-white transition-all duration-300"><Trash className="scale-[0.7] h-full" /></button><p className="h-full w-[90%] justify-center flex items-center">Sat</p></div>
-              <div className='h-[68px] text-[1.3rem] w-full flex border-t-[1px] border-accent0 justify-between'><button className="h-full bg-black text-accent2 hover:bg-red-500 hover:text-white transition-all duration-300"><Trash className="scale-[0.7] h-full" /></button><p className="h-full w-[90%] justify-center flex items-center">Sun</p></div>
+              <div className='h-[68px] text-[1.3rem] w-full flex border-t-[1px] border-accent0 justify-between'><button className="h-full bg-black text-accent2 hover:bg-red-500 hover:text-white transition-all duration-300" onClick={handleDeleteTask}><Trash className="scale-[0.7] h-full" /></button><p className="h-full w-[90%] justify-center flex items-center">Mon</p></div>
+              <div className='h-[68px] text-[1.3rem] w-full flex border-t-[1px] border-accent0 justify-between'><button className="h-full bg-black text-accent2 hover:bg-red-500 hover:text-white transition-all duration-300" onClick={handleDeleteTask}><Trash className="scale-[0.7] h-full" /></button><p className="h-full w-[90%] justify-center flex items-center">Tue</p></div>
+              <div className='h-[68px] text-[1.3rem] w-full flex border-t-[1px] border-accent0 justify-between'><button className="h-full bg-black text-accent2 hover:bg-red-500 hover:text-white  transition-all duration-300" onClick={handleDeleteTask}><Trash className="scale-[0.7] h-full" /></button><p className="h-full w-[90%] justify-center flex items-center">Wed</p></div>
+              <div className='h-[68px] text-[1.3rem] w-full flex border-t-[1px] border-accent0 justify-between'><button className="h-full bg-black text-accent2 hover:bg-red-500 hover:text-white transition-all duration-300" onClick={handleDeleteTask}><Trash className="scale-[0.7] h-full" /></button><p className="h-full w-[90%] justify-center flex items-center">Thu</p></div>
+              <div className='h-[68px] text-[1.3rem] w-full flex border-t-[1px] border-accent0 justify-between'><button className="h-full bg-black text-accent2 hover:bg-red-500 hover:text-white transition-all duration-300" onClick={handleDeleteTask}><Trash className="scale-[0.7] h-full" /></button><p className="h-full w-[90%] justify-center flex items-center">Fri</p></div>
+              <div className='h-[68px] text-[1.3rem] w-full flex border-t-[1px] border-accent0 justify-between'><button className="h-full bg-black text-accent2 hover:bg-red-500 hover:text-white transition-all duration-300" onClick={handleDeleteTask}><Trash className="scale-[0.7] h-full" /></button><p className="h-full w-[90%] justify-center flex items-center">Sat</p></div>
+              <div className='h-[68px] text-[1.3rem] w-full flex border-t-[1px] border-accent0 justify-between'><button className="h-full bg-black text-accent2 hover:bg-red-500 hover:text-white transition-all duration-300" onClick={handleDeleteTask}><Trash className="scale-[0.7] h-full" /></button><p className="h-full w-[90%] justify-center flex items-center">Sun</p></div>
             </section>
           </div>
 
