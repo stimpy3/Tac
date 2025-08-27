@@ -28,9 +28,11 @@ const TopBar = () => {
   const [notifCount, setNotifCount] = useState(0);
   const [notifArr, setNotifArr] = useState([]);
   const [showNotif, setShowNotif] = useState(false);
+  const BACKEND_URL = import.meta.env.VITE_BACKEND_URL||"http://localhost:5000";
   useEffect(()=>{
     // Simulate fetching notification count from an API
     const fetchNotif = async () => {
+        const token = localStorage.getItem("token");
         if (!token) return; // wait for login to set token first
 
         try {
