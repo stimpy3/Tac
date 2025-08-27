@@ -2,6 +2,7 @@ import React, { useState,useEffect } from 'react';
 import { Sun,MoonStar } from 'lucide-react';
 import { useDarkMode } from "../../darkModeContext"; //context useContext
 import { getCurrentUser } from "../../utils/auth";
+import axios from 'axios';
 
 /* Older React (before React 17)
 You always had to import React, because:
