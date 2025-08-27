@@ -73,7 +73,11 @@ const notifRef = useRef(null); // wraps the dropdown div
   useEffect(() => {
     const handleClickOutside=(e)=>{
        if(notifRef.current && !notifRef.current.contains(e.target)){
-        setShowNotif(false);
+        // Only mark as "seen" if they *already had it open*
+           if (showNotif) {
+             setNotifCount(0);
+             setShowNotif(false);
+           }
        }
     }
     document.addEventListener("mousedown",handleClickOutside);
