@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState,useEffect,useRef, use } from 'react';
 import { Sun,MoonStar } from 'lucide-react';
 import { useDarkMode } from "../../darkModeContext"; //context useContext
 import { getCurrentUser } from "../../utils/auth";
@@ -68,6 +68,21 @@ const TopBar = () => {
     fetchNotif();
   },[]);
 
+
+const notifRef = useRef(null); // wraps the dropdown div 
+  useEffect(() => {
+    const handleClickOutside=(e)=>{
+       if(notifRef.current && !notifRef.current.contains(e.target)){
+        setShowNotif(false);
+       }
+    }
+    document.addEventListener("mousedown",handleClickOutside);
+   //cleanup 
+    return ()=>{
+      document.removeEventListener("mousedown",handleClickOutside);
+    }
+  },[]);
+
   return (
     <div className="w-full h-[120px] pl-[20px] flex justify-between items-center">
       {/* Label and date */}
@@ -93,10 +108,10 @@ const TopBar = () => {
           </button>
           {/*better than  ternary ()?xyz:"" */}
           {notifCount > 0 && showNotif && (
-                <div className="absolute top-[80px] right-[20px] w-[250px] max-h-[300px] overflow-y-auto bg-accentM dark:bg-daccentM 
-                 border border-accentBorder2 dark:border-daccentBorder2 shadow-lg rounded-lg p-[10px] z-[10]">
+                <div ref={notifRef} className="absolute top-[80px] right-[50px] w-[250px] max-h-[300px] overflow-y-auto bg-accentM dark:bg-daccentM 
+                 border border-accentBorder2 dark:border-daccentBorder2 shadow-lg rounded-lg z-[10]">
                   {notifArr.map((notifName, idx) => (
-                    <div key={idx} className="mb-[8px] p-[8px] bg-accentS3 dark:bg-daccentS3 rounded-lg text-[0.9rem] text-accentTxt dark:text-daccentTxt">
+                    <div key={idx} className="p-[8px] rounded-lg text-[0.9rem] text-accentTxt dark:text-daccentTxt border-b-accentM dark:border-b-daccentM">
                       {notifName} is due Today
                     </div>
                   ))}
