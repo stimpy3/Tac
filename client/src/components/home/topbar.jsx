@@ -44,7 +44,7 @@ const TopBar = () => {
           </button>
           <button className="relative">
             <i className="fa-solid fa-bell text-[1.3rem] hover:text-accent1"></i>
-            <div data-label="notifCount" className=" absolute w-[20px] h-[20px] bg-red-500 text-white z-1 text-[0.8rem] rounded-full ">1</div>
+            <div data-label="notifCount" className="absolute top-[15px] right-[15px] w-[20px] h-[20px] bg-red-500 text-white z-[5px] text-[0.8rem] rounded-full ">1</div>
           </button>
         </div>
 
