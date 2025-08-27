@@ -4,6 +4,7 @@ import Calendar from '../calendar';
 import { CalendarDays, CalendarOff, ChevronRight, ChevronLeft, Plus, X, Trash } from 'lucide-react';
 import Tooltip from "../tooltip";
 import axios from 'axios';
+import { useLocation } from "react-router-dom";
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000"; 
 
@@ -62,6 +63,7 @@ const TimeTable = () => {
     }
   }, [leftDistance]);
 
+  const location = useLocation();
   // Fetch all tasks from database on mount
   useEffect(() => {
     const fetchSchedules = async () => {
@@ -76,7 +78,7 @@ const TimeTable = () => {
       }
     };
     fetchSchedules();
-  }, []);
+  }, [location.pathname]);//so it isnt tied to just initial mount, but also when we navigate to this page
 
   const [showTaskModal, setShowTaskModal] = useState(false);
   const [errorModal, setErrorModal] = useState(0);
