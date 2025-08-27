@@ -170,7 +170,7 @@ const TodaySchedule = () => {
               
                      return `${endMinutes - nowMinutes} mins left`;
                    })()
-                 : "----"}
+                 : "-- --"}
               </p>
             </div>
           </div>
