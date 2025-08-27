@@ -25,6 +25,44 @@ const TopBar = () => {
   const [userColor] = useState(randomColor[Math.floor(Math.random() * 5)]);
  
   const { mode, setMode } = useDarkMode(); //context useContext
+  const [notifCount, setNotifCount] = useState(0);
+  const [notifArr, setNotifArr] = useState([]);
+  const [showNotif, setShowNotif] = useState(false);
+  useEffect(()=>{
+    // Simulate fetching notification count from an API
+    const fetchNotif = async () => {
+        if (!token) return; // wait for login to set token first
+
+        try {
+          const res = await axios.get(`${BACKEND_URL}/deadlines`, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+      
+          const data = res.data; // deadlines array from backend
+          const today = new Date();
+      
+          // Filter only deadlines due today, then map to their names
+          const notif = data
+            .filter((event) => {
+              const eventDate = new Date(event.date);
+              return (
+                today.getFullYear() === eventDate.getFullYear() &&
+                today.getMonth() === eventDate.getMonth() &&
+                today.getDate() === eventDate.getDate()
+              );
+            })
+            .map((event) => event.name);
+      
+          setNotifArr(prev=>[...prev,...notif]);
+        } catch (err) {
+          console.error("Failed to fetch deadlines:", err);
+        }
+      setNotifCount(prev=>prev+1);
+    };
+    fetchNotif();
+  },[]);
 
   return (
     <div className="w-full h-[120px] pl-[20px] flex justify-between items-center">
@@ -42,10 +80,24 @@ const TopBar = () => {
           <button onClick={()=>setMode(prev=>!prev)}>
             {mode?<MoonStar className="hover:text-accent1"/>:<Sun className="hover:text-accent1"/>}
           </button>
-          <button className="relative">
-            <i className="fa-solid fa-bell text-[1.3rem] hover:text-accent1"></i>
-            <div data-label="notifCount" className="absolute top-[15px] right-[15px] w-[20px] h-[20px] bg-red-500 text-white z-[5px] text-[0.8rem] rounded-full ">1</div>
+          <button class="pl-[15px] relative w-[50px] h-[40px]" onclick={() => setShowNotif(prev => !prev)}>
+            <i class="fa-solid fa-bell text-[1.3rem] hover:text-accent1"></i>
+            {notifCount>0?
+            <div data-label="notifCount" class="absolute  top-0 right-0 translate-x-4/5 -translate-y-4/5  min-w-[20px] h-[20px] bg-red-500 text-white z-[5] text-[0.8rem] rounded-full ">{notifCount>5?"5+":notifCount}</div>
+            :
+            ""}
           </button>
+          {/*better than  ternary ()?xyz:"" */}
+          {notifCount > 0 && showNotif && (
+                <div className="absolute top-[80px] right-[20px] w-[250px] max-h-[300px] overflow-y-auto bg-accentM dark:bg-daccentM 
+                 border border-accentBorder2 dark:border-daccentBorder2 shadow-lg rounded-lg p-[10px] z-[10]">
+                  {notifArr.map((notifName, idx) => (
+                    <div key={idx} className="mb-[8px] p-[8px] bg-accentS3 dark:bg-daccentS3 rounded-lg text-[0.9rem] text-accentTxt dark:text-daccentTxt">
+                      {notifName} is due Today
+                    </div>
+                  ))}
+                </div>
+              )}  
         </div>
 
         <div className="h-[60px] w-[220px] bg-accentM  dark:bg-daccentM flex items-center rounded-full pl-[5px] border-[1px] border-accentBorder2 dark:border-daccentBorder2">
