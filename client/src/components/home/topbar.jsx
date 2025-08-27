@@ -111,7 +111,7 @@ const notifRef = useRef(null); // wraps the dropdown div
             ""}
           </button>
           {/*better than  ternary ()?xyz:"" */}
-          {notifCount > 0 && showNotif && (
+          {notifArr.length>0 && showNotif && (
                 <div ref={notifRef} className="absolute top-[80px] right-[50px] w-[250px] max-h-[300px] overflow-y-auto bg-accentM dark:bg-daccentM 
                  border border-accentBorder2 dark:border-daccentBorder2 shadow-lg rounded-lg z-[10]">
                   {notifArr.map((notifName, idx) => (
