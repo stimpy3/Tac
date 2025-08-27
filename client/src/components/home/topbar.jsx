@@ -42,7 +42,10 @@ const TopBar = () => {
           <button onClick={()=>setMode(prev=>!prev)}>
             {mode?<MoonStar className="hover:text-accent1"/>:<Sun className="hover:text-accent1"/>}
           </button>
-          <button><i className="fa-solid fa-bell text-[1.3rem] hover:text-accent1"></i></button>
+          <button className="relative">
+            <i className="fa-solid fa-bell text-[1.3rem] hover:text-accent1"></i>
+            <div data-label="notifCount" className=" absolute w-[20px] h-[20px] bg-red-500 text-white z-1 text-[0.8rem] rounded-full ">1</div>
+          </button>
         </div>
 
         <div className="h-[60px] w-[220px] bg-accentM  dark:bg-daccentM flex items-center rounded-full pl-[5px] border-[1px] border-accentBorder2 dark:border-daccentBorder2">
