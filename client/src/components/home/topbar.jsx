@@ -58,11 +58,12 @@ const TopBar = () => {
             })
             .map((event) => event.name);
       
-          setNotifArr(prev=>[...prev,...notif]);
+          setNotifArr(notif);
+          setNotifCount(notif.length);
         } catch (err) {
           console.error("Failed to fetch deadlines:", err);
         }
-      setNotifCount(prev=>prev+1);
+      
     };
     fetchNotif();
   },[]);
@@ -83,10 +84,10 @@ const TopBar = () => {
           <button onClick={()=>setMode(prev=>!prev)}>
             {mode?<MoonStar className="hover:text-accent1"/>:<Sun className="hover:text-accent1"/>}
           </button>
-          <button class="pl-[15px] relative w-[50px] h-[40px]" onclick={() => setShowNotif(prev => !prev)}>
-            <i class="fa-solid fa-bell text-[1.3rem] hover:text-accent1"></i>
+          <button className="pl-[15px] relative w-[50px] h-[40px]" onClick={() => setShowNotif(prev => !prev)}>
+            <i className="fa-solid fa-bell text-[1.3rem] hover:text-accent1"></i>
             {notifCount>0?
-            <div data-label="notifCount" class="absolute  top-0 right-0 translate-x-4/5 -translate-y-4/5  min-w-[20px] h-[20px] bg-red-500 text-white z-[5] text-[0.8rem] rounded-full ">{notifCount>5?"5+":notifCount}</div>
+            <div data-label="notifCount" className="absolute  top-0 right-0 translate-x-4/5 -translate-y-4/5  min-w-[20px] h-[20px] bg-red-500 text-white z-[5] text-[0.8rem] rounded-full ">{notifCount>5?"5+":notifCount}</div>
             :
             ""}
           </button>
