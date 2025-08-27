@@ -178,11 +178,11 @@ const TimeTable = () => {
     }
   };
 
-  const handleDeleteTask = async (id) => {
-    const deletedTask = tasks.find(task => task._id === id);
-    setTasks(prev => prev.filter(task => task._id !== id));
+  const handleDeleteTask = async (day) => {
+    const deletedTask = tasks.find(task => task.day === day);
+    setTasks(prev => prev.filter(task => task.day !== day));
     try {
-      await axios.delete(`${BACKEND_URL}/schedules/${id}`, {
+      await axios.delete(`${BACKEND_URL}/schedules/${day}`, {
         headers: { Authorization: `Bearer ${getToken()}` }
       });
     } catch (err) {
@@ -711,13 +711,13 @@ const TimeTable = () => {
               </div>
             }
             <section data-label='daysNameContainer' className='h-[476px] w-full bg-accent2 dark:bg-daccent2 flex flex-col items-center text-accent0 text-[1.2rem]'>
-              <div className='h-[68px] text-[1.3rem] w-full flex border-t-[1px] border-accent0 justify-between'><button className="h-full bg-black text-accent2 hover:bg-red-500 hover:text-white transition-all duration-300" onClick={handleDeleteTask}><Trash className="scale-[0.7] h-full" /></button><p className="h-full w-[90%] justify-center flex items-center">Mon</p></div>
-              <div className='h-[68px] text-[1.3rem] w-full flex border-t-[1px] border-accent0 justify-between'><button className="h-full bg-black text-accent2 hover:bg-red-500 hover:text-white transition-all duration-300" onClick={handleDeleteTask}><Trash className="scale-[0.7] h-full" /></button><p className="h-full w-[90%] justify-center flex items-center">Tue</p></div>
-              <div className='h-[68px] text-[1.3rem] w-full flex border-t-[1px] border-accent0 justify-between'><button className="h-full bg-black text-accent2 hover:bg-red-500 hover:text-white  transition-all duration-300" onClick={handleDeleteTask}><Trash className="scale-[0.7] h-full" /></button><p className="h-full w-[90%] justify-center flex items-center">Wed</p></div>
-              <div className='h-[68px] text-[1.3rem] w-full flex border-t-[1px] border-accent0 justify-between'><button className="h-full bg-black text-accent2 hover:bg-red-500 hover:text-white transition-all duration-300" onClick={handleDeleteTask}><Trash className="scale-[0.7] h-full" /></button><p className="h-full w-[90%] justify-center flex items-center">Thu</p></div>
-              <div className='h-[68px] text-[1.3rem] w-full flex border-t-[1px] border-accent0 justify-between'><button className="h-full bg-black text-accent2 hover:bg-red-500 hover:text-white transition-all duration-300" onClick={handleDeleteTask}><Trash className="scale-[0.7] h-full" /></button><p className="h-full w-[90%] justify-center flex items-center">Fri</p></div>
-              <div className='h-[68px] text-[1.3rem] w-full flex border-t-[1px] border-accent0 justify-between'><button className="h-full bg-black text-accent2 hover:bg-red-500 hover:text-white transition-all duration-300" onClick={handleDeleteTask}><Trash className="scale-[0.7] h-full" /></button><p className="h-full w-[90%] justify-center flex items-center">Sat</p></div>
-              <div className='h-[68px] text-[1.3rem] w-full flex border-t-[1px] border-accent0 justify-between'><button className="h-full bg-black text-accent2 hover:bg-red-500 hover:text-white transition-all duration-300" onClick={handleDeleteTask}><Trash className="scale-[0.7] h-full" /></button><p className="h-full w-[90%] justify-center flex items-center">Sun</p></div>
+              <div className='h-[68px] text-[1.3rem] w-full flex border-t-[1px] border-accent0 justify-between'><button className="h-full bg-black text-accent2 hover:bg-red-500 hover:text-white transition-all duration-300" onClick={() => handleDeleteTask("Monday")}><Trash className="scale-[0.7] h-full" /></button><p className="h-full w-[90%] justify-center flex items-center">Mon</p></div>
+              <div className='h-[68px] text-[1.3rem] w-full flex border-t-[1px] border-accent0 justify-between'><button className="h-full bg-black text-accent2 hover:bg-red-500 hover:text-white transition-all duration-300" onClick={() => handleDeleteTask("Tuesday")}><Trash className="scale-[0.7] h-full" /></button><p className="h-full w-[90%] justify-center flex items-center">Tue</p></div>
+              <div className='h-[68px] text-[1.3rem] w-full flex border-t-[1px] border-accent0 justify-between'><button className="h-full bg-black text-accent2 hover:bg-red-500 hover:text-white  transition-all duration-300" onClick={() => handleDeleteTask("Wednesday")}><Trash className="scale-[0.7] h-full" /></button><p className="h-full w-[90%] justify-center flex items-center">Wed</p></div>
+              <div className='h-[68px] text-[1.3rem] w-full flex border-t-[1px] border-accent0 justify-between'><button className="h-full bg-black text-accent2 hover:bg-red-500 hover:text-white transition-all duration-300" onClick={() => handleDeleteTask("Thursday")}><Trash className="scale-[0.7] h-full" /></button><p className="h-full w-[90%] justify-center flex items-center">Thu</p></div>
+              <div className='h-[68px] text-[1.3rem] w-full flex border-t-[1px] border-accent0 justify-between'><button className="h-full bg-black text-accent2 hover:bg-red-500 hover:text-white transition-all duration-300" onClick={() => handleDeleteTask("Friday")}><Trash className="scale-[0.7] h-full" /></button><p className="h-full w-[90%] justify-center flex items-center">Fri</p></div>
+              <div className='h-[68px] text-[1.3rem] w-full flex border-t-[1px] border-accent0 justify-between'><button className="h-full bg-black text-accent2 hover:bg-red-500 hover:text-white transition-all duration-300" onClick={() => handleDeleteTask("Saturday")}><Trash className="scale-[0.7] h-full" /></button><p className="h-full w-[90%] justify-center flex items-center">Sat</p></div>
+              <div className='h-[68px] text-[1.3rem] w-full flex border-t-[1px] border-accent0 justify-between'><button className="h-full bg-black text-accent2 hover:bg-red-500 hover:text-white transition-all duration-300" onClick={() => handleDeleteTask("Sunday")}><Trash className="scale-[0.7] h-full" /></button><p className="h-full w-[90%] justify-center flex items-center">Sun</p></div>
             </section>
           </div>
 

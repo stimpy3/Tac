@@ -47,18 +47,32 @@ In short:
 { error: err.message } is simply creating an object with a property called error.
   It’s a way to send error details back to the client in JSON format.
  */
+/*
 
-// Delete a schedule
-router.delete("/:id", authMiddleware, async (req, res) => {
+findOneAndDelete(filter)
+Finds one single document matching the filter.
+Deletes it.
+Returns the deleted document itself (so you can see what you just yeeted from the DB
+
+deleteMany() doesn’t return the actual deleted documents — it returns a result object like:
+{
+  acknowledged: true,
+  deletedCount: 3
+}
+ */
+// Delete all schedules for a given day
+router.delete("/:day", authMiddleware, async (req, res) => {
   try {
-    const deletedSchedule = await Schedule.findOneAndDelete({
-      _id: req.params.id,
+    const result = await Schedule.deleteMany({
+      day: req.params.day,
       user: req.user.id
     });
-    if (!deletedSchedule) {
-      return res.status(404).json({ message: "Schedule not found" });
+
+    if (result.deletedCount === 0) {
+      return res.status(404).json({ message: "No schedules found for this day" });
     }
-    res.json({ message: "Deleted successfully" });
+
+    res.json({ message: `Deleted ${result.deletedCount} schedules successfully` });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
