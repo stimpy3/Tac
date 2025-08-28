@@ -43,12 +43,8 @@ const TopBar = () => {
     };
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [showNotif, setNotifCount]);
+  }, [showNotif]);//Including showNotif ensures the latest value is used in the click handler.
 
-  // optional: refresh notifications on mount
-  useEffect(() => {
-    fetchNotif();
-  }, [fetchNotif]);
 
   return (
     <div className="w-full h-[120px] pl-[20px] flex justify-between items-center">
@@ -70,15 +66,12 @@ const TopBar = () => {
         </button>
 
         {/* Notifications */}
-        <button
-          ref={bellRef}
-          className="pl-[15px] relative w-[50px] h-[40px]"
-          onClick={() => {
+        <button ref={bellRef} className="pl-[15px] relative w-[50px] h-[40px]"
+          onClick={() => {https://www.msn.com/en-in/health/health-news/why-are-sudden-deaths-rising-among-young-indians-mumbai-doctor-s-decade-long-analysis-exposes-a-silent-crisis/ar-AA1Lnlad
             fetchNotif(); // refresh when user opens
             setShowNotif((prev) => !prev);
-          }}
-        >
-          <i className="fa-solid fa-bell text-[1.3rem] hover:text-accent1"></i>
+          }}>
+          <i className="fa-solid fa-bell text-[1.3rem] text-accentS3 dark:text-daccentS3 hover:text-accent2"></i>
           {notifCount > 0 && (
             <div
               data-label="notifCount"
