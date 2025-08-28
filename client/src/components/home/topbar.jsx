@@ -70,9 +70,11 @@ const TopBar = () => {
 
 
 const notifRef = useRef(null); // wraps the dropdown div 
+const bellRef = useRef(null);
   useEffect(() => {
     const handleClickOutside=(e)=>{
-       if(notifRef.current && !notifRef.current.contains(e.target)){
+       if(notifRef.current && !notifRef.current.contains(e.target) && bellRef.current &&
+  !bellRef.current.contains(e.target)){
         // Only mark as "seen" if they *already had it open*
            if (showNotif) {
              setNotifCount(0);
@@ -85,7 +87,7 @@ const notifRef = useRef(null); // wraps the dropdown div
     return ()=>{
       document.removeEventListener("mousedown",handleClickOutside);
     }
-  },[]);
+  },[showNotif]);
 
   return (
     <div className="w-full h-[120px] pl-[20px] flex justify-between items-center">
@@ -103,7 +105,7 @@ const notifRef = useRef(null); // wraps the dropdown div
           <button onClick={()=>setMode(prev=>!prev)}>
             {mode?<MoonStar className="hover:text-accent1"/>:<Sun className="hover:text-accent1"/>}
           </button>
-          <button className="pl-[15px] relative w-[50px] h-[40px]" onClick={() => setShowNotif(prev => !prev)}>
+          <button ref={bellRef} className="pl-[15px] relative w-[50px] h-[40px]" onClick={() => setShowNotif(prev => !prev)}>
             <i className="fa-solid fa-bell text-[1.3rem] hover:text-accent1"></i>
             {notifCount>0?
             <div data-label="notifCount" className="absolute  top-0 right-0 translate-x-4/5 -translate-y-4/5  min-w-[20px] h-[20px] bg-red-500 text-white z-[5] text-[0.8rem] rounded-full ">{notifCount>5?"5+":notifCount}</div>
@@ -111,7 +113,7 @@ const notifRef = useRef(null); // wraps the dropdown div
             ""}
           </button>
           {/*better than  ternary ()?xyz:"" */}
-          {notifCount > 0 && showNotif && (
+          {notifArr.length>0 && showNotif && (
                 <div ref={notifRef} className="absolute top-[80px] right-[50px] w-[250px] max-h-[300px] overflow-y-auto bg-accentM dark:bg-daccentM 
                  border border-accentBorder2 dark:border-daccentBorder2 shadow-lg rounded-lg z-[10]">
                   {notifArr.map((notifName, idx) => (
