@@ -2,11 +2,12 @@ import React, { useState, useEffect, useRef } from "react";
 import { Sun, MoonStar } from "lucide-react";
 import { useDarkMode } from "../../darkModeContext";
 import { getCurrentUser } from "../../utils/auth";
-import { useNotif } from "../../notifContext"; // 👈 bring in your notif context
+import { useNotif } from "../../notifContext";
 
 const TopBar = () => {
   const user = getCurrentUser();
   const username = user?.username || user?.name || "";
+  const useremail = user?.email || "";
 
   const today = new Date();
   const date = today.toLocaleDateString("en-US", {
@@ -16,15 +17,16 @@ const TopBar = () => {
   });
 
   const randomColor = ["bg-accent1", "bg-[#a1cbcf]", "bg-[#8ca3dc]", "bg-[#b4b4e4]", "bg-[#9d91c2]"];
-  const [userColor] = useState(randomColor[Math.floor(Math.random() * 5)]);
+  const [userColor] = useState(randomColor[Math.floor(Math.random() * randomColor.length)]);
 
   const { mode, setMode } = useDarkMode();
-  const { notifCount, setNotifCount, notifArr } = useNotif(); // 👈 use context instead of local state
+  const { notifCount, setNotifCount, notifArr, fetchNotif } = useNotif(); // bring fetchNotif to refresh
   const [showNotif, setShowNotif] = useState(false);
 
   const notifRef = useRef(null);
   const bellRef = useRef(null);
 
+  // handle click outside dropdown
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (
@@ -39,12 +41,14 @@ const TopBar = () => {
         }
       }
     };
-
     document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [showNotif, setNotifCount]);
+
+  // optional: refresh notifications on mount
+  useEffect(() => {
+    fetchNotif();
+  }, [fetchNotif]);
 
   return (
     <div className="w-full h-[120px] pl-[20px] flex justify-between items-center">
@@ -58,55 +62,89 @@ const TopBar = () => {
         </p>
       </div>
 
-      {/* Right side buttons */}
+      {/* Right side icons + profile */}
       <div className="h-full flex items-center gap-[20px]">
         {/* Theme toggle */}
         <button onClick={() => setMode((prev) => !prev)}>
-          {mode ? (
-            <MoonStar className="hover:text-accent1" />
-          ) : (
-            <Sun className="hover:text-accent1" />
-          )}
+          {mode ? <MoonStar className="hover:text-accent1" /> : <Sun className="hover:text-accent1" />}
         </button>
 
         {/* Notifications */}
         <button
           ref={bellRef}
           className="pl-[15px] relative w-[50px] h-[40px]"
-          onClick={() => setShowNotif((prev) => !prev)}
+          onClick={() => {
+            fetchNotif(); // refresh when user opens
+            setShowNotif((prev) => !prev);
+          }}
         >
           <i className="fa-solid fa-bell text-[1.3rem] hover:text-accent1"></i>
           {notifCount > 0 && (
             <div
               data-label="notifCount"
               className="absolute top-0 right-0 translate-x-4/5 -translate-y-4/5  
-              min-w-[20px] h-[20px] bg-red-500 text-white z-[5] text-[0.8rem] 
-              flex items-center justify-center rounded-full"
+                         min-w-[20px] h-[20px] bg-red-500 text-white z-[5] text-[0.8rem] 
+                         flex items-center justify-center rounded-full"
             >
               {notifCount > 5 ? "5+" : notifCount}
             </div>
           )}
         </button>
 
+        {/* Notification dropdown */}
         {notifArr.length > 0 && showNotif && (
           <div
             ref={notifRef}
             className="absolute top-[80px] right-[50px] w-[250px] max-h-[300px] overflow-y-auto 
-            bg-accentM/60 dark:bg-daccentM/60 backdrop-blur-md 
-            border border-accentBorder2 dark:border-daccentBorder2 
-            shadow-lg rounded-lg z-[10]"
+                       bg-accentM/60 dark:bg-daccentM/60 backdrop-blur-md 
+                       border border-accentBorder2 dark:border-daccentBorder2 
+                       shadow-lg rounded-lg z-[10]"
           >
             {notifArr.map((notifName, idx) => (
               <div
                 key={idx}
                 className="p-[8px] rounded-lg text-[0.9rem] text-accentTxt dark:text-daccentTxt 
-                border-b border-b-accentBorder2 dark:border-b-daccentBorder2"
+                           border-b border-b-accentBorder2 dark:border-b-daccentBorder2"
               >
                 {notifName} is due Today
               </div>
             ))}
           </div>
         )}
+
+        {/* Profile */}
+        <div className="h-[60px] w-[220px] bg-accentM dark:bg-daccentM flex items-center rounded-full pl-[5px] border-[1px] border-accentBorder2 dark:border-daccentBorder2">
+          {(user && user.picture && !user.picture.includes("default-user")) ? (
+            <div className="w-[50px] h-[50px] rounded-full border-[1px] border-accentBorder2 dark:border-daccentBorder2 shadow-lg overflow-hidden">
+              <img
+                src={user.picture}
+                alt="User"
+                className="w-full h-full object-cover"
+                onError={(e) => {
+                  e.target.onerror = null;
+                  e.target.style.display = "none";
+                  e.target.parentElement.innerHTML = `
+                    <div class="flex items-center justify-center text-[1.4rem] text-white w-full h-full ${userColor}">
+                      ${username && username[0] ? username[0].toUpperCase() : `<i class='fa-solid fa-user'></i>`}
+                    </div>`;
+                }}
+              />
+            </div>
+          ) : (
+            <div className={`flex items-center justify-center text-[1.4rem] text-white w-[50px] h-[50px] ${userColor} rounded-full border border-accentS3 dark:border-accentS3 shadow-lg`}>
+              {username && username[0] ? username[0].toUpperCase() : <i className="fa-solid fa-user"></i>}
+            </div>
+          )}
+
+          <section className="w-[150px] h-full flex justify-center items-center">
+            <section className="pl-[5px] w-full h-full flex flex-col justify-center items-start overflow-hidden">
+              <p className="text-[0.9rem] mb-[2px] text-accentTxt dark:text-daccentTxt">
+                {(username.length > 15) ? username.slice(0, 10) + "..." : username}
+              </p>
+              <p className="text-accentS3 dark:text-daccentS3 text-[0.6rem]">{useremail}</p>
+            </section>
+          </section>
+        </div>
       </div>
     </div>
   );
