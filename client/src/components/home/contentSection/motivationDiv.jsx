@@ -49,7 +49,7 @@ const MotivationDiv = () => {
 
       const random = Math.floor(Math.random() * quotes.length);
       if (quotes[0]?.q.includes("Too many requests")) {
-        setQuote("Keep going — even the best APIs need a break sometimes 🚀");
+        setQuote("Keep going — even the best APIs need a break sometimes");
       } else {
         setQuote(quotes[random].q);
       }
