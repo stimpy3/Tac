@@ -37,6 +37,7 @@ api.interceptors.response.use(
 export const logout = () => {
   localStorage.removeItem('token');
   localStorage.removeItem('user');
+  localStorage.removeItem('quotesData');
   localStorage.removeItem('username');
   localStorage.removeItem('useremail');
   window.location.href = '/login';

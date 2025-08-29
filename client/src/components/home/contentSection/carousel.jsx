@@ -356,7 +356,7 @@ const Carousel=()=>{
               <label className='text-accentTxt dark:text-daccentTxt mb-2'>Task Name:</label>
               <input 
                 type="text" 
-                className='border-[1px] px-[5px] py-2 bg-white dark:bg-daccentS text-black dark:text-white border-gray-500 rounded h-[60%]' 
+                className='border-[1px] px-[5px] py-2 bg-white dark:bg-daccentS text-black dark:text-white border-accentBorder2 dark:daccentBorder2 rounded h-[60%]' 
                 placeholder="e.g., LEETCODE"
                 ref={nameRef}
                 required
@@ -365,7 +365,7 @@ const Carousel=()=>{
             <div className='flex flex-col h-[35%]'>
               <label className='text-accentTxt dark:text-daccentTxt mb-2'>Description:</label>
               <textarea 
-                className='border-[1px] px-[5px] py-2 bg-white dark:bg-daccentS text-black dark:text-white border-gray-500 rounded resize-none h-[80%]' 
+                className='border-[1px] px-[5px] py-2 bg-white dark:bg-daccentS text-black dark:text-white border-accentBorder2 dark:daccentBorder2 rounded resize-none h-[80%]' 
                 placeholder="Brief description of your task..."
                 ref={descriptionRef}
                 required
@@ -375,7 +375,7 @@ const Carousel=()=>{
               <label className='text-accentTxt dark:text-daccentTxt mr-[5px]'>Start Date:</label>
               <input 
                 type="date" 
-                className='border-[1px] px-[5px] py-2 bg-white dark:bg-daccentS text-black dark:text-white border-gray-500 rounded w-fit h-[60%]' 
+                className='border-[1px] px-[5px] py-2 bg-white dark:bg-daccentS text-black dark:text-white border-accentBorder2 dark:daccentBorder2 rounded w-fit h-[60%]' 
                 ref={startDateRef}
                 required
               />
@@ -384,7 +384,7 @@ const Carousel=()=>{
               <label className='text-accentTxt dark:text-daccentTxt mr-[5px]'>Frequency:</label>
               <input 
                 type="number" 
-                className='border-[1px] px-[5px] py-2 bg-white dark:bg-daccentS text-black dark:text-white border-gray-500 rounded w-fit h-[60%]' 
+                className='border-[1px] px-[5px] py-2 bg-white dark:bg-daccentS text-black dark:text-white border-accentBorder2 dark:daccentBorder2 rounded w-fit h-[60%]' 
                 placeholder="e.g.,20 (frequency per 30days)"
                 ref={frequencyRef}
                 min="1"

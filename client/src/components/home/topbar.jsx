@@ -62,16 +62,15 @@ const TopBar = () => {
       <div className="h-full flex items-center gap-[20px]">
         {/* Theme toggle */}
         <button onClick={() => setMode((prev) => !prev)}>
-          {mode ? <MoonStar className="hover:text-accent1" /> : <Sun className="hover:text-accent1" />}
+          {mode ? <MoonStar className="text-accentS3 dark:text-daccentS3 hover:text-accent1" /> : <Sun className="text-accentS3 dark:text-daccentS3 hover:text-accent1" />}
         </button>
 
         {/* Notifications */}
         <button ref={bellRef} className="pl-[15px] relative w-[50px] h-[40px]"
-          onClick={() => {https://www.msn.com/en-in/health/health-news/why-are-sudden-deaths-rising-among-young-indians-mumbai-doctor-s-decade-long-analysis-exposes-a-silent-crisis/ar-AA1Lnlad
-            fetchNotif(); // refresh when user opens
+          onClick={() => {
             setShowNotif((prev) => !prev);
           }}>
-          <i className="fa-solid fa-bell text-[1.3rem] text-accentS3 dark:text-daccentS3 hover:text-accent2"></i>
+          <i className="fa-solid fa-bell text-[1.3rem] text-accentS3 dark:text-daccentS3 hover:text-accent1"></i>
           {notifCount > 0 && (
             <div
               data-label="notifCount"
