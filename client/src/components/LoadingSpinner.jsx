@@ -7,9 +7,16 @@ const LoadingSpinner = ({ size = "medium" }) => {
     large: "h-48 w-48"
   };
 
-  return (
-    <div className="flex items-center justify-center min-h-screen">
-      <div className={`animate-spin rounded-full border-b-2 border-gray-900 ${sizeClasses[size]}`}></div>
+    return (
+    <div className="fixed inset-0 flex items-center justify-center bg-white bg-opacity-20 backdrop-blur-sm z-50">
+      <div
+        className={`animate-spin rounded-full ${sizeClasses[size]}`}
+        style={{
+          borderWidth: "10px",
+          borderColor: "white",
+          borderTopColor: "transparent", // makes it look like a spinning arc
+        }}
+      ></div>
     </div>
   );
 };
