@@ -9,29 +9,33 @@ const PrivateRoute = ({ children }) => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const checkAuthentication = async () => {
-      // First check if token exists and is valid format
-      if (!isAuthenticated()) {
-        // If no token or invalid format, redirect immediately
-        setIsValidToken(false);
-        setIsLoading(false);
-        return;
-      }
+  const checkAuthentication = async () => {
+    // Always start loading
+    setIsLoading(true);
 
-      // If token exists and looks valid, verify with server
-      try {
-        const isValid = await verifyToken();
-        setIsValidToken(isValid);
-      } catch (error) {
-        console.error('Token verification error:', error);
-        setIsValidToken(false);
-      } finally {
-        setIsLoading(false);
-      }
-    };
+    // First check if token exists and is valid format
+    if (!isAuthenticated()) {
+      // If no token → no need to hit server
+      setIsValidToken(false);
+      setIsLoading(false);
+      return;
+    }
 
-    checkAuthentication();
-  }, []);
+    // If token exists and looks valid, verify with server
+    try {
+      const isValid = await verifyToken();
+      setIsValidToken(isValid);
+    } catch (error) {
+      console.error("Token verification error:", error);
+      setIsValidToken(false);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  checkAuthentication();
+}, []);
+
 
   if (isLoading) {
     return <LoadingSpinner size="medium" />;
