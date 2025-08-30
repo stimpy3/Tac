@@ -100,7 +100,7 @@ const Calendar = () => {
                 <button onClick={fwdBtnCalendar} className=" h-[45px] w-[50%] flex items-center justify-center text-accent1"><ChevronRight/></button>
              </section>
            </div>
-           <div data-label='weekContainer' className='mb-[5px] grid grid-cols-7 w-full h-[15%] text-accent1 font-bold rounded-md p-[5px]'>
+           <div data-label='weekContainer' className='mb-[5px] grid grid-cols-7 w-full h-[15%] text-accent1 dark:text-accent2  font-bold rounded-md p-[5px]'>
                        {["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].map((day, i) => (
                                    <p key={i} className='text-[0.8rem] text-center flex items-center justify-center'>
                                      {day}
@@ -141,8 +141,8 @@ const Calendar = () => {
 
                      return( //this return is for map
                      <div key={i} className={`py-[2px] h-full flex items-center justify-center rounded-sm
-                      ${isToday ? "bg-accent1 text-white font-bold" : ""}
-                      ${isMarked && !isToday ? "text-accent1 font-bold" : "text-accentTxt dark:text-daccentTxt"}`}>
+                      ${isToday ? "text-accent1 dark:text-accent1 font-bold" : ""}
+                      ${isMarked && !isToday ? "text-accentTxt dark:daccentTxt bg-accent2 rounded-full" : "text-accent1 dark:text-accent1 bg-accent2 rounded-full font-bold"}`}>
                           {dayNum}
                      </div>
                      );
