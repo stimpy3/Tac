@@ -140,7 +140,7 @@ const Calendar = () => {
                       );
 
                      return( //this return is for map
-                     <div key={i} className={`py-[2px] h-full flex items-center justify-center rounded-sm 
+                     <div key={i} className={`py-[2px] h-full flex items-center justify-center 
                      ${isToday && isMarked
                            ? "text-accent1 bg-accent2 rounded-full font-bold"
                            : isToday
