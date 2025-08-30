@@ -32,7 +32,7 @@ router.post("/", authMiddleware, async (req, res) => {
 
 // Get all deadlines for logged-in user
 router.get("/", authMiddleware, async (req, res) => {
-  const deadlines = await Deadline.find({ user: req.user.id });
+  const deadlines = await Deadline.find({ user: req.user.id }).sort({ date: 1 });//sort by date ascending
   res.json(deadlines);
 });
 
