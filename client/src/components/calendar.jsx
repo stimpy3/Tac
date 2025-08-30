@@ -133,10 +133,11 @@ const Calendar = () => {
                      today.getMonth() === monthNum &&
                      today.getFullYear() === currentYear;
 
-                     const isMarked=
-                     dayNum === markedDaysArray.day && 
-                     monthNum === markedDaysArray.month &&
-                     currentYear === currentYear;
+                     const isMarked = markedDaysArray.some(
+                        (md) =>
+                          md.day === dayNum &&
+                          md.month === monthNum  
+                      );
 
                      return( //this return is for map
                      <div key={i} className={`py-[2px] h-full flex items-center justify-center rounded-sm
