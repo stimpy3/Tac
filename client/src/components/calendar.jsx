@@ -1,7 +1,40 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import {ChevronRight,ChevronLeft} from 'lucide-react';
-
+import axios from 'axios';
 const Calendar = () => {
+
+  //fetching marked days in daedlines
+  const [markedDaysArray, setMarkedDaysArray] = useState([]);
+  const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
+  
+  useEffect(() => {
+    const fetchMarkedDays = async () => {
+      const token = localStorage.getItem("token");
+      if (!token) return;
+  
+      try {
+        const res = await axios.get(`${BACKEND_URL}/deadlines`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        const mapped = res.data.map(item =>{
+           const d = new Date(item.date); // convert ISO string from backend to JS Date object
+           return {
+             day: d.getDate(),      //1-31
+             month: d.getMonth(),   //0-11
+             name: item.name
+           };
+        } );
+        setMarkedDaysArray(mapped);
+      } 
+      
+      catch (err) {
+        console.error("Error fetching marked days:", err);
+      }
+    };
+    fetchMarkedDays();
+  }, []);
+
   const today = new Date();
   const currentDay = today.getDate();
   const currentMonth = today.getMonth(); // 0 to 11 months
@@ -99,8 +132,16 @@ const Calendar = () => {
                      dayNum === currentDay &&
                      today.getMonth() === monthNum &&
                      today.getFullYear() === currentYear;
+
+                     const isMarked=
+                     dayNum === markedDaysArray.day && 
+                     monthNum === markedDaysArray.month &&
+                     currentYear === currentYear;
+
                      return( //this return is for map
-                     <div key={i} className={`py-[2px] h-full flex items-center justify-center rounded-sm ${isToday ? ' text-accent1 font-bold' : 'text-accentTxt dark:text-daccentTxt ' }`}>
+                     <div key={i} className={`py-[2px] h-full flex items-center justify-center rounded-sm
+                      ${isToday ? "bg-accent1 text-white font-bold" : ""}
+                      ${isMarked && !isToday ? "text-accent1 font-bold" : "text-accentTxt dark:text-daccentTxt"}`}>
                           {dayNum}
                      </div>
                      );
