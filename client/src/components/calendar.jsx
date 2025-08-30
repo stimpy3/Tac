@@ -141,7 +141,7 @@ const Calendar = () => {
                     const isMarked = !!markedDay;
                   
                     const dayClasses = `
-                      py-[2px] h-full flex items-center justify-center 
+                      py-[2px] h-full flex items-center justify-center w-full
                       ${
                         isToday && isMarked
                           ? "text-accent1 bg-accent2 rounded-full font-bold"
