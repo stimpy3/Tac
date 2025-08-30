@@ -4,6 +4,7 @@ import { TrendingUp,Github } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
+import axios from 'axios';
  
 const LandingPage=()=>{
     const navigate=useNavigate();
@@ -101,6 +102,20 @@ const LandingPage=()=>{
              Wasted CPU cycles */
        };
    });
+
+   BACKEND_URL=import.meta.env.VITE_BACKEND_URL||"http://localhost:5000";
+   useEffect(()=>{
+    const warmUpServer = async () => {
+    try{
+      await axios.get(`${BACKEND_URL}/warmup`);
+      console.log("Server is awake");
+    }
+    catch (err) {
+        console.log("Warmup request failed:", err);
+      }
+    }
+    warmUpServer();
+   },[]);
     
 
 return (

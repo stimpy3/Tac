@@ -107,6 +107,14 @@ mongoose
   .catch((err) => console.error("❌ MongoDB connection error:", err));
 
 // ---------------- Routes ----------------
+
+//warmup route to prevent cold starts on Render
+app.get("/warmup", async (req,res)=>{
+  res.status(200).send("Server is awake");
+});
+
+
+//register route------------------------------
 app.post("/register", async (req, res) => {
   try {
     const hashedPassword = await bcrypt.hash(req.body.password, 10);
