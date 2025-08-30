@@ -141,9 +141,14 @@ const Calendar = () => {
 
                      return( //this return is for map
                      <div key={i} className={`py-[2px] h-full flex items-center justify-center rounded-sm 
-                      ${isToday? "text-accent1 dark:text-accent1 font-bold" 
-                        : isMarked? "text-accentTxt dark:text-accentTxt bg-accent2 rounded-full"
-                        : "text-accent1 dark:text-accent1 bg-accent2 rounded-full font-bold"}`}>
+                     ${isToday && isMarked
+                           ? "text-accent1 bg-accent2 rounded-full font-bold"
+                           : isToday
+                           ? "text-accent1 font-bold"
+                           : isMarked
+                           ? "text-accentTxt dark:text-daccentTxt bg-accent2 rounded-full font-bold"
+                           : "text-accentTxt dark:text-daccentTxt"
+                       }`}>
                           {dayNum}
                      </div>
                      );
