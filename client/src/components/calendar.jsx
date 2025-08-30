@@ -1,5 +1,6 @@
 import React, { useState,useEffect } from 'react';
 import {ChevronRight,ChevronLeft} from 'lucide-react';
+import Tooltip from "./tooltip";
 import axios from 'axios';
 const Calendar = () => {
 
@@ -133,26 +134,41 @@ const Calendar = () => {
                      today.getMonth() === monthNum &&
                      today.getFullYear() === currentYear;
 
-                     const isMarked = markedDaysArray.some(
-                        (md) =>
-                          md.day === dayNum &&
-                          md.month === monthNum  
-                      );
-
-                     return( //this return is for map
-                     <div key={i} className={`py-[2px] h-full flex items-center justify-center 
-                     ${isToday && isMarked
-                           ? "text-accent1 bg-accent2 rounded-full font-bold"
-                           : isToday
-                           ? "text-accent1 font-bold"
-                           : isMarked
-                           ? "text-accentTxt dark:text-daccentTxt bg-accent2 rounded-full font-bold"
-                           : "text-accentTxt dark:text-daccentTxt"
-                       }`}>
-                          {dayNum}
-                     </div>
-                     );
+                    // find if this day is marked
+                    const markedDay = markedDaysArray.find(
+                      (md) => md.day === dayNum && md.month === monthNum
+                    );
+                    const isMarked = !!markedDay;
+                  
+                    const dayClasses = `
+                      py-[2px] h-full flex items-center justify-center 
+                      ${
+                        isToday && isMarked
+                          ? "text-accent1 bg-accent2 rounded-full font-bold"
+                          : isToday
+                          ? "text-accent1 font-bold"
+                          : isMarked
+                          ? "text-accentTxt dark:text-daccentTxt bg-accent2 rounded-full font-bold"
+                          : "text-accentTxt dark:text-daccentTxt"
+                      }
+                    `;
+                  
+                    const dayContent = (
+                      <div key={i} className={dayClasses}>
+                        {dayNum}
+                      </div>
+                    );
+                  
+                    // wrap in tooltip if marked
+                    return isMarked ? (
+                      <Tooltip key={i} text={markedDay.name}>
+                        {dayContent}
+                      </Tooltip>
+                    ) : (
+                      dayContent
+                    );
                   });
+
                       /*new Array(5): Creates an array with 5 empty slots (not undefined),
                       and you can't use .map() directly on it because the empty slots are not actual values.
                        Array.from({ length: 5 }): Creates an array with 5 undefined elements,
