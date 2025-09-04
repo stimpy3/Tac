@@ -24,7 +24,7 @@ const LoadingSpinner = ({ size = "medium" }) => {
           display: grid;
           background: white;
           filter: blur(5px) contrast(10) hue-rotate(300deg);
-          mix-blend-mode: darken;
+          mix-blend-mode: lighten;
         }
         .loader:before,
         .loader:after {

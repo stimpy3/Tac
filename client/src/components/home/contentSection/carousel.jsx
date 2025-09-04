@@ -475,31 +475,46 @@ const Carousel=()=>{
                     top: 0 → no extra space at the top.
                     right: 40 → adds breathing space on right.
                     storkeDasharray="3 6" means 3px dash with 6px gap */}
-                    <CartesianGrid strokeDasharray="3 6" stroke="#242424" />
+                    <CartesianGrid strokeDasharray="3 6" stroke="#323232ff" />
                     {/*dataKey="day" → X-axis values will be taken from data.day*/}
                     <XAxis
                       dataKey="day"
-                      stroke="#b0b0b0ff" //color of Xaxis line
+                      stroke="#818181ff" //color of Xaxis line
                       fontSize={10}
-                      tick={{ fill: '#b0b0b0ff' }}//to style tick labels, fill is text color of ticks
+                      tick={{ fill: '#818181ff' }}//to style tick labels, fill is text color of ticks
                     />
                     <YAxis
-                      stroke="#b0b0b0ff"
+                      stroke="#818181ff"
                       fontSize={10}
-                      tick={{ fill: '#b0b0b0ff' }}
+                      tick={{ fill: '#818181ff' }}
                     />
                     <Tooltip
-                      contentStyle={{
-                        backgroundColor: "#2f3030ff",
-                        border: "none",
-                        borderRadius: "8px",
-                        color: "#F9FAFB",
-                        opacity: 0.9,
-                      }}
-                    />
+                     content={({ active, payload }) => {
+                       if (active && payload && payload.length) {
+                         return (
+                           <div
+                             style={{
+                               backgroundColor: "#2f3030ff",
+                               border: "none",
+                               borderRadius: "8px",
+                               color: "#F9FAFB",
+                               padding: "3px 3px",
+                               fontSize: "5px",   //smaller font size
+                             }}
+                           >
+                             {payload.map((entry, index) => (
+                               <div key={`item-${index}`} style={{ margin: "2px 0" }}>
+                                 {entry.name}: {entry.value}
+                               </div>
+                             ))}
+                           </div>
+                         );
+                       }
+                       return null;
+                     }}/>
                     <Legend
                       wrapperStyle={{
-                        fontSize: "5px",
+                        fontSize: "8px",
                       }}
                       formatter={(value) => {
                         if (value === "Projected") {
@@ -541,7 +556,7 @@ const Carousel=()=>{
                       dataKey="actual"
                       stroke="#680cb3"
                       strokeWidth={2}
-                      dot={{ fill: "#680cb3", strokeWidth: 1, r: 3 }}
+                      dot={{ fill: "#680cb3", strokeWidth: 2, r: 3 }}
                       name="Actual"
                     />
                   </LineChart>
