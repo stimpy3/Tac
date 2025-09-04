@@ -462,6 +462,7 @@ const Carousel=()=>{
                   <X size={16} />
                 </button> 
                 <ResponsiveContainer width="90%" height="90%">
+                  {/*data={...} → the dataset used. Each object in your array needs keys(day, actual, projected)*/}
                   <LineChart
                     data={generateActualData(
                       task.frequency,
@@ -469,23 +470,28 @@ const Carousel=()=>{
                       getElapsedDays(task.startDate)
                     )}
                     margin={{ top: 0, right: 40, bottom: 0, left: 0 }}
-                  >
-                    <CartesianGrid strokeDasharray="3 3" stroke="#c997d1" />
+                  >{/*margin={{...}} → padding around the chart area.
+                    Example:
+                    top: 0 → no extra space at the top.
+                    right: 40 → adds breathing space on right.
+                    storkeDasharray="3 6" means 3px dash with 6px gap */}
+                    <CartesianGrid strokeDasharray="3 6" stroke="#242424" />
+                    {/*dataKey="day" → X-axis values will be taken from data.day*/}
                     <XAxis
                       dataKey="day"
-                      stroke="#c997d1"
+                      stroke="#b0b0b0ff" //color of Xaxis line
                       fontSize={10}
-                      tick={{ fill: '#c997d1' }}
+                      tick={{ fill: '#b0b0b0ff' }}//to style tick labels, fill is text color of ticks
                     />
                     <YAxis
-                      stroke="#c997d1"
+                      stroke="#b0b0b0ff"
                       fontSize={10}
-                      tick={{ fill: '#c997d1' }}
+                      tick={{ fill: '#b0b0b0ff' }}
                     />
                     <Tooltip
                       contentStyle={{
-                        backgroundColor: "#1F2937",
-                        border: "1px solid #374151",
+                        backgroundColor: "#2f3030ff",
+                        border: "none",
                         borderRadius: "8px",
                         color: "#F9FAFB",
                         opacity: 0.9,
@@ -493,12 +499,12 @@ const Carousel=()=>{
                     />
                     <Legend
                       wrapperStyle={{
-                        fontSize: "10px",
+                        fontSize: "5px",
                       }}
                       formatter={(value) => {
                         if (value === "Projected") {
                           return (
-                            <span style={{ color: "#d073de" }}>
+                            <span style={{ color: "#739cdeff" }}>
                               Projected
                             </span>
                           );
@@ -516,7 +522,7 @@ const Carousel=()=>{
                     <Line
                       type="monotone"
                       dataKey="projected"
-                      stroke="#d073de"
+                      stroke="#739cdeff"
                       strokeWidth={2}
                       strokeDasharray="5 5"
                       dot={(props) => {
@@ -524,7 +530,7 @@ const Carousel=()=>{
                         const day = payload.day;
                         // Only show dots every 5 days
                         if ([0, 5, 10, 15, 20, 25, 30].includes(day)) {
-                          return <circle cx={cx} cy={cy} r={3} fill="#c997d1" />;
+                          return <circle cx={cx} cy={cy} r={3} fill="#739cdeff" />;
                         }
                         return null;
                       }}
@@ -534,8 +540,8 @@ const Carousel=()=>{
                       type="monotone"
                       dataKey="actual"
                       stroke="#680cb3"
-                      strokeWidth={1.5}
-                      dot={{ fill: "#9f59d9", strokeWidth: 1, r: 3 }}
+                      strokeWidth={2}
+                      dot={{ fill: "#680cb3", strokeWidth: 1, r: 3 }}
                       name="Actual"
                     />
                   </LineChart>
