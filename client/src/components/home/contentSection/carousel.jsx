@@ -42,7 +42,6 @@ const Carousel=()=>{
     id:"",
     name:"",
     description:"",
-    streak: 0,
     lastMarkedDate: null,
     startDate: null,
     frequency: "",
@@ -116,7 +115,7 @@ const Carousel=()=>{
   
   const closeTaskPopup=()=>{
     setShowTask(false);
-    setTempTask({ id: "", name: "", description: "", streak: 0, lastMarkedDate: null, startDate: null, frequency: "", problemsSolved: 0 }); //Clear it
+    setTempTask({ id: "", name: "", description: "", lastMarkedDate: null, startDate: null, frequency: "", problemsSolved: 0 }); //Clear it
     
     // Reset border colors
     if (nameRef.current) {
@@ -259,14 +258,13 @@ const Carousel=()=>{
     id: Date.now(),
     name: selectedName,
     description: selectedDescription,
-    streak: 0,
     lastMarkedDate: null,
     startDate: selectedStartDate,
     frequency: parseInt(selectedFrequency),
     problemsSolved: 0,
   };
    setTasks((prev) => [...prev, newTask]);
-   setTempTask({ id: "", name: "", description: "", streak: 0, lastMarkedDate: null, startDate: null, frequency: "", problemsSolved: 0 }); //Clear it
+   setTempTask({ id: "", name: "", description: "", lastMarkedDate: null, startDate: null, frequency: "", problemsSolved: 0 }); //Clear it
    setShowTask(false);
    };
 
@@ -287,28 +285,11 @@ const Carousel=()=>{
         
         // Always increment problems solved
         let newProblemsSolved = task.problemsSolved + 1;
-        let newStreak = task.streak;
         let newLastMarkedDate = task.lastMarkedDate;
         
-        // Handle streak logic
-        if (lastMarked === today) {
-          // Already marked today, just increment problems solved, keep same streak
-          console.log('Already marked today, incrementing problems only');
-        } else if (lastMarked === yesterdayString) {
-          // Marked yesterday, increment streak and problems solved
-          console.log('Marked yesterday, incrementing streak and problems');
-          newStreak = task.streak + 1;
-          newLastMarkedDate = today;
-        } else {
-          // Not marked yesterday, reset streak to 1 and add problems solved
-          console.log('Not marked yesterday, resetting streak to 1 and adding problems');
-          newStreak = 1;
-          newLastMarkedDate = today;
-        }
         
         return { 
           ...task, 
-          streak: newStreak, 
           lastMarkedDate: newLastMarkedDate,
           problemsSolved: newProblemsSolved
         };
@@ -346,7 +327,7 @@ const Carousel=()=>{
             <div className='flex'>
               <div>
                 <p className='text-[1.2rem] text-white font-bold'>Add a Task</p>
-                <p className='text-[0.7rem] text-gray-100'>Track your progress and build streaks.</p>
+                <p className='text-[0.7rem] text-gray-100'>Track your progress with graphs</p>
               </div>
             </div>
             <button onClick={closeTaskPopup} className='text-white text-[1.6rem]'><X/></button>
@@ -474,23 +455,6 @@ const Carousel=()=>{
         tasks.map((task) => (
           <div data-label='task' key={task.id} className="relative flex flex-col rounded-xl bg-accentM dark:bg-daccentM h-full aspect-[4/5] text-accentTxt dark:text-daccentTxt p-[10px] mr-[20px] bg-cover bg-no-repeat border-[1px] border-accentBorder2 dark:border-daccentBorder2 ">
             <div data-label='graphContainer' className='w-full h-[65%] flex items-center justify-center'>
-              <div
-                 className={`
-                   min-h-[40px] aspect-[4/5] bg-contain bg-no-repeat absolute top-[10px] left-[10px]
-                   text-[1rem] text-accentTxt bebas-neue-regular
-                   ${task.streak === 0
-                     ? "bg-[url('/streak/empty.png')] text-accentTxt2 dark:text-daccentTxt"
-                     : task.streak <= 5
-                     ? "bg-[url('/streak/streak1-5.png')]"
-                     : task.streak <= 15
-                     ? "bg-[url('/streak/streak5-15.png')]"
-                     : "bg-[url('/streak/streak15plus.png')]"}
-                 `}
-               >
-                 <p className="w-full h-full flex justify-center items-end font-bold text-[1.2rem]">
-                   {task.streak}
-                 </p>
-               </div>
                 <button 
                   onClick={() => removeTask(task.id)}
                   className="absolute top-[10px] right-[10px] text-accentTxt dark:text-daccentTxt hover:text-red-500 transition-colors"
@@ -577,7 +541,7 @@ const Carousel=()=>{
                   </LineChart>
                 </ResponsiveContainer>
             </div>
-            <div data-label='taskDescriptionContainer' className='p-[5px] h-[35%] rounded-lg border-[1px] border-accentS3 bg-accentS2 dark:bg-daccentS2 w-full flex flex-col items-center justify-center'>
+            <div data-label='taskDescriptionContainer' className='p-[5px] h-[35%] rounded-lg bg-accentS2 dark:bg-daccentS2 w-full flex flex-col items-center justify-center'>
               <div className='w-full h-[70%]'>
                   <p className='mt-[5px] flex items-center justify-start w-full bebas-neue-regular text-[1.5rem] h-fit 
                   text-accentTxt dark:text-daccentTxt leading-none'>{task.name.length > 20 ? task.name.slice(0, 20) + "..."  : task.name}</p>
@@ -590,7 +554,7 @@ const Carousel=()=>{
                     onClick={() => markToday(task.id)}
                     className='text-[1rem] bebas-neue-regular bg-accent1 text-white p-[2px] px-[5px] rounded hover:bg-accent0 transition-colors'
                   >
-                    MARK TODAY +
+                    MARK +1
                   </button>
               </div>
             </div>
