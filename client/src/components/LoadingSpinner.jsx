@@ -22,8 +22,8 @@ const LoadingSpinner = ({ size = "medium" }) => {
           padding: 10px;
           box-sizing: border-box;
           display: grid;
-          background: white;
-          filter: blur(5px) contrast(10) hue-rotate(300deg);
+          background: transparent;
+          filter: blur(2px) contrast(10) hue-rotate(300deg);
           mix-blend-mode: lighten;
         }
         .loader:before,
@@ -32,7 +32,7 @@ const LoadingSpinner = ({ size = "medium" }) => {
           grid-area: 1/1;
           width: 40%;
           height: 40%;
-          background: white;
+          background: #adadad;
           animation: l7 2s infinite;
         }
         .loader:after {
