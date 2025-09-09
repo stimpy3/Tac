@@ -45,9 +45,22 @@ const LoadingSpinner = ({ size = "medium" }) => {
           75%  {transform: translate(   0,100%)}
           100% {transform: translate(   0,0)}
         }
+        @keyframes lt7 {
+      0%   {opacity: 1}
+      50% {opacity: 0.2}
+      100% {opacity: 1}
+    }
+      .loader_text{
+       color: white;
+      font-size: 0.9rem;
+        font-family: "Share Tech", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  animation: lt7 2s infinite;
+      }
       `}</style>
 
-      <p className="lobster text-white">Warming up the server… this may take a few seconds on free tier hosting</p>
+      <p className="loader_text text-white">Waking up free-tier server</p>
     </div>
   );
 };
