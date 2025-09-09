@@ -24,7 +24,8 @@ const HomePage=() =>{
     {modal ? (
       <section className='fixed z-[10] w-full h-full bg-transparent backdrop-blur-sm flex justify-center items-center'>
         <div className='absolute inset-0' onClick={() => setModal(false)}></div>
-        <div className='absolute z-[15] opacity-[100%] w-[250px] h-[150px] bg-accentS dark:bg-daccentS flex flex-col justify-between rounded-xl relative z-10'>
+        <div className='absolute z-[15] opacity-[100%] w-[250px] h-[150px] bg-accentS dark:bg-daccentS flex flex-col justify-between rounded-xl 
+        border-[1px] border-gray-500 dark:border-daccentBorder2'>
           <section className='flex items-center h-full w-fulls'>
             <p className='text-accentTxt dark:text-daccentTxt text-[1.2rem] text-center'>
               Are you sure you want to logout?

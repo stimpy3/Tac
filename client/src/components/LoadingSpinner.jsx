@@ -46,6 +46,8 @@ const LoadingSpinner = ({ size = "medium" }) => {
           100% {transform: translate(   0,0)}
         }
       `}</style>
+
+      <p className="lobster text-white">Warming up the server… this may take a few seconds on free tier hosting</p>
     </div>
   );
 };

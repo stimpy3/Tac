@@ -326,7 +326,7 @@ const Carousel=()=>{
           <div className='bg-[url("/modalBG.png")] bg-cover bg-no-repeat px-[12px] h-[60px] flex items-center justify-between border-b-gray-500 border-b-[1px]'>
             <div className='flex'>
               <div>
-                <p className='text-[1.2rem] text-white font-bold'>Add a Task</p>
+                <p className='text-[1.2rem] text-white font-bold'>Add a Task to Track</p>
                 <p className='text-[0.7rem] text-gray-100'>Track your progress with graphs</p>
               </div>
             </div>
@@ -337,7 +337,7 @@ const Carousel=()=>{
               <label className='text-accentTxt dark:text-daccentTxt mb-2'>Task Name:</label>
               <input 
                 type="text" 
-                className='border-[1px] px-[5px] py-2 bg-white dark:bg-daccentS text-black dark:text-white border-accentBorder2 dark:daccentBorder2 rounded h-[60%]' 
+                className='border-[1px] px-[5px] py-2 bg-white dark:bg-daccentS text-black dark:text-white border-accentBorder2 dark:border-daccentBorder2 rounded h-[60%]' 
                 placeholder="e.g., LEETCODE"
                 ref={nameRef}
                 required
@@ -346,7 +346,7 @@ const Carousel=()=>{
             <div className='flex flex-col h-[35%]'>
               <label className='text-accentTxt dark:text-daccentTxt mb-2'>Description:</label>
               <textarea 
-                className='border-[1px] px-[5px] py-2 bg-white dark:bg-daccentS text-black dark:text-white border-accentBorder2 dark:daccentBorder2 rounded resize-none h-[80%]' 
+                className='border-[1px] px-[5px] py-2 bg-white dark:bg-daccentS text-black dark:text-white border-accentBorder2 dark:border-daccentBorder2 rounded resize-none h-[80%]' 
                 placeholder="Brief description of your task..."
                 ref={descriptionRef}
                 required
@@ -356,7 +356,7 @@ const Carousel=()=>{
               <label className='text-accentTxt dark:text-daccentTxt mr-[5px]'>Start Date:</label>
               <input 
                 type="date" 
-                className='border-[1px] px-[5px] py-2 bg-white dark:bg-daccentS text-black dark:text-white border-accentBorder2 dark:daccentBorder2 rounded w-fit h-[60%]' 
+                className='border-[1px] px-[5px] py-2 bg-white dark:bg-daccentS text-black dark:text-white border-accentBorder2 dark:border-daccentBorder2 rounded w-fit h-[60%]' 
                 ref={startDateRef}
                 required
               />
@@ -365,7 +365,7 @@ const Carousel=()=>{
               <label className='text-accentTxt dark:text-daccentTxt mr-[5px]'>Frequency:</label>
               <input 
                 type="number" 
-                className='border-[1px] px-[5px] py-2 bg-white dark:bg-daccentS text-black dark:text-white border-accentBorder2 dark:daccentBorder2 rounded w-fit h-[60%]' 
+                className='border-[1px] px-[5px] py-2 bg-white dark:bg-daccentS text-black dark:text-white border-accentBorder2 dark:border-daccentBorder2 rounded w-fit h-[60%]' 
                 placeholder="e.g.,20 (frequency per 30days)"
                 ref={frequencyRef}
                 min="1"
@@ -487,6 +487,7 @@ const Carousel=()=>{
                       stroke="#818181ff"
                       fontSize={10}
                       tick={{ fill: '#818181ff' }}
+                      interval={0} // Show all ticks
                     />
                     <Tooltip
                      content={({ active, payload }) => {
@@ -499,7 +500,7 @@ const Carousel=()=>{
                                borderRadius: "8px",
                                color: "#F9FAFB",
                                padding: "3px 3px",
-                               fontSize: "5px",   //smaller font size
+                               fontSize: "1rem",   //smaller font size
                              }}
                            >
                              {payload.map((entry, index) => (
@@ -514,12 +515,12 @@ const Carousel=()=>{
                      }}/>
                     <Legend
                       wrapperStyle={{
-                        fontSize: "8px",
+                        fontSize: "1rem",
                       }}
                       formatter={(value) => {
                         if (value === "Projected") {
                           return (
-                            <span style={{ color: "#739cdeff" }}>
+                            <span style={{ color: "#1281efff" }}>
                               Projected
                             </span>
                           );
@@ -537,7 +538,7 @@ const Carousel=()=>{
                     <Line
                       type="monotone"
                       dataKey="projected"
-                      stroke="#739cdeff"
+                      stroke="#1281efff"
                       strokeWidth={2}
                       strokeDasharray="5 5"
                       dot={(props) => {
@@ -545,7 +546,7 @@ const Carousel=()=>{
                         const day = payload.day;
                         // Only show dots every 5 days
                         if ([0, 5, 10, 15, 20, 25, 30].includes(day)) {
-                          return <circle cx={cx} cy={cy} r={3} fill="#739cdeff" />;
+                          return <circle cx={cx} cy={cy} r={3} fill="#1281efff" />;
                         }
                         return null;
                       }}
@@ -555,7 +556,7 @@ const Carousel=()=>{
                       type="monotone"
                       dataKey="actual"
                       stroke="#680cb3"
-                      strokeWidth={2}
+                      strokeWidth={3}
                       dot={{ fill: "#680cb3", strokeWidth: 2, r: 3 }}
                       name="Actual"
                     />
