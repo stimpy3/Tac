@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { EyeOff, Eye } from "lucide-react";
 import axios from "axios";
 import { useGoogleLogin } from "@react-oauth/google"; //oauth
+import LoadingSpinner from "../LoadingSpinner";
 
 const RegisterForm = () => {
   const navigate = useNavigate();
@@ -15,6 +16,7 @@ const RegisterForm = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showFlag, setShowFlag] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleShowPass = (e) => {
     e.preventDefault();
@@ -25,6 +27,8 @@ const RegisterForm = () => {
     e.preventDefault();
 
     if (password === "" || email === "" || username === "") return;
+    
+    setIsLoading(true);
 
     axios
       .post(`${BACKEND_URL}/register`, { username, email, password })
@@ -45,6 +49,9 @@ const RegisterForm = () => {
         } else {
           alert("Registration failed");
         }
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
   };
 
@@ -68,6 +75,7 @@ Is a bearer token — whoever holds it, can use it
   //oauth
   const loginWithGoogle = useGoogleLogin({
     onSuccess: async (tokenResponse) => {
+      setIsLoading(true);
       try {
         const res = await axios.get(
           "https://www.googleapis.com/oauth2/v3/userinfo",
@@ -98,13 +106,20 @@ Is a bearer token — whoever holds it, can use it
       } catch (err) {
         console.error("Failed to fetch Google user:", err);
         alert("Google registration failed");
+      } finally {
+        setIsLoading(false);
       }
     },
     onError: () => {
       alert("Google register failed");
+      setIsLoading(false);
     },
   });
   
+  if (isLoading) {
+    return <LoadingSpinner />;
+  }
+
   return (
   <div className="p-[20px] w-1/2 h-full flex flex-col justify-center items-center bg-white text-black max-mobXL:h-full max-mobXL:w-full max-mobXL:rounded-t-[50px]">
     <p className="max-mobXL:text-[2rem] max-mobXL:pb-[20px] max-mobXL:mb-0 text-[3rem] md:text-[4rem] font-bold inter">

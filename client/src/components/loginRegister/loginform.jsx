@@ -4,13 +4,15 @@ import { Eye,EyeOff } from 'lucide-react';
 import axios from "axios";
 import { useGoogleLogin } from "@react-oauth/google"; //oauth
 import { jwtDecode } from "jwt-decode"; //to extract user info like emil pfp etc, GOTTA DO THIS IN LOGIN /REGISTER PAGE
+import LoadingSpinner from "../LoadingSpinner";
 //NOT IN HOMEPAGE -REASON(EXPLORE LATER)
 
 const LoginForm=() => {
   //npm install @react-oauth/google needed to be done in client folder
    const [email,setEmail]=useState("");
    const [password,setPassword]=useState("");
-
+   const [isLoading, setIsLoading] = useState(false);
+   
   const navigate= useNavigate();//hook in react
   /*
   Why import.meta.env and not process.env?
@@ -29,6 +31,7 @@ const LoginForm=() => {
   const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:3001";
   const handleLogin=(e)=>{
       e.preventDefault();
+      setIsLoading(true);
       axios.post(`${BACKEND_URL}/login`, { email, password })
       .then(result => {
       console.log(result)
@@ -48,6 +51,9 @@ const LoginForm=() => {
         } else {
           alert("Login failed");
         }
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
     };
 
@@ -94,6 +100,7 @@ const loginWithGoogle = useGoogleLogin({
     //async makes the function capable of using await.
     //await pauses the code until the Google API sends back user data.
     //So Google gives your app a tokenResponse object when login succeeds.
+    setIsLoading(true);
     try {
       // Use the access token to fetch profile info
       const res = await axios.get( //This makes a GET request to Google's User Info API and waits for response
@@ -149,16 +156,23 @@ const loginWithGoogle = useGoogleLogin({
     } catch (error) {
       console.error("Failed to fetch user info:", error);
       alert("Google login failed");
+    } finally {
+      setIsLoading(false);
     }
   },
   onError: () => {
     alert("Google login failed");
+    setIsLoading(false);
   },
 });
 
     
 
- return (
+ if (isLoading) {
+    return <LoadingSpinner />;
+  }
+
+  return (
   <div className="bg-white p-[20px] w-1/2 h-full flex flex-col justify-evenly items-center text-black max-mobXL:h-full max-mobXL:w-full max-mobXL:rounded-t-[50px]">
     <p className="inter text-[3rem] md:text-[4rem] font-bold text-center mb-4 max-mobXL:text-[2rem] max-mobXL:mb-0">
       Welcome Back
