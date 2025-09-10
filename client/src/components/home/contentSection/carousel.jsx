@@ -33,8 +33,29 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Responsi
 import gsap from "gsap";
 
 const Carousel=()=>{
-
-    
+  //list of icons for task category
+  const categoryData = {
+    academic: {
+      icon: "fa-solid fa-graduation-cap",
+      color: "bg-[#4592ff]",
+    },
+    health: {
+      icon: "fa-regular fa-heart",
+      color: "bg-[#e872e8]",
+    },
+    career: {
+      icon: "fa-solid fa-list",
+      color: "bg-[#62b035]",
+    },
+    personal: {
+      icon: "fa-solid fa-user",
+      color: "bg-[#fc357d]",
+    },
+    other: {
+      icon: "fa-solid fa-hashtag",
+      color: "bg-[#685ffa]",
+    }
+  };
 
   const [showTask,setShowTask]=useState(false);
   const [tasks, setTasks] = useState([]);
@@ -46,11 +67,12 @@ const Carousel=()=>{
     startDate: null,
     frequency: "",
     problemsSolved: 0,
+    category: "academic"
   });
 
   const nameRef = useRef(null);
   const descriptionRef = useRef(null);
-  const startDateRef = useRef(null);
+  const categoryRef = useRef(null);
   const frequencyRef = useRef(null);
 
   // Function to generate projected data
@@ -115,7 +137,7 @@ const Carousel=()=>{
   
   const closeTaskPopup=()=>{
     setShowTask(false);
-    setTempTask({ id: "", name: "", description: "", lastMarkedDate: null, startDate: null, frequency: "", problemsSolved: 0 }); //Clear it
+    setTempTask({ id: "", name: "", description: "", lastMarkedDate: null, startDate: null, frequency: "", problemsSolved: 0, category: "academic" }); //Clear it
     
     // Reset border colors
     if (nameRef.current) {
@@ -125,10 +147,6 @@ const Carousel=()=>{
     if (descriptionRef.current) {
       descriptionRef.current.classList.remove("border-red-500");
       descriptionRef.current.classList.add("border-gray-500");
-    }
-    if (startDateRef.current) {
-      startDateRef.current.classList.remove("border-red-500");
-      startDateRef.current.classList.add("border-gray-500");
     }
     if (frequencyRef.current) {
       frequencyRef.current.classList.remove("border-red-500");
@@ -176,18 +194,17 @@ const Carousel=()=>{
   const addTask=()=>{  //confirming changes(when create button pressed) temp task added to tasks
     const selectedName = nameRef.current.value;
     const selectedDescription = descriptionRef.current.value;
-    const selectedStartDate = startDateRef.current.value;
     const selectedFrequency = frequencyRef.current.value;
+    const selectedCategory = categoryRef.current.value;
+    const today = new Date().toISOString().split('T')[0]; // Get today's date in YYYY-MM-DD format
     
     // Validation checks
-    if(selectedName == "" && selectedDescription == "" && selectedStartDate == "" && selectedFrequency == ""){
+    if(selectedName == "" && selectedDescription == "" && selectedFrequency == ""){
       // All fields empty
       nameRef.current.classList.remove("border-gray-500");
       nameRef.current.classList.add("border-red-500");
       descriptionRef.current.classList.remove("border-gray-500");
       descriptionRef.current.classList.add("border-red-500");
-      startDateRef.current.classList.remove("border-gray-500");
-      startDateRef.current.classList.add("border-red-500");
       frequencyRef.current.classList.remove("border-gray-500");
       frequencyRef.current.classList.add("border-red-500");
       return;
@@ -259,9 +276,12 @@ const Carousel=()=>{
     name: selectedName,
     description: selectedDescription,
     lastMarkedDate: null,
-    startDate: selectedStartDate,
+    startDate: today,
     frequency: parseInt(selectedFrequency),
     problemsSolved: 0,
+    category: selectedCategory,
+    icon: categoryData[selectedCategory]?.icon || categoryData["other"].icon,
+    color: categoryData[selectedCategory]?.color || categoryData["other"].color
   };
    setTasks((prev) => [...prev, newTask]);
    setTempTask({ id: "", name: "", description: "", lastMarkedDate: null, startDate: null, frequency: "", problemsSolved: 0 }); //Clear it
@@ -353,13 +373,18 @@ const Carousel=()=>{
               ></textarea>
             </div>
             <div className='flex items-center h-[15%]'>
-              <label className='text-accentTxt dark:text-daccentTxt mr-[5px]'>Start Date:</label>
-              <input 
-                type="date" 
-                className='border-[1px] px-[5px] py-2 bg-white dark:bg-daccentS text-black dark:text-white border-accentBorder2 dark:border-daccentBorder2 rounded w-fit h-[60%]' 
-                ref={startDateRef}
+              <label className='text-accentTxt dark:text-daccentTxt mr-[5px]'>Category:</label>
+              <select 
+                ref={categoryRef}
+                className='border-[1px] px-[5px] py-2 bg-white dark:bg-daccentS text-black dark:text-white border-accentBorder2 dark:border-daccentBorder2 rounded w-fit h-[60%]'
                 required
-              />
+              >
+                <option value="academic">Academic</option>
+                <option value="health">Health & Wellness</option>
+                <option value="career">Work & Career</option>
+                <option value="personal">Personal Life</option>
+                <option value="other">Other</option>
+              </select>
             </div>
             <div className='flex items-center h-[15%]'>
               <label className='text-accentTxt dark:text-daccentTxt mr-[5px]'>Frequency:</label>
