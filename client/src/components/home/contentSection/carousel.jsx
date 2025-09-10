@@ -198,77 +198,30 @@ const Carousel=()=>{
     const selectedCategory = categoryRef.current.value;
     const today = new Date().toISOString().split('T')[0]; // Get today's date in YYYY-MM-DD format
     
-    // Validation checks
-    if(selectedName == "" && selectedDescription == "" && selectedFrequency == ""){
-      // All fields empty
+    // Reset all borders first
+    nameRef.current.classList.remove("border-red-500");
+    nameRef.current.classList.add("border-gray-500");
+    descriptionRef.current.classList.remove("border-red-500");
+    descriptionRef.current.classList.add("border-gray-500");
+    frequencyRef.current.classList.remove("border-red-500");
+    frequencyRef.current.classList.add("border-gray-500");
+
+    let hasError = false;
+
+    // Check required fields
+    if(selectedName == ""){
       nameRef.current.classList.remove("border-gray-500");
       nameRef.current.classList.add("border-red-500");
-      descriptionRef.current.classList.remove("border-gray-500");
-      descriptionRef.current.classList.add("border-red-500");
+      hasError = true;
+    }
+
+    if(selectedFrequency == "" || isNaN(selectedFrequency) || selectedFrequency <= 0){
       frequencyRef.current.classList.remove("border-gray-500");
       frequencyRef.current.classList.add("border-red-500");
-      return;
+      hasError = true;
     }
-    else if(selectedName == ""){
-      // Only name missing
-      nameRef.current.classList.remove("border-gray-500");
-      nameRef.current.classList.add("border-red-500");
-      descriptionRef.current.classList.remove("border-red-500");
-      descriptionRef.current.classList.add("border-gray-500");
-      startDateRef.current.classList.remove("border-red-500");
-      startDateRef.current.classList.add("border-gray-500");
-      frequencyRef.current.classList.remove("border-red-500");
-      frequencyRef.current.classList.add("border-gray-500");
-      return;
-    }
-    else if(selectedDescription == ""){
-      // Only description missing
-      nameRef.current.classList.remove("border-red-500");
-      nameRef.current.classList.add("border-gray-500");
-      descriptionRef.current.classList.remove("border-gray-500");
-      descriptionRef.current.classList.add("border-red-500");
-      startDateRef.current.classList.remove("border-red-500");
-      startDateRef.current.classList.add("border-gray-500");
-      frequencyRef.current.classList.remove("border-red-500");
-      frequencyRef.current.classList.add("border-gray-500");
-      return;
-    }
-    else if(selectedStartDate == ""){
-      // Only start date missing
-      nameRef.current.classList.remove("border-red-500");
-      nameRef.current.classList.add("border-gray-500");
-      descriptionRef.current.classList.remove("border-red-500");
-      descriptionRef.current.classList.add("border-gray-500");
-      startDateRef.current.classList.remove("border-gray-500");
-      startDateRef.current.classList.add("border-red-500");
-      frequencyRef.current.classList.remove("border-red-500");
-      frequencyRef.current.classList.add("border-gray-500");
-      return;
-    }
-    else if(selectedFrequency == ""){
-      // Only frequency missing
-      nameRef.current.classList.remove("border-red-500");
-      nameRef.current.classList.add("border-gray-500");
-      descriptionRef.current.classList.remove("border-red-500");
-      descriptionRef.current.classList.add("border-gray-500");
-      startDateRef.current.classList.remove("border-red-500");
-      startDateRef.current.classList.add("border-gray-500");
-      frequencyRef.current.classList.remove("border-gray-500");
-      frequencyRef.current.classList.add("border-red-500");
-      return;
-    }
-    else if(isNaN(selectedFrequency) || selectedFrequency <= 0){
-      // Frequency is not a valid number
-      nameRef.current.classList.remove("border-red-500");
-      nameRef.current.classList.add("border-gray-500");
-      descriptionRef.current.classList.remove("border-red-500");
-      descriptionRef.current.classList.add("border-gray-500");
-      startDateRef.current.classList.remove("border-red-500");
-      startDateRef.current.classList.add("border-gray-500");
-      frequencyRef.current.classList.remove("border-gray-500");
-      frequencyRef.current.classList.add("border-red-500");
-      return;
-    }
+
+    if(hasError) return;
     
     // All validations passed
     const newTask = {
@@ -357,7 +310,7 @@ const Carousel=()=>{
               <label className='text-accentTxt dark:text-daccentTxt mb-2'>Task Name:</label>
               <input 
                 type="text" 
-                className='border-[1px] px-[5px] py-2 bg-white dark:bg-daccentS text-black dark:text-white border-accentBorder2 dark:border-daccentBorder2 rounded h-[60%]' 
+                className='border-[1px] border-gray-500 px-[5px] py-2 bg-white dark:bg-daccentS text-black dark:text-white rounded h-[60%]' 
                 placeholder="e.g., LEETCODE"
                 ref={nameRef}
                 required
@@ -366,17 +319,16 @@ const Carousel=()=>{
             <div className='flex flex-col h-[35%]'>
               <label className='text-accentTxt dark:text-daccentTxt mb-2'>Description:</label>
               <textarea 
-                className='border-[1px] px-[5px] py-2 bg-white dark:bg-daccentS text-black dark:text-white border-accentBorder2 dark:border-daccentBorder2 rounded resize-none h-[80%]' 
-                placeholder="Brief description of your task..."
+                className='border-[1px] border-gray-500 px-[5px] py-2 bg-white dark:bg-daccentS text-black dark:text-white rounded resize-none h-[80%]' 
+                placeholder="Brief description of your task (optional)..."
                 ref={descriptionRef}
-                required
               ></textarea>
             </div>
             <div className='flex items-center h-[15%]'>
               <label className='text-accentTxt dark:text-daccentTxt mr-[5px]'>Category:</label>
               <select 
                 ref={categoryRef}
-                className='border-[1px] px-[5px] py-2 bg-white dark:bg-daccentS text-black dark:text-white border-accentBorder2 dark:border-daccentBorder2 rounded w-fit h-[60%]'
+                className='border-[1px] px-[5px] py-[2px] bg-white dark:bg-daccentS text-black dark:text-white border-accentBorder2 dark:border-daccentBorder2 rounded w-fit h-fit'
                 required
               >
                 <option value="academic">Academic</option>
@@ -390,7 +342,7 @@ const Carousel=()=>{
               <label className='text-accentTxt dark:text-daccentTxt mr-[5px]'>Frequency:</label>
               <input 
                 type="number" 
-                className='border-[1px] px-[5px] py-2 bg-white dark:bg-daccentS text-black dark:text-white border-accentBorder2 dark:border-daccentBorder2 rounded w-fit h-[60%]' 
+                className='border-[1px] border-gray-500 px-[5px] py-2 bg-white dark:bg-daccentS text-black dark:text-white rounded w-fit h-[60%]' 
                 placeholder="e.g.,20 (frequency per 30days)"
                 ref={frequencyRef}
                 min="1"
