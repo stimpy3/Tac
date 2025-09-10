@@ -3,7 +3,10 @@ Efficiency: Manipulating the real DOM is slow because the browser has to reflow
  and repaint the page after every update. This process can be time-consuming,
   especially when updating multiple elements or complex UIs.
 
-Avoiding Unnecessary Re-renders: The Virtual DOM helps minimize unnecessary updates
+Avoiding Unnecessary Re-renders: The Virtual DOM helps minimize unn              <select 
+                ref={categoryRef}
+                className='border-[1px] border-gray-500 px-[5px] py-2 bg-white dark:bg-daccentS text-black dark:text-white rounded w-fit h-[60%]'
+                requiredsary updates
  by performing a "diffing" process to check which part of the UI needs to change.
   It allows React to update only the parts of the real DOM that actually need it.
 
@@ -152,6 +155,10 @@ const Carousel=()=>{
       frequencyRef.current.classList.remove("border-red-500");
       frequencyRef.current.classList.add("border-gray-500");
     }
+    if (categoryRef.current) {
+      categoryRef.current.classList.remove("border-red-500");
+      categoryRef.current.classList.add("border-gray-500");
+    }
   };
 
 
@@ -205,6 +212,8 @@ const Carousel=()=>{
     descriptionRef.current.classList.add("border-gray-500");
     frequencyRef.current.classList.remove("border-red-500");
     frequencyRef.current.classList.add("border-gray-500");
+    categoryRef.current.classList.remove("border-red-500");
+    categoryRef.current.classList.add("border-gray-500");
 
     let hasError = false;
 
@@ -218,6 +227,12 @@ const Carousel=()=>{
     if(selectedFrequency == "" || isNaN(selectedFrequency) || selectedFrequency <= 0){
       frequencyRef.current.classList.remove("border-gray-500");
       frequencyRef.current.classList.add("border-red-500");
+      hasError = true;
+    }
+
+    if(!selectedCategory){
+      categoryRef.current.classList.remove("border-gray-500");
+      categoryRef.current.classList.add("border-red-500");
       hasError = true;
     }
 
@@ -241,29 +256,35 @@ const Carousel=()=>{
    setShowTask(false);
    };
 
-   const markToday = (taskId) => {
+   const incrementCount = (taskId) => {
     const today = new Date().toDateString();
-    console.log('Marking today for task:', taskId, 'Date:', today);
     
     setTasks(prev => prev.map(task => {
       if (task.id === taskId) {
-        console.log('Current task:', task.name, 'Problems solved:', task.problemsSolved, 'Last marked:', task.lastMarkedDate);
-        
-        const lastMarked = task.lastMarkedDate ? new Date(task.lastMarkedDate).toDateString() : null;
-        const yesterday = new Date();
-        yesterday.setDate(yesterday.getDate() - 1);
-        const yesterdayString = yesterday.toDateString();
-        
-        console.log('Last marked:', lastMarked, 'Today:', today, 'Yesterday:', yesterdayString);
-        
-        // Always increment problems solved
+        // Increment problems solved
         let newProblemsSolved = task.problemsSolved + 1;
-        let newLastMarkedDate = task.lastMarkedDate;
-        
         
         return { 
           ...task, 
-          lastMarkedDate: newLastMarkedDate,
+          lastMarkedDate: today,
+          problemsSolved: newProblemsSolved
+        };
+      }
+      return task;
+    }));
+   };
+
+   const decrementCount = (taskId) => {
+    const today = new Date().toDateString();
+    
+    setTasks(prev => prev.map(task => {
+      if (task.id === taskId) {
+        // Decrement problems solved but don't go below 0
+        let newProblemsSolved = Math.max(0, task.problemsSolved - 1);
+        
+        return { 
+          ...task, 
+          lastMarkedDate: today,
           problemsSolved: newProblemsSolved
         };
       }
@@ -325,7 +346,7 @@ const Carousel=()=>{
               ></textarea>
             </div>
             <div className='flex items-center h-[15%]'>
-              <label className='text-accentTxt dark:text-daccentTxt mr-[5px]'>Category:</label>
+              <label className='text-accentTxt dark:text-daccentTxt mr-[5px]'>Category: *</label>
               <select 
                 ref={categoryRef}
                 className='border-[1px] px-[5px] py-[2px] bg-white dark:bg-daccentS text-black dark:text-white border-accentBorder2 dark:border-daccentBorder2 rounded w-fit h-fit'
@@ -549,12 +570,20 @@ const Carousel=()=>{
               </div>
               <div className='flex items-center justify-between w-full h-[30%]'>
                   <div className='text-[1rem] bebas-neue-regular text-accentTxt2 dark:text-daccentTxt '>DAY: {getElapsedDays(task.startDate)}/30</div>
-                  <button 
-                    onClick={() => markToday(task.id)}
-                    className='text-[1rem] bebas-neue-regular bg-accent1 text-white p-[2px] px-[5px] rounded hover:bg-accent0 transition-colors'
-                  >
-                    MARK +1
-                  </button>
+                  <div className='flex items-center space-x-2'>
+                    <button 
+                      onClick={() => decrementCount(task.id)}
+                      className='text-[1rem] bebas-neue-regular bg-red-500 text-white p-[2px] px-[5px] rounded hover:bg-red-600 transition-colors'
+                    >
+                      –
+                    </button>
+                    <button 
+                      onClick={() => incrementCount(task.id)}
+                      className='text-[1rem] bebas-neue-regular bg-accent1 text-white p-[2px] px-[5px] rounded hover:bg-accent0 transition-colors'
+                    >
+                      +
+                    </button>
+                  </div>
               </div>
             </div>
           </div>
