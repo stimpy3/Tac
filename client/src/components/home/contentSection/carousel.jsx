@@ -513,7 +513,7 @@ const Carousel=()=>{
                      }}/>
                     <Legend
                       wrapperStyle={{
-                        fontSize: "1rem",
+                        fontSize: "0.8rem",
                       }}
                       formatter={(value) => {
                         if (value === "Projected") {
@@ -570,18 +570,18 @@ const Carousel=()=>{
               </div>
               <div className='flex items-center justify-between w-full h-[30%]'>
                   <div className='text-[1rem] bebas-neue-regular text-accentTxt2 dark:text-daccentTxt '>DAY: {getElapsedDays(task.startDate)}/30</div>
-                  <div className='flex items-center space-x-2'>
+                  <div className='flex items-center w-fit h-fit mb-[10px] justify-between'>
                     <button 
                       onClick={() => decrementCount(task.id)}
-                      className='text-[1rem] bebas-neue-regular bg-red-500 text-white p-[2px] px-[5px] rounded hover:bg-red-600 transition-colors'
+                      className='text-[1rem] bebas-neue-regular text-red-500 p-[2px] p-[10px] w-[30px] mr-[10px] rounded-full transition-colors border-[2px] border-red-500'
                     >
-                      –
+                      <i class="fa-solid fa-chevron-down"></i>
                     </button>
                     <button 
                       onClick={() => incrementCount(task.id)}
-                      className='text-[1rem] bebas-neue-regular bg-accent1 text-white p-[2px] px-[5px] rounded hover:bg-accent0 transition-colors'
+                      className='text-[1rem] bebas-neue-regular text-blue-500 p-[2px] p-[10px] w-[30px] rounded-full transition-colors border-green-500 border-[2px] border-blue-500'
                     >
-                      +
+                      <i class="fa-solid fa-chevron-up"></i>
                     </button>
                   </div>
               </div>
