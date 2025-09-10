@@ -145,19 +145,19 @@ const Carousel=()=>{
     // Reset border colors
     if (nameRef.current) {
       nameRef.current.classList.remove("border-red-500");
-      nameRef.current.classList.add("border-gray-500");
+      nameRef.current.classList.add("border-accentBorder2 dark:border-daccentBorder2");
     }
     if (descriptionRef.current) {
       descriptionRef.current.classList.remove("border-red-500");
-      descriptionRef.current.classList.add("border-gray-500");
+      descriptionRef.current.classList.add("border-accentBorder2 dark:border-daccentBorder2");
     }
     if (frequencyRef.current) {
       frequencyRef.current.classList.remove("border-red-500");
-      frequencyRef.current.classList.add("border-gray-500");
+      frequencyRef.current.classList.add("border-accentBorder2 dark:border-daccentBorder2");
     }
     if (categoryRef.current) {
       categoryRef.current.classList.remove("border-red-500");
-      categoryRef.current.classList.add("border-gray-500");
+      categoryRef.current.classList.add("border-accentBorder2 dark:border-daccentBorder2");
     }
   };
 
@@ -207,31 +207,31 @@ const Carousel=()=>{
     
     // Reset all borders first
     nameRef.current.classList.remove("border-red-500");
-    nameRef.current.classList.add("border-gray-500");
+    nameRef.current.classList.add("border-accentBorder2 dark:border-daccentBorder2");
     descriptionRef.current.classList.remove("border-red-500");
-    descriptionRef.current.classList.add("border-gray-500");
+    descriptionRef.current.classList.add("border-accentBorder2 dark:border-daccentBorder2");
     frequencyRef.current.classList.remove("border-red-500");
-    frequencyRef.current.classList.add("border-gray-500");
+    frequencyRef.current.classList.add(" border-accentBorder2 dark:border-daccentBorder2");
     categoryRef.current.classList.remove("border-red-500");
-    categoryRef.current.classList.add("border-gray-500");
+    categoryRef.current.classList.add(" border-accentBorder2 dark:border-daccentBorder2");
 
     let hasError = false;
 
     // Check required fields
     if(selectedName == ""){
-      nameRef.current.classList.remove("border-gray-500");
+      nameRef.current.classList.remove("border-accentBorder2 dark:border-daccentBorder2");
       nameRef.current.classList.add("border-red-500");
       hasError = true;
     }
 
     if(selectedFrequency == "" || isNaN(selectedFrequency) || selectedFrequency <= 0){
-      frequencyRef.current.classList.remove("border-gray-500");
+      frequencyRef.current.classList.remove("border-accentBorder2 dark:border-daccentBorder2");
       frequencyRef.current.classList.add("border-red-500");
       hasError = true;
     }
 
     if(!selectedCategory){
-      categoryRef.current.classList.remove("border-gray-500");
+      categoryRef.current.classList.remove("border-accentBorder2 dark:border-daccentBorder2");
       categoryRef.current.classList.add("border-red-500");
       hasError = true;
     }
@@ -331,7 +331,7 @@ const Carousel=()=>{
               <label className='text-accentTxt dark:text-daccentTxt mb-2'>Task Name:</label>
               <input 
                 type="text" 
-                className='border-[1px] border-gray-500 px-[5px] py-2 bg-white dark:bg-daccentS text-black dark:text-white rounded h-[60%]' 
+                className='border-[1px]  border-accentBorder2 dark:border-daccentBorder2 px-[5px] py-2 bg-white dark:bg-daccentS text-black dark:text-white rounded h-[60%]' 
                 placeholder="e.g., LEETCODE"
                 ref={nameRef}
                 required
@@ -340,7 +340,7 @@ const Carousel=()=>{
             <div className='flex flex-col h-[35%]'>
               <label className='text-accentTxt dark:text-daccentTxt mb-2'>Description:</label>
               <textarea 
-                className='border-[1px] border-gray-500 px-[5px] py-2 bg-white dark:bg-daccentS text-black dark:text-white rounded resize-none h-[80%]' 
+                className='border-[1px]  border-accentBorder2 dark:border-daccentBorder2 px-[5px] py-2 bg-white dark:bg-daccentS text-black dark:text-white rounded resize-none h-[80%]' 
                 placeholder="Brief description of your task (optional)..."
                 ref={descriptionRef}
               ></textarea>
@@ -363,7 +363,7 @@ const Carousel=()=>{
               <label className='text-accentTxt dark:text-daccentTxt mr-[5px]'>Frequency:</label>
               <input 
                 type="number" 
-                className='border-[1px] border-gray-500 px-[5px] py-2 bg-white dark:bg-daccentS text-black dark:text-white rounded w-fit h-[60%]' 
+                className='border-[1px]  border-accentBorder2 dark:border-daccentBorder2 px-[5px] py-2 bg-white dark:bg-daccentS text-black dark:text-white rounded w-fit h-[60%]' 
                 placeholder="e.g.,20 (frequency per 30days)"
                 ref={frequencyRef}
                 min="1"
@@ -573,13 +573,13 @@ const Carousel=()=>{
                   <div className='flex items-center w-fit h-fit mb-[10px] justify-between'>
                     <button 
                       onClick={() => decrementCount(task.id)}
-                      className='text-[1rem] bebas-neue-regular text-red-500 p-[2px] p-[10px] w-[30px] mr-[10px] rounded-full transition-colors border-[2px] border-red-500'
+                      className='text-[1rem] text-red-500 bebas-neue-regular w-[30px] aspect-square mr-[10px] rounded-full border-[2px] border-red-500'
                     >
                       <i class="fa-solid fa-chevron-down"></i>
                     </button>
                     <button 
                       onClick={() => incrementCount(task.id)}
-                      className='text-[1rem] bebas-neue-regular text-blue-500 p-[2px] p-[10px] w-[30px] rounded-full transition-colors border-green-500 border-[2px] border-blue-500'
+                      className='text-[1rem] text-blue-500 bebas-neue-regular w-[30px] aspect-square rounded-full border-blue-500 border-[2px] border-blue-500'
                     >
                       <i class="fa-solid fa-chevron-up"></i>
                     </button>
