@@ -145,19 +145,19 @@ const Carousel=()=>{
     // Reset border colors
     if (nameRef.current) {
       nameRef.current.classList.remove("border-red-500");
-      nameRef.current.classList.add("border-accentBorder2 dark:border-daccentBorder2");
+      nameRef.current.classList.add("border-accentBorder2","dark:border-daccentBorder2");
     }
     if (descriptionRef.current) {
       descriptionRef.current.classList.remove("border-red-500");
-      descriptionRef.current.classList.add("border-accentBorder2 dark:border-daccentBorder2");
+      descriptionRef.current.classList.add("border-accentBorder2","dark:border-daccentBorder2");
     }
     if (frequencyRef.current) {
       frequencyRef.current.classList.remove("border-red-500");
-      frequencyRef.current.classList.add("border-accentBorder2 dark:border-daccentBorder2");
+      frequencyRef.current.classList.add("border-accentBorder2","dark:border-daccentBorder2");
     }
     if (categoryRef.current) {
       categoryRef.current.classList.remove("border-red-500");
-      categoryRef.current.classList.add("border-accentBorder2 dark:border-daccentBorder2");
+      categoryRef.current.classList.add("border-accentBorder2","dark:border-daccentBorder2");
     }
   };
 
@@ -207,31 +207,31 @@ const Carousel=()=>{
     
     // Reset all borders first
     nameRef.current.classList.remove("border-red-500");
-    nameRef.current.classList.add("border-accentBorder2 dark:border-daccentBorder2");
+    nameRef.current.classList.add("border-accentBorder2","dark:border-daccentBorder2");
     descriptionRef.current.classList.remove("border-red-500");
-    descriptionRef.current.classList.add("border-accentBorder2 dark:border-daccentBorder2");
+    descriptionRef.current.classList.add("border-accentBorder2","dark:border-daccentBorder2");
     frequencyRef.current.classList.remove("border-red-500");
-    frequencyRef.current.classList.add(" border-accentBorder2 dark:border-daccentBorder2");
+    frequencyRef.current.classList.add("border-accentBorder2","dark:border-daccentBorder2");
     categoryRef.current.classList.remove("border-red-500");
-    categoryRef.current.classList.add(" border-accentBorder2 dark:border-daccentBorder2");
+    categoryRef.current.classList.add("border-accentBorder2","dark:border-daccentBorder2");
 
     let hasError = false;
 
     // Check required fields
     if(selectedName == ""){
-      nameRef.current.classList.remove("border-accentBorder2 dark:border-daccentBorder2");
+      nameRef.current.classList.remove("border-accentBorder2","dark:border-daccentBorder2");
       nameRef.current.classList.add("border-red-500");
       hasError = true;
     }
 
     if(selectedFrequency == "" || isNaN(selectedFrequency) || selectedFrequency <= 0){
-      frequencyRef.current.classList.remove("border-accentBorder2 dark:border-daccentBorder2");
+      frequencyRef.current.classList.remove("border-accentBorder2","dark:border-daccentBorder2");
       frequencyRef.current.classList.add("border-red-500");
       hasError = true;
     }
 
     if(!selectedCategory){
-      categoryRef.current.classList.remove("border-accentBorder2 dark:border-daccentBorder2");
+      categoryRef.current.classList.remove("border-accentBorder2","dark:border-daccentBorder2");
       categoryRef.current.classList.add("border-red-500");
       hasError = true;
     }
