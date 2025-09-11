@@ -19,10 +19,45 @@ const TimeTable = () => {
   const [showCalender, setShowCalendar] = useState(false);
   const [leftDistance, setLeftDistance] = useState(0);
   const contentRef = useRef(null);
+    // Scroll to current time when component mounts
+  useEffect(() => {
+    if (contentRef.current) {
+      const scrollPosition = leftDistance - (window.innerWidth / 2) + 100; // Center the current time
+      contentRef.current.scrollLeft = Math.max(0, scrollPosition);
+    }
+  }, [leftDistance]);
+
 
   const handleCalender = () => {
     setShowCalendar(prev => !prev);
   };
+//drag to scroll functionality------------------------------------------------
+const [isDragging, setIsDragging] = useState(false);
+const [startX, setStartX] = useState(0);
+const [scrollLeft, setScrollLeft] = useState(0);
+
+const handleMouseDown = (e) => {
+    setIsDragging(true);
+    setStartX(e.pageX - contentRef.current.offsetLeft);
+    setScrollLeft(contentRef.current.scrollLeft);
+  };
+
+  const handleMouseLeave = () => {
+    setIsDragging(false);
+  };
+
+  const handleMouseUp = () => {
+    setIsDragging(false);
+  };
+
+  const handleMouseMove = (e) => {
+    if (!isDragging) return;
+    e.preventDefault();
+    const x = e.pageX - contentRef.current.offsetLeft;
+    const walk = (x - startX) * 1.5;
+    contentRef.current.scrollLeft = scrollLeft - walk;
+  };
+  //---------------------------------------------------------------
   let width = 100;
 
   const lines = Array.from({ length: 23 }, (_, i) => (
@@ -687,17 +722,20 @@ const TimeTable = () => {
       </div>;
   };
 
-  return (
-    <div data-label='masterContainer' className='w-screen h-screen flex relative bg-accentS dark:bg-daccentS'>
+ return (
+    <div data-label='masterContainer' className='w-[100%] min-h-screen h-[100%] flex flex-col relative bg-accentS dark:bg-daccentS'>
       {renderTaskModal()}
-      <button data-label='addTaskBtn' onClick={handleTaskModal} className="absolute z-[10] h-[60px] w-[60px] text-[2rem] flex items-center justify-center dark:bg-accentM bg-daccentM text-daccentTxt dark:text-accentTxt  rounded-full shadow-lg right-5 bottom-5 hover:bg-accent1 dark:hover:bg-accent2 hover:rotate-90 transition-all duration-300"><Plus className="scale-110" /></button>
+      <button data-label='addTaskBtn' onClick={handleTaskModal} className="fixed z-[10] h-[60px] w-[60px] text-[2rem] flex items-center justify-center dark:bg-accentM bg-daccentM text-daccentTxt dark:text-accentTxt rounded-full shadow-lg right-5 bottom-[20px] hover:bg-accent1 dark:hover:bg-accent2 hover:rotate-90 transition-all duration-300"><Plus className="scale-110" /></button>
       <Sidebar />
-      <div data-label='outerRightContainer' className=' w-[calc(100%-55px)] ml-[55px] p-[15px] flex justify-center '>
-        <div data-label='timeTableContainer' className='h-[516px] w-[98%] flex relative border-[1px] border-black'>
-          <div className={`min-w-[130px] h-full  flex flex-col items-center border-r-[1px] border-black`}>
+      <div className="w-[100%] max-[675px]:w-[100%] pl-[55px] max-[675px]:px-[15px] px-[15px] max-[675px]:ml-[0px] flex justify-center ">
+      <TopBar/>
+      </div>
+      <div data-label='outerRightContainer' className='w-[calc(100%-70px)] ml-[55px] max-[675px]:pr-[15px] max-[675px]:w-[100%] max-[675px]:ml-[0px] p-[15px] pr-[0px] flex justify-center '>
+        <div data-label='timeTableContainer' className='h-[516px] w-[100%] flex relative border-[1px] border-black overflow-hidden'>
+          <div className={`w-[130px] max-[675px]:w-[70px] h-full  flex flex-col items-center border-r-[1px] border-black`}>
             <section className='flex justify-betweenitems-center w-full min-h-[40px] bg-accentS2'>
               <button className='text-accentS3 dark:text-daccentS3  bg-daccentM w-full h-full flex items-center justify-center px-[10px]' onClick={handleCalender}>{(showCalender) ? <CalendarOff /> : <CalendarDays />}</button>
-              <section data-label='scrollContainer' className='bg-accentS2 dark:bg-daccentS2 px-[5px] border-b-[1px] border-black w-[90px] h-full flex items-center justify-around text-[1.6rem]'>
+              <section data-label='scrollContainer' className='max-[675px]:hidden bg-accentS2 dark:bg-daccentS2 px-[5px] border-b-[1px] border-black w-[90px] h-full flex items-center justify-around text-[1.6rem]'>
                 <button onClick={handleLeftScroll} className='mr-[5px] rounded-full h-[80%] aspect-square bg-accentM  text-accent0 hover:bg-black hover:text-accent2 transition-all duration-300 flex items-center justify-center border-[1px] border-accentS3  shadow-lg'><ChevronLeft /></button>
                 <button onClick={handleRightScroll} className='rounded-full h-[80%] aspect-square bg-accentM text-accent0 hover:bg-black hover:text-accent2 transition-all duration-300 flex items-center justify-center border-[1px] border-accentS3 shadow-lg'><ChevronRight /></button>
               </section>
@@ -723,7 +761,16 @@ const TimeTable = () => {
             </section>
           </div>
 
-          <div data-label='contentContainer' ref={contentRef} className='min-w-[900px] overflow-y-hidden overflow-x-hidden h-full bg-accentS flex flex-col relative'>
+          <div 
+            data-label='contentContainer' 
+            ref={contentRef} 
+            className='w-full overflow-y-hidden overflow-x-auto scrollbar-hide h-full bg-accentS flex flex-col relative cursor-grab active:cursor-grabbing'
+            onMouseDown={handleMouseDown}
+            onMouseLeave={handleMouseLeave}
+            onMouseUp={handleMouseUp}
+            onMouseMove={handleMouseMove}
+            style={{ scrollBehavior: 'smooth' }}
+          >
 
             <div data-label="currentLineContainer" className=" group absolute z-[6] w-fit h-[480px] bottom-0 flex flex-col items-center" style={{ left: `${leftDistance - 6.5}px` }}>
               <div data-label="currentLineCircle" className="w-[12px] h-[12px] border-[3px] border-accent2 bg-transparent rounded-full"></div>
@@ -741,7 +788,7 @@ const TimeTable = () => {
             </div>
 
             {lines}
-            <section data-label='timeContainer' className='overflow-y-clip w-[2400px] min-h-[40px] bg-accent4 text-white flex border-black border-b-[1px]'>
+            <section data-label='timeContainer' className='overflow-y-clip w-[2800px] min-h-[40px] bg-accent4 text-white flex border-black border-b-[1px]'>
               <div className='w-[100px] text-[1rem] flex flex-col items-center justify-center'>12-1<span className='text-[0.6rem]'>AM</span></div>
               <div className='w-[100px] flex flex-col items-center justify-center'>1-2<span className='text-[0.6rem]'>AM</span></div>
               <div className='w-[100px] flex flex-col items-center justify-center'>2-3<span className='text-[0.6rem]'>AM</span></div>
@@ -768,7 +815,7 @@ const TimeTable = () => {
               <div className='w-[100px] flex flex-col items-center justify-center '>11-12<span className='text-[0.6rem]'>PM</span></div>
 
             </section>
-            <section data-label='planContainer' className='flex flex-col w-[2400px] h-[476px] border-b-[1px] bg-accentS dark:bg-daccentM'>
+            <section data-label='planContainer' className='flex flex-col w-[2800px] h-[476px] border-b-[1px] bg-accentS dark:bg-daccentM'>
               <div className='h-[68px] w-full flex items-center border-b-[1px] border-accentS3 dark:border-accentTxt2 py-[10px] relative'>
                 {mondayTasks()}
               </div>
@@ -797,7 +844,9 @@ const TimeTable = () => {
 
         </div>
       </div>
+       <p className='w-full p-[15px] flex justify-center text-accentS3 text-daccentS3'>&lt;&lt;drag to see more&gt;&gt;</p>
     </div>
+   
   );
 
 };
