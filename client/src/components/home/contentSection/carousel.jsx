@@ -314,69 +314,56 @@ const Carousel=()=>{
    const renderTaskPopup = () => {
   if (showTask) {
     return (
-      <div className='fixed z-[10] inset-0 bg-black  bg-opacity-20 backdrop-blur-sm flex justify-center items-center'>
-        <div className='absolute inset-0' onClick={closeTaskPopup}></div>
-        <div className='bg-gray-100 dark:bg-daccentS h-[70%] min-w-[300px] w-[40%] max-w-[600px] max-h-[400px] rounded-lg shadow-lg overflow-hidden relative z-10'>
-          <div className='bg-[url("/modalBG.png")] bg-cover bg-no-repeat px-[12px] h-[60px] flex items-center justify-between border-b-gray-500 border-b-[1px]'>
-            <div className='flex'>
-              <div>
-                <p className='text-[1.2rem] text-white font-bold'>Add a Task to Track</p>
-                <p className='text-[0.7rem] text-gray-100'>Track your progress with graphs</p>
+       <div className='fixed inset-0 bg-black bg-opacity-20 backdrop-blur-sm flex justify-center items-center z-50'>
+          <div className='absolute inset-0' onClick={closePopup}></div>
+          <div className='bg-accentS dark:bg-daccentS2 h-[70%] min-w-[250px] w-[40%] max-w-[800px] max-h-[400px] rounded-lg shadow-lg overflow-hidden relative z-10'>
+            <div className='bg-[url("/modalBG.png")] bg-cover bg-no-repeat  px-[12px] h-[60px] flex items-center justify-between border-accentBorder2 dark:border-daccentBorder2 border-b-[1px]'>
+                  <div className='flex'>
+                  <div>
+                  <p className='text-[1.2rem] text-white font-bold'>Add a Deadline</p>
+                  <p className='text-[0.7rem] text-gray-100'>Deadlines track what your brain drops</p>
+                  </div>
+                  </div>
+                  <button onClick={closePopup} className='text-white text-[1.6rem]'><X/></button>
+            </div>
+            <div data-label='DeadlineEventInputContainer' className=' px-[10px] py-[20px] w-full h-[70%] flex flex-col justify-around'>
+              <div className='flex flex-col'>
+                <label  className="text-accentTxt dark:text-daccentTxt">event name:</label>
+                <input type='text' placeholder='Max 13 characters' className='px-[5px] border-[1px] border-accentBorder2 dark:border-daccentBorder2 bg-accentS dark:bg-daccentS2 rounded text-accentTxt dark:text-daccentTxt' 
+                ref={nameRef} maxlength="13" required></input>
+              </div>
+
+              <div className='flex flex-col'>
+                 <label className="text-accentTxt dark:text-daccentTxt">event details:</label>
+                 <textarea className='border-[1px] px-[5px] border-accentBorder2 dark:border-daccentBorder2 bg-accentS dark:bg-daccentS2 rounded text-accentTxt dark:text-daccentTxt'></textarea> 
+              </div>
+
+              <div className='flex flex-col maxjustify-between'>
+                  <div className='flex'>
+                     <label className="text-accentTxt dark:text-daccentTxt">date:</label>
+                     <input type='date' className='ml-[5px] mb-[20px] px-[5px] border-[1px] border-accentBorder2 dark:border-daccentBorder2 rounded bg-accentS dark:bg-daccentS2 text-accentTxt dark:text-daccentTxt'
+                     ref={dateRef}></input>
+                  </div>
+                  <div className='flex'>
+                    <label  className="text-accentTxt dark:text-daccentTxt">Category:</label>
+                    <select id="my-dropdown" name="fruits" className=' ml-[5px] border-[1px] border-accentBorder2 dark:border-daccentBorder2 bg-accentS dark:bg-daccentS2 rounded text-accentTxt dark:text-daccentTxt'
+                    ref={categoryRef}>
+                           <option value="academic">Academic</option>
+                           <option value="health">Health & Wellness</option>
+                           <option value="career">Work & Career</option>
+                           <option value="personal">Personal Life</option>
+                           <option value="other">Other</option>
+                     </select>
+                  </div>
               </div>
             </div>
-            <button onClick={closeTaskPopup} className='text-white text-[1.6rem]'><X/></button>
-          </div>
-          <div data-label='TaskInputContainer' className='px-[10px] py-[20px] w-full h-[70%] flex flex-col justify-between'>
-            <div className='flex flex-col h-[20%]'>
-              <label className='text-accentTxt dark:text-daccentTxt mb-2'>Task Name:</label>
-              <input 
-                type="text" 
-                className='border-[1px]  border-accentBorder2 dark:border-daccentBorder2 px-[5px] py-2 bg-white dark:bg-daccentS text-black dark:text-white rounded h-[60%]' 
-                placeholder="e.g., LEETCODE"
-                ref={nameRef}
-                required
-              />
+            <div className='flex px-[12px] h-[15%] text-[1.1rem] space-x-5 justify-center items-center border-t-[1px] border-accentBorder2 dark:border-daccentBorder2'>
+                <button onClick={createEvent} className='bg-gradient-to-r from-accent0 via-accent1 to-accent0 w-full text-white px-4 py-2 rounded'>Create</button>
+                <button onClick={closePopup} className=' w-full px-4 py-2 rounded text-white bg-black '>Cancel</button>
             </div>
-            <div className='flex flex-col h-[35%]'>
-              <label className='text-accentTxt dark:text-daccentTxt mb-2'>Description:</label>
-              <textarea 
-                className='border-[1px]  border-accentBorder2 dark:border-daccentBorder2 px-[5px] py-2 bg-white dark:bg-daccentS text-black dark:text-white rounded resize-none h-[80%]' 
-                placeholder="Brief description of your task (optional)..."
-                ref={descriptionRef}
-              ></textarea>
-            </div>
-            <div className='flex items-center h-[15%]'>
-              <label className='text-accentTxt dark:text-daccentTxt mr-[5px]'>Category: *</label>
-              <select 
-                ref={categoryRef}
-                className='border-[1px] px-[5px] py-[2px] bg-white dark:bg-daccentS text-black dark:text-white border-accentBorder2 dark:border-daccentBorder2 rounded w-fit h-fit'
-                required
-              >
-                <option value="academic">Academic</option>
-                <option value="health">Health & Wellness</option>
-                <option value="career">Work & Career</option>
-                <option value="personal">Personal Life</option>
-                <option value="other">Other</option>
-              </select>
-            </div>
-            <div className='flex items-center h-[15%]'>
-              <label className='text-accentTxt dark:text-daccentTxt mr-[5px]'>Frequency:</label>
-              <input 
-                type="number" 
-                className='border-[1px]  border-accentBorder2 dark:border-daccentBorder2 px-[5px] py-2 bg-white dark:bg-daccentS text-black dark:text-white rounded w-fit h-[60%]' 
-                placeholder="e.g.,20 (frequency per 30days)"
-                ref={frequencyRef}
-                min="1"
-                required
-              />
-            </div>
-          </div>
-          <div className='flex px-[12px] h-[15%] text-[1.1rem] space-x-[10px] justify-center items-center border-t-[1px] border-gray-500'>
-            <button onClick={addTask} className='bg-gradient-to-r from-accent0 via-accent1 to-accent0 w-full text-white px-4 py-2 rounded'>Create</button>
-            <button onClick={closeTaskPopup} className='bg-black w-full text-white px-4 py-2 rounded border-[1px] border-gray-600'>Cancel</button>
+
           </div>
         </div>
-      </div>
     );
   } else {
     return null;
