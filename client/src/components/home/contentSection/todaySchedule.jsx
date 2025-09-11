@@ -105,7 +105,7 @@ const TodaySchedule = () => {
 
   return (
     <div className="relative todaysScheduleContainer flex flex-col w-full h-fit mt-[30px] rounded-xl bg-accentM dark:bg-daccentM shadow-none">
-      <div data-label="lable&ScrollBtnContainer" className='absolute h-[60px] w-[60%]'>
+      <div data-label="lable&ScrollBtnContainer" className='absolute h-[60px] w-[calc(100%-270px)]'>
         <div data-label="INNERlable&ScrollBtnContainer" className='flex items-center justify-between w-full h-[60px] bg-accentS dark:bg-daccentS rounded-br-xl pb-[5px] pr-[20px]'>
           <div data-label="labelContainer" className='flex mr-[10px] h-full items-center'>
             <p className='mr-[5px] flex items-center text-[1.5rem] text-accentTxt dark:text-daccentTxt w-fit h-full whitespace-nowrap'>
@@ -121,7 +121,7 @@ const TodaySchedule = () => {
           </div>
         </div>
       </div>
-      <div data-label="topLeftCurveContainer" className="bg-accentS dark:bg-daccentS w-[10px] h-[10px] absolute left-[60%]">
+      <div data-label="topLeftCurveContainer" className="bg-accentS dark:bg-daccentS w-[10px] h-[10px] absolute left-[calc(100%-270px)]">
         <div data-label="topLeftCurve" className="w-[10px] h-[10px] rounded-tl-xl bg-accentM dark:bg-daccentM"></div>
       </div>
       <div data-label="topBottomLeftCurveContainer" className="bg-accentS dark:bg-daccentS w-[15px] h-[15px] absolute top-[60px] left-[0px]">
@@ -129,9 +129,9 @@ const TodaySchedule = () => {
       </div>
       <div data-label="schedulerContainer" className="h-[150px] w-full  flex flex-col">
         <div data-label="topDescContainer" className="flex h-[60px] w-[100%] p-[10px] pb-[0px] ">
-          <div data-label="description" className="flex items-center justify-between p-[5px] ml-[calc(60%+12px)] bg-accentS2 dark:bg-daccentS2 w-full h-full rounded-[7px]">
-            <p className="text-accentTxt w-full dark:text-daccentTxt text-[1rem] flex justify-center"> {currTasks && currTasks.name ? currTasks.name : "Task Description"}</p>
-            <div className="flex items-center min-w-[130px] border-l-[2px] border-daccentS3 justify-center">
+          <div data-label="description" class="absolute right-[10px] flex items-center justify-between p-[5px] bg-accentS2 dark:bg-daccentS2 w-[250px] h-[50px] rounded-[7px]">
+            <p className="lato text-accentTxt w-full dark:text-daccentTxt text-[1rem] flex justify-center"> {currTasks && currTasks.name ? currTasks.name.slice(0,17)+"..." : "Task Description"}</p>
+            <div className="flex items-center min-w-[100px] border-l-[2px] border-daccentS3 justify-center">
                 {
                   currTasks && currTasks.startTime && currTasks.endTime ? (() => {
                     const [sh, sm] = currTasks.startTime.split(":").map(Number);
