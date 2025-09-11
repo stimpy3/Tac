@@ -114,7 +114,7 @@ const TodaySchedule = () => {
       <div data-label="lable&ScrollBtnContainer" className='absolute h-[60px] w-[calc(100%-270px)]'>
         <div data-label="INNERlable&ScrollBtnContainer" className='min-w-[43px] flex items-center justify-between w-full h-[60px] bg-accentS dark:bg-daccentS rounded-br-xl pb-[5px]'>
           
-          <button className='hidden relative max-[415px]:justify-start max-[415px]:pl-[10px] max-[415px]:flex text-accentS3 dark:text-daccentS3 w-full h-full flex items-center justify-center px-[20px]' onClick={handleCalender}>{(showCalender) ? <CalendarOff /> : <CalendarDays />}</button>
+          <button className='hidden relative max-[415px]:justify-start max-[415px]:pl-[10px] max-[415px]:flex text-accentS3 dark:text-daccentS3 w-full h-full flex items-center justify-center' onClick={handleCalender}>{(showCalender) ? <CalendarOff /> : <CalendarDays />}</button>
           {(showCalender) ?
               <div className='absolute top-[50px] left-[-10px] z-10'>
                 <Calendar />
@@ -138,7 +138,7 @@ const TodaySchedule = () => {
             </div>
 
           </div>
-          <div data-label="btnContainer" className='max-[410px]:hidden mx-[10px] min-w-[80px] h-full flex items-center'>
+          <div data-label="btnContainer" className='max-[415px]:hidden mx-[10px] min-w-[80px] h-full flex items-center pr-[10px]'>
             <button onClick={handleLeftScroll} className='flex items-center justify-center border-[1px] border-gray-500 shadow-lg w-[35px] aspect-square rounded-full bg-accentS2 dark:bg-daccentS2 text-accentTxt dark:text-daccentTxt mr-[5px] hover:bg-accent1 dark:hover:bg-accent1 hover:text-white transition-colors duration-400'><ChevronLeft /></button>
             <button onClick={handleRightScroll} className='flex items-center justify-center border-[1px] border-gray-500 shadow-lg w-[35px] aspect-square rounded-full bg-accentS2 dark:bg-daccentS2 text-accentTxt dark:text-daccentTxt hover:bg-accent1 dark:hover:bg-accent1 hover:text-white transition-colors duration-400'><ChevronRight /></button>
           </div>
