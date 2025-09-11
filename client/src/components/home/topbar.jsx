@@ -98,7 +98,7 @@ const TopBar = ({modal,setModal}) => {
         </div>:<></>}
         <div className="flex flex-col items-center justify-center w-fit h-full">
            <h1 className="text-[1.5rem] max-[515px]:text-[1.1rem] text-accentTxt dark:text-daccentTxt">Welcome {username ? (username.split(" ")[0].length > 10 ? "" : username.split(" ")[0]) : ""}</h1>
-           <p className="text-[1rem] text-gray-500">
+           <p className="max-[375px]:hidden text-[1rem] text-gray-500">
              <span className="text-accentS3 text-[0.9rem] dark:text-daccentS3">{date}</span>
            </p>
         </div>
@@ -107,11 +107,11 @@ const TopBar = ({modal,setModal}) => {
       {/* Right side icons + profile */}
       <div className="h-full flex items-center gap-[20px]">
         {/* Theme toggle */}
-        <button onClick={() => setMode((prev) => !prev)}>
-          {mode ? <MoonStar className="text-accentS3 dark:text-daccentS3 hover:text-accent1" /> : <Sun className="text-accentS3 dark:text-daccentS3 hover:text-accent1" />}
-        </button>
-
-         <button className='hidden relative max-[565px]:inline text-accentS3 dark:text-daccentS3 w-full h-full flex items-center justify-center px-[20px]' onClick={handleCalender}>{(showCalender) ? <CalendarOff /> : <CalendarDays />}</button>
+        <div className="min-w-[70px] flex justify-between items-center h-full text-accentS3 dark:text-daccentS3 ">
+          <button onClick={()=>setMode(prev=>!prev)}>
+            {mode?<MoonStar className="hover:text-accent1"/>:<Sun className="hover:text-accent1"/>}
+          </button>
+          <button className='hidden relative max-[565px]:inline max-[415px]:hidden text-accentS3 dark:text-daccentS3 w-full h-full flex items-center justify-center px-[20px]' onClick={handleCalender}>{(showCalender) ? <CalendarOff /> : <CalendarDays />}</button>
           {(showCalender) ?
               <div className='absolute top-[70px] right-[60px] z-10'>
                 <Calendar />
@@ -123,7 +123,7 @@ const TopBar = ({modal,setModal}) => {
             }
 
         {/* Notifications */}
-        <button ref={bellRef} className="pl-[15px] relative w-[50px] h-[40px]"
+        <button ref={bellRef} className="relative"
           onClick={() => {
             setShowNotif((prev) => !prev);
           }}>
@@ -139,6 +139,7 @@ const TopBar = ({modal,setModal}) => {
             </div>
           )}
         </button>
+        </div>
 
         {/* Notification dropdown */}
         {notifArr.length > 0 && showNotif && (

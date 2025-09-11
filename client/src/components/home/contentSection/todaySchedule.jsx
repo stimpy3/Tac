@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { ChevronRight, ChevronLeft, SquarePen, CircleHelp } from 'lucide-react';
+import { ChevronRight, ChevronLeft, SquarePen, CircleHelp,CalendarDays, CalendarOff } from 'lucide-react';
 import Tooltip from "../../tooltip";
+import Calendar from '../../calendar';
 import gsap from "gsap";
 import axios from "axios";
 
@@ -103,10 +104,27 @@ const TodaySchedule = () => {
     }
   }, [leftDistance]);
 
+  const handleCalender = () => {
+      setShowCalendar(prev => !prev);
+    };
+  const [showCalender, setShowCalendar] = useState(false);
+
   return (
     <div className="relative todaysScheduleContainer flex flex-col w-full h-fit mt-[30px] rounded-xl bg-accentM dark:bg-daccentM shadow-none">
       <div data-label="lable&ScrollBtnContainer" className='absolute h-[60px] w-[calc(100%-270px)]'>
-        <div data-label="INNERlable&ScrollBtnContainer" className='flex items-center justify-between w-full h-[60px] bg-accentS dark:bg-daccentS rounded-br-xl pb-[5px]'>
+        <div data-label="INNERlable&ScrollBtnContainer" className='min-w-[43px] flex items-center justify-between w-full h-[60px] bg-accentS dark:bg-daccentS rounded-br-xl pb-[5px]'>
+          
+          <button className='hidden relative max-[415px]:justify-start max-[415px]:pl-[10px] max-[415px]:flex text-accentS3 dark:text-daccentS3 w-full h-full flex items-center justify-center px-[20px]' onClick={handleCalender}>{(showCalender) ? <CalendarOff /> : <CalendarDays />}</button>
+          {(showCalender) ?
+              <div className='absolute top-[50px] left-[-10px] z-10'>
+                <Calendar />
+              </div>
+              :
+              <div className='hidden'>
+                <Calendar />
+              </div>
+            }
+          
           <div data-label="labelContainer" className='flex mr-[10px] h-full items-center'>
             <p className='mr-[5px] flex items-center text-[1.5rem] text-accentTxt dark:text-daccentTxt w-fit h-full whitespace-nowrap'>
               <span className="max-[630px]:hidden">Today's Schedule</span>
@@ -126,7 +144,7 @@ const TodaySchedule = () => {
           </div>
         </div>
       </div>
-      <div data-label="topLeftCurveContainer" className="bg-accentS dark:bg-daccentS w-[10px] h-[10px] absolute left-[calc(100%-270px)]">
+      <div data-label="topLeftCurveContainer" className="bg-accentS dark:bg-daccentS w-[10px] h-[10px] absolute left-[calc(100%-270px)] max-[355px]:left-[43px]">
         <div data-label="topLeftCurve" className="w-[10px] h-[10px] rounded-tl-xl bg-accentM dark:bg-daccentM"></div>
       </div>
       <div data-label="topBottomLeftCurveContainer" className="bg-accentS dark:bg-daccentS w-[15px] h-[15px] absolute top-[60px] left-[0px]">
@@ -134,8 +152,8 @@ const TodaySchedule = () => {
       </div>
       <div data-label="schedulerContainer" className="h-[150px] w-full  flex flex-col">
         <div data-label="topDescContainer" className="flex h-[60px] w-[100%] p-[10px] pb-[0px] ">
-          <div data-label="description" class="absolute right-[10px] flex items-center justify-between p-[5px] bg-accentS2 dark:bg-daccentS2 w-[250px] h-[50px] rounded-[7px]">
-            <div className="flex w-[calc(100%-100px)] justify-evenly">
+          <div data-label="description" class="max-[355px]:w-[calc(100%-63px)] absolute right-[10px] flex items-center justify-between p-[5px] bg-accentS2 dark:bg-daccentS2 w-[250px] h-[50px] rounded-[7px]">
+            <div className="flex w-[calc(100%-100px)] max-[355px]:w-[100%] justify-evenly">
           
             <p className="flex justify-center max-[515px]:hidden lato text-accentTxt w-full dark:text-daccentTxt text-[1rem] flex justify-center"> {currTasks && currTasks.name ? currTasks.name.slice(0,17)+"..." : "Task Description"}</p>
             <p className="w-fit hidden max-[515px]:flex text-center lato text-accentTxt dark:text-daccentTxt text-[1rem] flex"> {currTasks && currTasks.name ? currTasks.name.slice(0,13)+"..." : "Schedule"}</p>
@@ -146,7 +164,7 @@ const TodaySchedule = () => {
             </div>
            
             </div>
-            <div className="flex items-center min-w-[100px] border-l-[2px] border-daccentS3 justify-center">
+            <div className="max-[355px]:hidden flex items-center min-w-[100px] border-l-[2px] border-daccentS3 justify-center">
                 {
                   currTasks && currTasks.startTime && currTasks.endTime ? (() => {
                     const [sh, sm] = currTasks.startTime.split(":").map(Number);
