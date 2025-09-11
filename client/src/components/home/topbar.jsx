@@ -3,8 +3,9 @@ import { Sun, MoonStar } from "lucide-react";
 import { useDarkMode } from "../../darkModeContext";
 import { getCurrentUser } from "../../utils/auth";
 import { useNotif } from "../../notifContext";
+import { useNavigate, useLocation } from "react-router-dom";
 
-const TopBar = () => {
+const TopBar = ({modal,setModal}) => {
   const user = getCurrentUser();
   const username = user?.username || user?.name || "";
   const useremail = user?.email || "";
@@ -44,16 +45,35 @@ const TopBar = () => {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [showNotif]);//Including showNotif ensures the latest value is used in the click handler.
-
+  
+  const [showMenu,setShowMenu]=useState(false);
+  const toggleMenu=()=>{
+    setShowMenu(prev=>!prev);
+  };
+ const navigate = useNavigate();
+ const location = useLocation();
+ const baseClasses = "w-full h-fit px-[5px] py-[5px] border-b border-b-accentBorder2 dark:border-b-daccentBorder2";
+ const isActive = (path) => location.pathname === path ? "text-accent1" : "text-accentTxt dark:text-daccentTxt";
 
   return (
     <div className="w-full h-[120px] pl-[20px] flex justify-between items-center max-[675px]:pl-[0px]">
       {/* greeting + menu */}
-      <div className="flex h-full justify-center">
-        <div className="mr-[20px] flex h-full items-center justify-center hidden text-accentTxt dark:text-daccentTxt max-[675px]:flex">
-           <i class="fa-solid fa-bars text-[1.5rem] text-accentS3 dark:text-daccentS3"></i>
-        </div>
-
+        <div className="flex h-full justify-center">
+        <button onClick={toggleMenu} className="hidden relative mr-[20px] flex h-full items-center justify-center text-accentTxt dark:text-daccentTxt max-[675px]:flex">
+           <i class="fa-solid fa-bars text-[1.5rem] text-accentS3 dark:text-daccentS3 hover:text-accentTxt hover:dark:text-daccentTxt"></i>
+        </button>
+        {(showMenu)?<div className="absolute botrtom-0 w-[100px] h-fit
+        bg-accentM/60 dark:bg-daccentM/60 backdrop-blur-sm border border-accentBorder2 dark:border-daccentBorder2
+        rounded-lg z-[10] top-[80px] left-[20px]">
+          <button onClick={() => navigate("/home")} 
+             className={`${baseClasses} ${isActive("/home")}`}>Home</button>
+          <button className='w-full h-fit px-[5px] py-[5px] text-accentTxt hover:text-accent2 dark:text-daccentTxt 
+                           border-b border-b-accentBorder2 dark:border-b-daccentBorder2'>Analytics</button>
+          <button onClick={() => navigate("/timetable")} 
+             className={`${baseClasses} ${isActive("/timetable")}`}>TimeTable</button>
+          <button onClick={() => {setModal(true); setShowMenu(false);}} 
+           className={`${baseClasses} text-accentTxt dark:text-daccentTxt`}>logout</button>
+        </div>:<></>}
         <div className="flex flex-col items-center justify-center w-fit h-full">
            <h1 className="text-[1.5rem] text-accentTxt dark:text-daccentTxt">Welcome {username.split(" ")[0]} 👋</h1>
            <p className="text-[1rem] text-gray-500">
@@ -143,6 +163,33 @@ const TopBar = () => {
             </section>
           </section>
         </div>
+
+        <div className="hidden max-[675px]:flex">
+           {
+            (user && user?.picture && !user.picture.includes("default-user")) ? (
+              <div className="w-[50px] h-[50px] rounded-full border-[1px] border-accentBorder2 dark:border-daccentBorder2 shadow-lg overflow-hidden">
+                <img
+                  src={user.picture}
+                  alt="User"
+                  className="w-full h-full object-cover"
+                  onError={(e) => {
+                    e.target.onerror = null;
+                    e.target.style.display = "none";
+                    e.target.parentElement.innerHTML = `
+                      <div class="flex items-center justify-center text-[1.4rem] text-white w-full h-full ${userColor}">
+                        ${username && username[0] ? username[0].toUpperCase() : `<i class='fa-solid fa-user'></i>`}
+                      </div>`;
+                  }}
+                />
+              </div>
+            ) : (
+              <div className={`flex items-center justify-center text-[1.4rem] text-white w-[50px] h-[50px] ${userColor} rounded-full border border-accentS3 dark:border-accentS3 shadow-lg`}>
+                {username && username[0] ? username[0].toUpperCase() : <i className="fa-solid fa-user"></i>}
+              </div>
+            )
+          }
+        </div>
+
       </div>
     </div>
   );
