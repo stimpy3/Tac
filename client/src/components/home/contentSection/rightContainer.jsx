@@ -501,8 +501,10 @@ const deleteEvent = async (id) => {
   //-----------------------------------------------------------------------------------------------
 
 
+
 return(
-<div data-label='rightSide' className="flex flex-col w-[265px] h-fit min-w-[265px] items-center max-[985px]:flex-row ">
+<div data-label='rightSide' className="flex flex-col w-[265px] max-[985px]:w-[100%] h-fit min-w-[265px] items-center max-[985px]:items-start max-[985px]:flex-row max-[985px]:pb-[20px]">
+      
       <div data-label='timeOuterDiv' className=' min-w-[265px] w-full h-[170px] pl-[15px] pb-[40px] py-[0px] flex max-[985px]:hidden'>
         <div className='w-[250px] h-full rounded-xl bg-white shadow-lg border-[1px] border-accentBorder2 dark:border-daccentBorder2 overflow-hidden'>
            <div className={`relative ${sky} text-white w-full h-full 
@@ -520,13 +522,13 @@ return(
      {/* Calendar Component - separated from original code */}
      <Calendar />
 
-      <div data-label='deadlineContainer' className='mt-[40px] min-w-[265px] w-full h-fit p-[15px] pr-[0px] max-[985px]:pr-[15px]'>
+      <div data-label='deadlineContainer' className='flex min-w-[265px] max-[985px]:w-full max-[985px]:w-[100%] mt-[40px] max-[985px]:mt-[0px] h-fit p-[15px] pr-[0px] max-[985px]:pr-[15px]'>
         {renderPopup()}
         <div data-label='innerDeadlineContainer' className='w-full min-h-[50px] h-fit rounded-lg bg-accentM dark:bg-daccentS2 shadow-lg border-[1px] border-b-[0px] border-accentBorder2 dark:border-daccentBorder2 overflow-hidden'>
            <section data-label='headingSection' className='w-full h-[50px] bg-accentS2 dark:bg-daccentM text-accentTxt2 font-medium dark:text-daccentTxt flex items-center justify-between px-[10px]'>
             <p>Upcoming Events ({eventCount})</p><button onClick={openPopup} className='text-[1.5rem] text-accent1'>+</button>
            </section>
-           <section data-label='eventsSection' className='flex flex-col h-fit max-h-[300px] overflow-x-hidden overflow-y-auto'>
+           <section data-label='eventsSection' className='flex flex-col h-fit w-full max-h-[300px] overflow-x-hidden overflow-y-auto'>
              {
               /*onClick={deleteEvent(index)}
               This immediately calls deleteEvent(index) during rendering—

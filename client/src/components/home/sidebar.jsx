@@ -10,7 +10,7 @@ const Sidebar = ({ modal, setModal }) => {
 const isActive = (path) => location.pathname === path ? "text-accent1" : "text-accentS3 dark:text-daccentS3";
 
 return (
-  <section className="w-[70px] h-screen pr-[15px] fixed border-box">
+  <section className="w-[70px] h-screen pr-[15px] fixed border-box max-[675px]:hidden">
     <div className="flex flex-col h-full w-full bg-accentM dark:bg-daccentM shadow-lg px-[0px] py-[5px] items-center border-r-[1px] border-accentBorder2 dark:border-daccentBorder2">
       <div
         data-label="logoContainer"

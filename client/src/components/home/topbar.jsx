@@ -47,15 +47,19 @@ const TopBar = () => {
 
 
   return (
-    <div className="w-full h-[120px] pl-[20px] flex justify-between items-center">
-      {/* Greeting + Date */}
-      <div className="flex flex-col justify-center">
-        <h1 className="text-[1.5rem] text-accentTxt dark:text-daccentTxt">
-          Welcome {username.split(" ")[0]} 👋
-        </h1>
-        <p className="text-[1rem] text-gray-500">
-          <span className="text-accentS3 text-[0.9rem] dark:text-daccentS3">{date}</span>
-        </p>
+    <div className="w-full h-[120px] pl-[20px] flex justify-between items-center max-[675px]:pl-[0px]">
+      {/* greeting + menu */}
+      <div className="flex h-full justify-center">
+        <div className="mr-[20px] flex h-full items-center justify-center hidden text-accentTxt dark:text-daccentTxt max-[675px]:flex">
+           <i class="fa-solid fa-bars text-[1.5rem] text-accentS3 dark:text-daccentS3"></i>
+        </div>
+
+        <div className="flex flex-col items-center justify-center w-fit h-full">
+           <h1 className="text-[1.5rem] text-accentTxt dark:text-daccentTxt">Welcome {username.split(" ")[0]} 👋</h1>
+           <p className="text-[1rem] text-gray-500">
+             <span className="text-accentS3 text-[0.9rem] dark:text-daccentS3">{date}</span>
+           </p>
+        </div>
       </div>
 
       {/* Right side icons + profile */}
@@ -105,28 +109,30 @@ const TopBar = () => {
         )}
 
         {/* Profile */}
-        <div className="h-[60px] w-[220px] bg-accentM dark:bg-daccentM flex items-center rounded-full pl-[5px] border-[1px] border-accentBorder2 dark:border-daccentBorder2">
-          {(user && user.picture && !user.picture.includes("default-user")) ? (
-            <div className="w-[50px] h-[50px] rounded-full border-[1px] border-accentBorder2 dark:border-daccentBorder2 shadow-lg overflow-hidden">
-              <img
-                src={user.picture}
-                alt="User"
-                className="w-full h-full object-cover"
-                onError={(e) => {
-                  e.target.onerror = null;
-                  e.target.style.display = "none";
-                  e.target.parentElement.innerHTML = `
-                    <div class="flex items-center justify-center text-[1.4rem] text-white w-full h-full ${userColor}">
-                      ${username && username[0] ? username[0].toUpperCase() : `<i class='fa-solid fa-user'></i>`}
-                    </div>`;
-                }}
-              />
-            </div>
-          ) : (
-            <div className={`flex items-center justify-center text-[1.4rem] text-white w-[50px] h-[50px] ${userColor} rounded-full border border-accentS3 dark:border-accentS3 shadow-lg`}>
-              {username && username[0] ? username[0].toUpperCase() : <i className="fa-solid fa-user"></i>}
-            </div>
-          )}
+        <div className="max-[675px]:hidden h-[60px] w-[220px] bg-accentM  dark:bg-daccentM flex items-center rounded-full pl-[5px] border-[1px] border-accentBorder2 dark:border-daccentBorder2">
+          {
+            (user && user?.picture && !user.picture.includes("default-user")) ? (
+              <div className="w-[50px] h-[50px] rounded-full border-[1px] border-accentBorder2 dark:border-daccentBorder2 shadow-lg overflow-hidden">
+                <img
+                  src={user.picture}
+                  alt="User"
+                  className="w-full h-full object-cover"
+                  onError={(e) => {
+                    e.target.onerror = null;
+                    e.target.style.display = "none";
+                    e.target.parentElement.innerHTML = `
+                      <div class="flex items-center justify-center text-[1.4rem] text-white w-full h-full ${userColor}">
+                        ${username && username[0] ? username[0].toUpperCase() : `<i class='fa-solid fa-user'></i>`}
+                      </div>`;
+                  }}
+                />
+              </div>
+            ) : (
+              <div className={`flex items-center justify-center text-[1.4rem] text-white w-[50px] h-[50px] ${userColor} rounded-full border border-accentS3 dark:border-accentS3 shadow-lg`}>
+                {username && username[0] ? username[0].toUpperCase() : <i className="fa-solid fa-user"></i>}
+              </div>
+            )
+          }
 
           <section className="w-[150px] h-full flex justify-center items-center">
             <section className="pl-[5px] w-full h-full flex flex-col justify-center items-start overflow-hidden">
