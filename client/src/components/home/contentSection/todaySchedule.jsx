@@ -301,7 +301,7 @@ const TodaySchedule = () => {
             </div>
           </div>
         </div>
-        <p className="hidden max-[675px]:flex left-1/2 -translate-x-1/2 bottom-[10px] text-[0.5rem] absolute dark:text-daccentS3 text-accentS3">&lt;&lt;Swipe up to see more&gt;&gt;</p>
+        <p className="hidden max-[675px]:flex left-1/2 -translate-x-1/2 bottom-[10px] text-[0.8rem] absolute dark:text-daccentS3 text-accentS3">&lt;&lt;Swipe to see more&gt;&gt;</p>
       </div>
     </div>
   );
