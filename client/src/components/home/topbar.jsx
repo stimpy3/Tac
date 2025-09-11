@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Sun, MoonStar } from "lucide-react";
+import { Sun, MoonStar,CalendarDays, CalendarOff } from "lucide-react";
 import { useDarkMode } from "../../darkModeContext";
 import { getCurrentUser } from "../../utils/auth";
 import { useNotif } from "../../notifContext";
 import { useNavigate, useLocation } from "react-router-dom";
+import Calendar from '../calendar';
 
 const TopBar = ({modal,setModal}) => {
   const user = getCurrentUser();
@@ -50,6 +51,27 @@ const TopBar = ({modal,setModal}) => {
   const toggleMenu=()=>{
     setShowMenu(prev=>!prev);
   };
+
+  
+   const handleCalender = () => {
+    setShowCalendar(prev => !prev);
+  };
+  const [showCalender, setShowCalendar] = useState(false);
+
+ useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth > 675) {
+        setShowMenu(false);
+      }
+      if (window.innerWidth > 565) {
+        setShowCalendar(false);
+      }
+    };
+    
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
  const navigate = useNavigate();
  const location = useLocation();
  const baseClasses = "w-full h-fit px-[5px] py-[5px] border-b border-b-accentBorder2 dark:border-b-daccentBorder2";
@@ -88,6 +110,18 @@ const TopBar = ({modal,setModal}) => {
         <button onClick={() => setMode((prev) => !prev)}>
           {mode ? <MoonStar className="text-accentS3 dark:text-daccentS3 hover:text-accent1" /> : <Sun className="text-accentS3 dark:text-daccentS3 hover:text-accent1" />}
         </button>
+
+         <button className='hidden relative max-[565px]:inline text-accentS3 dark:text-daccentS3 w-full h-full flex items-center justify-center px-[20px]' onClick={handleCalender}>{(showCalender) ? <CalendarOff /> : <CalendarDays />}</button>
+          {(showCalender) ?
+              <div className='absolute top-[70px] right-[60px] z-10'>
+                <Calendar />
+              </div>
+              :
+              <div className='hidden'>
+                <Calendar />
+              </div>
+            }
+          <button><i className="fa-solid fa-bell text-[1.3rem] hover:text-accent1"></i></button>
 
         {/* Notifications */}
         <button ref={bellRef} className="pl-[15px] relative w-[50px] h-[40px]"
