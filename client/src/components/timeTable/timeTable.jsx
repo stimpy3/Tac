@@ -4,6 +4,7 @@ import Calendar from '../calendar';
 import { CalendarDays, CalendarOff, ChevronRight, ChevronLeft, Plus, X, Trash } from 'lucide-react';
 import Tooltip from "../tooltip";
 import axios from 'axios';
+import TopBar from '../home/topbar';
 import { useLocation } from "react-router-dom";
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000"; 
