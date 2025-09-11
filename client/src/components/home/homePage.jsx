@@ -43,7 +43,7 @@ const HomePage=() =>{
       </section>
     ) : <></>}
     <Sidebar modal={modal} setModal={setModal}></Sidebar>
-    <Content></Content>
+    <Content  modal={modal} setModal={setModal}></Content>
   </div>
 );
 
