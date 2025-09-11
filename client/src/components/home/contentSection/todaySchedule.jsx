@@ -109,7 +109,8 @@ const TodaySchedule = () => {
         <div data-label="INNERlable&ScrollBtnContainer" className='flex items-center justify-between w-full h-[60px] bg-accentS dark:bg-daccentS rounded-br-xl pb-[5px] pr-[20px]'>
           <div data-label="labelContainer" className='flex mr-[10px] h-full items-center'>
             <p className='mr-[5px] flex items-center text-[1.5rem] text-accentTxt dark:text-daccentTxt w-fit h-full whitespace-nowrap'>
-              Today's Schedule
+              <span className="max-[630px]:hidden">Today's Schedule</span>
+              <span className="hidden max-[630px]:inline">Today</span>
             </p>
             <Tooltip text="Need to edit in the schedule section to see today's schedule here">
               <CircleHelp className="text-accentS3 dark:text-daccentS3 cursor-pointer" />

@@ -520,7 +520,9 @@ return(
       </div>
 
      {/* Calendar Component - separated from original code */}
-     <Calendar />
+     <div className="max-[565px]:hidden">
+       <Calendar />
+     </div>
 
       <div data-label='deadlineContainer' className='flex min-w-[265px] max-[985px]:w-full max-[985px]:w-[100%] mt-[40px] max-[985px]:mt-[0px] h-fit p-[15px] pr-[0px] max-[985px]:pr-[15px]'>
         {renderPopup()}
