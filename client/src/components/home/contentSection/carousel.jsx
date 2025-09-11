@@ -316,7 +316,7 @@ const Carousel=()=>{
     return (
       <div className='fixed z-[10] inset-0 bg-black  bg-opacity-20 backdrop-blur-sm flex justify-center items-center'>
         <div className='absolute inset-0' onClick={closeTaskPopup}></div>
-        <div className='bg-gray-100 dark:bg-daccentS h-[70%] w-[40%] max-h-[400px] max-w-[700px] rounded-lg shadow-lg overflow-hidden relative z-10'>
+        <div className='bg-gray-100 dark:bg-daccentS h-[70%] min-w-[300px] w-[40%] max-w-[600px] max-h-[400px] rounded-lg shadow-lg overflow-hidden relative z-10'>
           <div className='bg-[url("/modalBG.png")] bg-cover bg-no-repeat px-[12px] h-[60px] flex items-center justify-between border-b-gray-500 border-b-[1px]'>
             <div className='flex'>
               <div>
