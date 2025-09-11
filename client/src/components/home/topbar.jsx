@@ -97,7 +97,7 @@ const TopBar = ({modal,setModal}) => {
            className={`${baseClasses} text-accentTxt dark:text-daccentTxt`}>logout</button>
         </div>:<></>}
         <div className="flex flex-col items-center justify-center w-fit h-full">
-           <h1 className="text-[1.5rem] text-accentTxt dark:text-daccentTxt">Welcome {username.split(" ")[0]} 👋</h1>
+           <h1 className="text-[1.5rem] max-[515px]:text-[1.1rem] text-accentTxt dark:text-daccentTxt">Welcome {username ? (username.split(" ")[0].length > 10 ? "" : username.split(" ")[0]) : ""}</h1>
            <p className="text-[1rem] text-gray-500">
              <span className="text-accentS3 text-[0.9rem] dark:text-daccentS3">{date}</span>
            </p>
@@ -121,7 +121,6 @@ const TopBar = ({modal,setModal}) => {
                 <Calendar />
               </div>
             }
-          <button><i className="fa-solid fa-bell text-[1.3rem] hover:text-accent1"></i></button>
 
         {/* Notifications */}
         <button ref={bellRef} className="pl-[15px] relative w-[50px] h-[40px]"

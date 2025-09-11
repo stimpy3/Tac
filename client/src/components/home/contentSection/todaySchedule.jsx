@@ -112,11 +112,15 @@ const TodaySchedule = () => {
               <span className="max-[630px]:hidden">Today's Schedule</span>
               <span className="hidden max-[630px]:inline max-[515px]:hidden">Today</span>
             </p>
-            <Tooltip text="Need to edit in the schedule section to see today's schedule here">
-              <CircleHelp className="text-accentS3 dark:text-daccentS3 cursor-pointer" />
-            </Tooltip>
+
+            <div className="max-[515px]:hidden">
+              <Tooltip text="Need to edit in the schedule section to see today's schedule here">
+                <CircleHelp className="text-accentS3 dark:text-daccentS3 cursor-pointer" />
+              </Tooltip>
+            </div>
+
           </div>
-          <div data-label="btnContainer" className='mx-[10px] min-w-[80px] h-full flex items-center'>
+          <div data-label="btnContainer" className='max-[410px]:hidden mx-[10px] min-w-[80px] h-full flex items-center'>
             <button onClick={handleLeftScroll} className='flex items-center justify-center border-[1px] border-gray-500 shadow-lg w-[35px] aspect-square rounded-full bg-accentS2 dark:bg-daccentS2 text-accentTxt dark:text-daccentTxt mr-[5px] hover:bg-accent1 dark:hover:bg-accent1 hover:text-white transition-colors duration-400'><ChevronLeft /></button>
             <button onClick={handleRightScroll} className='flex items-center justify-center border-[1px] border-gray-500 shadow-lg w-[35px] aspect-square rounded-full bg-accentS2 dark:bg-daccentS2 text-accentTxt dark:text-daccentTxt hover:bg-accent1 dark:hover:bg-accent1 hover:text-white transition-colors duration-400'><ChevronRight /></button>
           </div>
@@ -279,6 +283,7 @@ const TodaySchedule = () => {
             </div>
           </div>
         </div>
+        <p className="hidden max-[675px]:flex left-1/2 -translate-x-1/2 bottom-[10px] text-[0.5rem] absolute dark:text-daccentS3 text-accentS3">&lt;&lt;Swipe up to see more&gt;&gt;</p>
       </div>
     </div>
   );
