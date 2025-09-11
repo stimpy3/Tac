@@ -19,10 +19,45 @@ const TimeTable = () => {
   const [showCalender, setShowCalendar] = useState(false);
   const [leftDistance, setLeftDistance] = useState(0);
   const contentRef = useRef(null);
+    // Scroll to current time when component mounts
+  useEffect(() => {
+    if (contentRef.current) {
+      const scrollPosition = leftDistance - (window.innerWidth / 2) + 100; // Center the current time
+      contentRef.current.scrollLeft = Math.max(0, scrollPosition);
+    }
+  }, [leftDistance]);
+
 
   const handleCalender = () => {
     setShowCalendar(prev => !prev);
   };
+//drag to scroll functionality------------------------------------------------
+const [isDragging, setIsDragging] = useState(false);
+const [startX, setStartX] = useState(0);
+const [scrollLeft, setScrollLeft] = useState(0);
+
+const handleMouseDown = (e) => {
+    setIsDragging(true);
+    setStartX(e.pageX - contentRef.current.offsetLeft);
+    setScrollLeft(contentRef.current.scrollLeft);
+  };
+
+  const handleMouseLeave = () => {
+    setIsDragging(false);
+  };
+
+  const handleMouseUp = () => {
+    setIsDragging(false);
+  };
+
+  const handleMouseMove = (e) => {
+    if (!isDragging) return;
+    e.preventDefault();
+    const x = e.pageX - contentRef.current.offsetLeft;
+    const walk = (x - startX) * 1.5;
+    contentRef.current.scrollLeft = scrollLeft - walk;
+  };
+  //---------------------------------------------------------------
   let width = 100;
 
   const lines = Array.from({ length: 23 }, (_, i) => (
@@ -729,11 +764,12 @@ const TimeTable = () => {
           <div 
             data-label='contentContainer' 
             ref={contentRef} 
-            className='min-w-[900px] overflow-y-hidden overflow-x-auto scrollbar-hide h-full bg-accentS flex flex-col relative cursor-grab active:cursor-grabbing'
+            className='w-full overflow-y-hidden overflow-x-auto scrollbar-hide h-full bg-accentS flex flex-col relative cursor-grab active:cursor-grabbing'
             onMouseDown={handleMouseDown}
             onMouseLeave={handleMouseLeave}
             onMouseUp={handleMouseUp}
             onMouseMove={handleMouseMove}
+            style={{ scrollBehavior: 'smooth' }}
           >
 
             <div data-label="currentLineContainer" className=" group absolute z-[6] w-fit h-[480px] bottom-0 flex flex-col items-center" style={{ left: `${leftDistance - 6.5}px` }}>
@@ -752,7 +788,7 @@ const TimeTable = () => {
             </div>
 
             {lines}
-            <section data-label='timeContainer' className='overflow-y-clip w-[2400px] min-h-[40px] bg-accent4 text-white flex border-black border-b-[1px]'>
+            <section data-label='timeContainer' className='overflow-y-clip w-[2800px] min-h-[40px] bg-accent4 text-white flex border-black border-b-[1px]'>
               <div className='w-[100px] text-[1rem] flex flex-col items-center justify-center'>12-1<span className='text-[0.6rem]'>AM</span></div>
               <div className='w-[100px] flex flex-col items-center justify-center'>1-2<span className='text-[0.6rem]'>AM</span></div>
               <div className='w-[100px] flex flex-col items-center justify-center'>2-3<span className='text-[0.6rem]'>AM</span></div>
@@ -779,7 +815,7 @@ const TimeTable = () => {
               <div className='w-[100px] flex flex-col items-center justify-center '>11-12<span className='text-[0.6rem]'>PM</span></div>
 
             </section>
-            <section data-label='planContainer' className='flex flex-col w-[2400px] h-[476px] border-b-[1px] bg-accentS dark:bg-daccentM'>
+            <section data-label='planContainer' className='flex flex-col w-[2800px] h-[476px] border-b-[1px] bg-accentS dark:bg-daccentM'>
               <div className='h-[68px] w-full flex items-center border-b-[1px] border-accentS3 dark:border-accentTxt2 py-[10px] relative'>
                 {mondayTasks()}
               </div>
