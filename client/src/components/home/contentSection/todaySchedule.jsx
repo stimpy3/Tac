@@ -106,17 +106,17 @@ const TodaySchedule = () => {
   return (
     <div className="relative todaysScheduleContainer flex flex-col w-full h-fit mt-[30px] rounded-xl bg-accentM dark:bg-daccentM shadow-none">
       <div data-label="lable&ScrollBtnContainer" className='absolute h-[60px] w-[calc(100%-270px)]'>
-        <div data-label="INNERlable&ScrollBtnContainer" className='flex items-center justify-between w-full h-[60px] bg-accentS dark:bg-daccentS rounded-br-xl pb-[5px] pr-[20px]'>
+        <div data-label="INNERlable&ScrollBtnContainer" className='flex items-center justify-between w-full h-[60px] bg-accentS dark:bg-daccentS rounded-br-xl pb-[5px]'>
           <div data-label="labelContainer" className='flex mr-[10px] h-full items-center'>
             <p className='mr-[5px] flex items-center text-[1.5rem] text-accentTxt dark:text-daccentTxt w-fit h-full whitespace-nowrap'>
               <span className="max-[630px]:hidden">Today's Schedule</span>
-              <span className="hidden max-[630px]:inline">Today</span>
+              <span className="hidden max-[630px]:inline max-[515px]:hidden">Today</span>
             </p>
             <Tooltip text="Need to edit in the schedule section to see today's schedule here">
               <CircleHelp className="text-accentS3 dark:text-daccentS3 cursor-pointer" />
             </Tooltip>
           </div>
-          <div data-label="btnContainer" className='ml-[10px] min-w-[80px] h-full flex items-center'>
+          <div data-label="btnContainer" className='mx-[10px] min-w-[80px] h-full flex items-center'>
             <button onClick={handleLeftScroll} className='flex items-center justify-center border-[1px] border-gray-500 shadow-lg w-[35px] aspect-square rounded-full bg-accentS2 dark:bg-daccentS2 text-accentTxt dark:text-daccentTxt mr-[5px] hover:bg-accent1 dark:hover:bg-accent1 hover:text-white transition-colors duration-400'><ChevronLeft /></button>
             <button onClick={handleRightScroll} className='flex items-center justify-center border-[1px] border-gray-500 shadow-lg w-[35px] aspect-square rounded-full bg-accentS2 dark:bg-daccentS2 text-accentTxt dark:text-daccentTxt hover:bg-accent1 dark:hover:bg-accent1 hover:text-white transition-colors duration-400'><ChevronRight /></button>
           </div>
@@ -131,7 +131,17 @@ const TodaySchedule = () => {
       <div data-label="schedulerContainer" className="h-[150px] w-full  flex flex-col">
         <div data-label="topDescContainer" className="flex h-[60px] w-[100%] p-[10px] pb-[0px] ">
           <div data-label="description" class="absolute right-[10px] flex items-center justify-between p-[5px] bg-accentS2 dark:bg-daccentS2 w-[250px] h-[50px] rounded-[7px]">
-            <p className="lato text-accentTxt w-full dark:text-daccentTxt text-[1rem] flex justify-center"> {currTasks && currTasks.name ? currTasks.name.slice(0,17)+"..." : "Task Description"}</p>
+            <div className="flex w-[calc(100%-100px)] justify-evenly">
+          
+            <p className="flex justify-center max-[515px]:hidden lato text-accentTxt w-full dark:text-daccentTxt text-[1rem] flex justify-center"> {currTasks && currTasks.name ? currTasks.name.slice(0,17)+"..." : "Task Description"}</p>
+            <p className="w-fit hidden max-[515px]:flex text-center lato text-accentTxt dark:text-daccentTxt text-[1rem] flex"> {currTasks && currTasks.name ? currTasks.name.slice(0,13)+"..." : "Schedule"}</p>
+            <div className="hidden max-[515px]:flex">
+              <Tooltip text="Need to edit in the schedule section to see today's schedule here">
+                <CircleHelp className="text-accentS3 dark:text-daccentS3 cursor-pointer" />
+              </Tooltip>
+            </div>
+           
+            </div>
             <div className="flex items-center min-w-[100px] border-l-[2px] border-daccentS3 justify-center">
                 {
                   currTasks && currTasks.startTime && currTasks.endTime ? (() => {

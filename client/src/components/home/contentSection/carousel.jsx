@@ -428,8 +428,11 @@ const Carousel=()=>{
   <div className="flex flex-col h-[40%] mb-[20px] my-[10px] w-full p-0">{/* heading(buttons and headin)+items */}
     <div className='flex items-center w-full h-fit justify-between'>
       <div className='flex mr-[10px] h-[120px]'>
-        <p className='flex items-center text-[1.5rem] text-accentTxt dark:text-daccentTxt w-fit h-full whitespace-nowrap'>
+        <p className='max-[410px]:hidden flex items-center text-[1.5rem] text-accentTxt dark:text-daccentTxt w-fit h-full whitespace-nowrap'>
           {monthNames[month]} Activity
+        </p>
+        <p className='hidden max-[410px]:flex items-center text-[1.5rem] text-accentTxt dark:text-daccentTxt w-fit h-full whitespace-nowrap'>
+          {monthNames[month].slice(0,3)} Activity
         </p>
         <button onClick={openTaskPopup} className='flex items-center justify-cente h-full text-[1.5rem] text-accent1 hover:text-[2rem] hover:rotate-90 transition-all duration-300 font-bold w-[30px] justify-center '>+</button>
       </div>
