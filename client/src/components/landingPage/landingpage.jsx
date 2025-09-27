@@ -533,7 +533,7 @@ return (
     <section ref={(el) => (panelsRef.current[0] = el)} className='flex-none w-full h-screen'>{/*flex-none prevents grow and shrink */}
       <div className="h-[100vh] w-full bg-daccentS flex flex-col items-center justify-center px-[20px] text-center">
         <p className="text-[2.2rem] max-[600px]:text-[1.5rem] font-semibold text-white">Your scattered tasks, now aligned into a clear timeline.</p>
-        <figure className="mt-[20px] aspect-[1797/841] w-[95%] bg-[url('/ttPic.png')] max-[500px]:aspect-[605/679] max-[500px]:h-[80%] max-[500px]:bg-[url('/ttPicSmall.png')] bg-contain bg-no-repeat bg-center"></figure>
+        <figure className="mt-[10px] aspect-[1797/841] w-[90%] bg-[url('/ttPic.png')] max-[500px]:aspect-[605/679] max-[500px]:h-[80%] max-[500px]:bg-[url('/ttPicSmall.png')] bg-contain bg-no-repeat bg-center"></figure>
       </div>
     </section>
     

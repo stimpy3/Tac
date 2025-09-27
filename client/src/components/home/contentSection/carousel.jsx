@@ -77,6 +77,8 @@ const Carousel=()=>{
   const descriptionRef = useRef(null);
   const categoryRef = useRef(null);
   const frequencyRef = useRef(null);
+  const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:3001";
+  const token = typeof window !== 'undefined' ? localStorage.getItem('token') || '' : '';
 
   // Function to generate projected data
   const generateProjectedData = (frequency) => {
@@ -198,102 +200,215 @@ const Carousel=()=>{
 
 
     
-  const addTask=()=>{  //confirming changes(when create button pressed) temp task added to tasks
-    const selectedName = nameRef.current.value;
-    const selectedDescription = descriptionRef.current.value;
-    const selectedFrequency = frequencyRef.current.value;
-    const selectedCategory = categoryRef.current.value;
-    const today = new Date().toISOString().split('T')[0]; // Get today's date in YYYY-MM-DD format
+  const addTask= async ()=>{  //confirming changes(when create button pressed) temp task added to tasks
+    const selectedName = nameRef.current ? nameRef.current.value.trim() : "";
+    const selectedDescription = descriptionRef.current ? descriptionRef.current.value.trim() : "";
+  const selectedFrequency = frequencyRef.current ? frequencyRef.current.value : "";
+  const selectedCategory = categoryRef.current ? categoryRef.current.value : "academic";
+  const today = new Date().toISOString().split('T')[0]; // still use today for startDate but no date input
     
     // Reset all borders first
-    nameRef.current.classList.remove("border-red-500");
-    nameRef.current.classList.add("border-accentBorder2","dark:border-daccentBorder2");
-    descriptionRef.current.classList.remove("border-red-500");
-    descriptionRef.current.classList.add("border-accentBorder2","dark:border-daccentBorder2");
-    frequencyRef.current.classList.remove("border-red-500");
-    frequencyRef.current.classList.add("border-accentBorder2","dark:border-daccentBorder2");
-    categoryRef.current.classList.remove("border-red-500");
-    categoryRef.current.classList.add("border-accentBorder2","dark:border-daccentBorder2");
+    if (nameRef.current) {
+      nameRef.current.classList.remove("border-red-500");
+      nameRef.current.classList.add("border-accentBorder2","dark:border-daccentBorder2");
+    }
+    if (descriptionRef.current) {
+      descriptionRef.current.classList.remove("border-red-500");
+      descriptionRef.current.classList.add("border-accentBorder2","dark:border-daccentBorder2");
+    }
+    if (frequencyRef.current) {
+      frequencyRef.current.classList.remove("border-red-500");
+      frequencyRef.current.classList.add("border-accentBorder2","dark:border-daccentBorder2");
+    }
+    if (categoryRef.current) {
+      categoryRef.current.classList.remove("border-red-500");
+      categoryRef.current.classList.add("border-accentBorder2","dark:border-daccentBorder2");
+    }
 
     let hasError = false;
 
     // Check required fields
-    if(selectedName == ""){
-      nameRef.current.classList.remove("border-accentBorder2","dark:border-daccentBorder2");
-      nameRef.current.classList.add("border-red-500");
+    if(selectedName === ""){
+      if (nameRef.current) {
+        nameRef.current.classList.remove("border-accentBorder2","dark:border-daccentBorder2");
+        nameRef.current.classList.add("border-red-500");
+      }
       hasError = true;
     }
 
-    if(selectedFrequency == "" || isNaN(selectedFrequency) || selectedFrequency <= 0){
-      frequencyRef.current.classList.remove("border-accentBorder2","dark:border-daccentBorder2");
-      frequencyRef.current.classList.add("border-red-500");
+    const freqNum = selectedFrequency === "" ? NaN : parseInt(selectedFrequency, 10);
+    if(isNaN(freqNum) || freqNum <= 0){
+      if (frequencyRef.current) {
+        frequencyRef.current.classList.remove("border-accentBorder2","dark:border-daccentBorder2");
+        frequencyRef.current.classList.add("border-red-500");
+      }
       hasError = true;
     }
 
     if(!selectedCategory){
-      categoryRef.current.classList.remove("border-accentBorder2","dark:border-daccentBorder2");
-      categoryRef.current.classList.add("border-red-500");
+      if (categoryRef.current) {
+        categoryRef.current.classList.remove("border-accentBorder2","dark:border-daccentBorder2");
+        categoryRef.current.classList.add("border-red-500");
+      }
       hasError = true;
     }
 
     if(hasError) return;
     
     // All validations passed
+    const tempId = `temp-${Date.now()}`;
     const newTask = {
-    id: Date.now(),
-    name: selectedName,
-    description: selectedDescription,
-    lastMarkedDate: null,
-    startDate: today,
-    frequency: parseInt(selectedFrequency),
-    problemsSolved: 0,
-    category: selectedCategory,
-    icon: categoryData[selectedCategory]?.icon || categoryData["other"].icon,
-    color: categoryData[selectedCategory]?.color || categoryData["other"].color
-  };
-   setTasks((prev) => [...prev, newTask]);
-   setTempTask({ id: "", name: "", description: "", lastMarkedDate: null, startDate: null, frequency: "", problemsSolved: 0 }); //Clear it
-   setShowTask(false);
+      id: tempId,
+      name: selectedName,
+      description: selectedDescription,
+      lastMarkedDate: null,
+      startDate: today,
+      frequency: isNaN(freqNum) ? 7 : freqNum,
+      problemsSolved: 0,
+      category: selectedCategory,
+      icon: categoryData[selectedCategory]?.icon || categoryData["other"].icon,
+      color: categoryData[selectedCategory]?.color || categoryData["other"].color,
+    };
+
+    // Optimistically add to UI
+    setTasks((prev) => [...prev, newTask]);
+    setTempTask({ id: "", name: "", description: "", lastMarkedDate: null, startDate: null, frequency: "", problemsSolved: 0 }); //Clear it
+    setShowTask(false);
+
+    // Persist to backend
+    try {
+      const res = await fetch(`${BACKEND_URL}/graphtracker`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
+        body: JSON.stringify({
+          name: newTask.name,
+          description: newTask.description,
+          startDate: newTask.startDate,
+          frequency: newTask.frequency,
+          category: newTask.category,
+          icon: newTask.icon,
+          color: newTask.color,
+        }),
+      });
+
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message || 'Create task failed');
+
+      // Replace optimistic task with server task
+      setTasks((prev) => prev.map((t) => (t.id === tempId ? {
+        id: data._id || data.id || tempId,
+        name: data.name,
+        description: data.description,
+        lastMarkedDate: data.lastMarkedDate || null,
+        startDate: data.startDate || newTask.startDate,
+        frequency: data.frequency,
+        problemsSolved: data.problemsSolved || 0,
+        category: data.category || newTask.category,
+        icon: data.icon || newTask.icon,
+        color: data.color || newTask.color,
+      } : t)));
+    } catch (err) {
+      console.error('Failed to persist task:', err);
+      // rollback optimistic add
+      setTasks((prev) => prev.filter((t) => t.id !== tempId));
+      // Optional: show toast or error
+    }
    };
 
    const incrementCount = (taskId) => {
+    // Optimistic UI: increment locally, then persist
     const today = new Date().toDateString();
-    
-    setTasks(prev => prev.map(task => {
-      if (task.id === taskId) {
-        // Increment problems solved
-        let newProblemsSolved = task.problemsSolved + 1;
-        
-        return { 
-          ...task, 
-          lastMarkedDate: today,
-          problemsSolved: newProblemsSolved
-        };
-      }
-      return task;
-    }));
+
+    // Snapshot for rollback
+    setTasks(prev => {
+      const snapshot = prev.map(t => ({ ...t }));
+      // apply optimistic update
+      const updated = prev.map(task => task.id === taskId ? { ...task, lastMarkedDate: today, problemsSolved: (task.problemsSolved || 0) + 1 } : task);
+
+      // Fire-and-forget async call (but handle rollback inside)
+      (async () => {
+        try {
+          // only call backend for persisted tasks (those without temp- prefix)
+          if (String(taskId).startsWith('temp-')) return;
+          const res = await fetch(`${BACKEND_URL}/graphtracker/${taskId}/increment`, {
+            method: 'PATCH',
+            headers: {
+              'Content-Type': 'application/json',
+              ...(token ? { Authorization: `Bearer ${token}` } : {}),
+            }
+          });
+          if (!res.ok) throw new Error('Increment failed');
+          // Optionally you could replace with server document if returned
+        } catch (err) {
+          console.error('Increment persist failed', err);
+          // rollback by restoring snapshot
+          setTasks(snapshot);
+        }
+      })();
+
+      return updated;
+    });
    };
 
    const decrementCount = (taskId) => {
+    // Optimistic UI: decrement locally, then persist
     const today = new Date().toDateString();
-    
-    setTasks(prev => prev.map(task => {
-      if (task.id === taskId) {
-        // Decrement problems solved but don't go below 0
-        let newProblemsSolved = Math.max(0, task.problemsSolved - 1);
-        
-        return { 
-          ...task, 
-          lastMarkedDate: today,
-          problemsSolved: newProblemsSolved
-        };
-      }
-      return task;
-    }));
+
+    setTasks(prev => {
+      const snapshot = prev.map(t => ({ ...t }));
+      const updated = prev.map(task => task.id === taskId ? { ...task, lastMarkedDate: today, problemsSolved: Math.max(0, (task.problemsSolved || 0) - 1) } : task);
+
+      (async () => {
+        try {
+          if (String(taskId).startsWith('temp-')) return;
+          const res = await fetch(`${BACKEND_URL}/graphtracker/${taskId}/decrement`, {
+            method: 'PATCH',
+            headers: {
+              'Content-Type': 'application/json',
+              ...(token ? { Authorization: `Bearer ${token}` } : {}),
+            }
+          });
+          if (!res.ok) throw new Error('Decrement failed');
+        } catch (err) {
+          console.error('Decrement persist failed', err);
+          setTasks(snapshot);
+        }
+      })();
+
+      return updated;
+    });
    };
 
    const removeTask = (taskId) => {
-    setTasks(prev => prev.filter(task => task.id !== taskId));
+    // Optimistic UI: remove locally, then request delete on backend
+    setTasks(prev => {
+      const snapshot = prev.map(t => ({ ...t }));
+      const updated = prev.filter(task => task.id !== taskId);
+
+      (async () => {
+        try {
+          if (!String(taskId).startsWith('temp-')) {
+            const res = await fetch(`${BACKEND_URL}/graphtracker/${taskId}`, {
+              method: 'DELETE',
+              headers: {
+                'Content-Type': 'application/json',
+                ...(token ? { Authorization: `Bearer ${token}` } : {}),
+              }
+            });
+            if (!res.ok) throw new Error('Delete failed');
+          }
+        } catch (err) {
+          console.error('Delete persist failed', err);
+          // rollback
+          setTasks(snapshot);
+        }
+      })();
+
+      return updated;
+    });
    };
 
    const getElapsedDays = (startDate) => {
@@ -311,38 +426,38 @@ const Carousel=()=>{
     return Math.min(Math.max(diffDays, 1), 30); // Ensure minimum 1, maximum 30
    };
 
-   const renderTaskPopup = () => {
+  const renderTaskPopup = () => {
   if (showTask) {
     return (
        <div className='fixed inset-0 bg-black bg-opacity-20 backdrop-blur-sm flex justify-center items-center z-50'>
-          <div className='absolute inset-0' onClick={closePopup}></div>
+          <div className='absolute inset-0' onClick={closeTaskPopup}></div>
           <div className='bg-accentS dark:bg-daccentS2 h-[70%] min-w-[250px] w-[40%] max-w-[800px] max-h-[400px] rounded-lg shadow-lg overflow-hidden relative z-10'>
             <div className='bg-[url("/modalBG.png")] bg-cover bg-no-repeat  px-[12px] h-[60px] flex items-center justify-between border-accentBorder2 dark:border-daccentBorder2 border-b-[1px]'>
                   <div className='flex'>
                   <div>
-                  <p className='text-[1.2rem] text-white font-bold'>Add a Deadline</p>
-                  <p className='text-[0.7rem] text-gray-100'>Deadlines track what your brain drops</p>
+                  <p className='text-[1.2rem] text-white font-bold'>Add a task to track</p>
+                  <p className='text-[0.7rem] text-gray-100'>Projected vs Actual: where ambition meets reality</p>
                   </div>
                   </div>
-                  <button onClick={closePopup} className='text-white text-[1.6rem]'><X/></button>
+                  <button onClick={closeTaskPopup} className='text-white text-[1.6rem]'><X/></button>
             </div>
             <div data-label='DeadlineEventInputContainer' className=' px-[10px] py-[20px] w-full h-[70%] flex flex-col justify-around'>
               <div className='flex flex-col'>
                 <label  className="text-accentTxt dark:text-daccentTxt">event name:</label>
                 <input type='text' placeholder='Max 13 characters' className='px-[5px] border-[1px] border-accentBorder2 dark:border-daccentBorder2 bg-accentS dark:bg-daccentS2 rounded text-accentTxt dark:text-daccentTxt' 
-                ref={nameRef} maxlength="13" required></input>
+                ref={nameRef} maxLength={13} required></input>
               </div>
 
               <div className='flex flex-col'>
                  <label className="text-accentTxt dark:text-daccentTxt">event details:</label>
-                 <textarea className='border-[1px] px-[5px] border-accentBorder2 dark:border-daccentBorder2 bg-accentS dark:bg-daccentS2 rounded text-accentTxt dark:text-daccentTxt'></textarea> 
+                 <textarea ref={descriptionRef} className='border-[1px] px-[5px] border-accentBorder2 dark:border-daccentBorder2 bg-accentS dark:bg-daccentS2 rounded text-accentTxt dark:text-daccentTxt'></textarea> 
               </div>
 
               <div className='flex flex-col maxjustify-between'>
-                  <div className='flex'>
-                     <label className="text-accentTxt dark:text-daccentTxt">date:</label>
-                     <input type='date' className='ml-[5px] mb-[20px] px-[5px] border-[1px] border-accentBorder2 dark:border-daccentBorder2 rounded bg-accentS dark:bg-daccentS2 text-accentTxt dark:text-daccentTxt'
-                     ref={dateRef}></input>
+            {/* Date input removed intentionally; startDate will use current date automatically */}
+                  <div className='flex mt-2 items-center'>
+                    <label className="text-accentTxt dark:text-daccentTxt">Frequency:</label>
+                    <input type='number' min='1' placeholder='e.g. 7' className='ml-[8px] w-[80px] px-[5px] border-[1px] border-accentBorder2 dark:border-daccentBorder2 rounded bg-accentS dark:bg-daccentS2 text-accentTxt dark:text-daccentTxt' ref={frequencyRef} />
                   </div>
                   <div className='flex'>
                     <label  className="text-accentTxt dark:text-daccentTxt">Category:</label>
@@ -358,8 +473,8 @@ const Carousel=()=>{
               </div>
             </div>
             <div className='flex px-[12px] h-[15%] text-[1.1rem] space-x-5 justify-center items-center border-t-[1px] border-accentBorder2 dark:border-daccentBorder2'>
-                <button onClick={createEvent} className='bg-gradient-to-r from-accent0 via-accent1 to-accent0 w-full text-white px-4 py-2 rounded'>Create</button>
-                <button onClick={closePopup} className=' w-full px-4 py-2 rounded text-white bg-black '>Cancel</button>
+                <button onClick={addTask} className='bg-gradient-to-r from-accent0 via-accent1 to-accent0 w-full text-white px-4 py-2 rounded'>Create</button>
+                <button onClick={closeTaskPopup} className=' w-full px-4 py-2 rounded text-white bg-black '>Cancel</button>
             </div>
 
           </div>
@@ -376,25 +491,38 @@ const Carousel=()=>{
   let finalPath="M 0 40 Q 50 80, 100 40";
 
   useEffect(()=>{
-  strokeBoxRef.current.addEventListener("mousemove", (e) => {
-  const rect = strokeBoxRef.current.getBoundingClientRect();
-    const x = e.clientX - rect.left; // relative X inside strokeBoxRef.current
-    const y = e.clientY - rect.top; // 0 → 80
-    const vx =  (x/ rect.width) * 100    //if viewBox width is set to scale of 0 to 100
-     const vy = (y / rect.height) * 80; // if viewBox height is set to scale of 0 to 80
-  path=`M 0 40 Q ${vx} ${vy}, 100 40`;
-  gsap.to(".pathName",{
-    attr:{d:path}
-   });
-  });
+  const el = strokeBoxRef.current;
+  if (!el) return;
 
-  strokeBoxRef.current.addEventListener("mouseleave", (dets) => {
-  gsap.to(".pathName",{
-     attr: { d: "M 0 40 Q 50 40, 100 40" },
+  const handleMove = (e) => {
+    const rect = el.getBoundingClientRect();
+    const x = e.clientX - rect.left; // relative X inside el
+    const y = e.clientY - rect.top; // 0 → 80
+    const vx = (x / rect.width) * 100; //if viewBox width is set to scale of 0 to 100
+    const vy = (y / rect.height) * 80; // if viewBox height is set to scale of 0 to 80
+    const newPath = `M 0 40 Q ${vx} ${vy}, 100 40`;
+    gsap.to(".pathName",{
+      attr:{d:newPath},
+      overwrite: true,
+      duration: 0.2
+    });
+  };
+
+  const handleLeave = () => {
+    gsap.to(".pathName",{
+      attr: { d: "M 0 40 Q 50 40, 100 40" },
       duration: 1,
-      ease: "elastic.out(3, 0.2)", //3 is amplitude , 0.2 smalle the value tighter and more bounces more elastic
-   });
-  });
+      ease: "elastic.out(3, 0.2)",
+    });
+  };
+
+  el.addEventListener("mousemove", handleMove);
+  el.addEventListener("mouseleave", handleLeave);
+
+  return () => {
+    el.removeEventListener("mousemove", handleMove);
+    el.removeEventListener("mouseleave", handleLeave);
+  };
   },[]);
   //[] means it runs once, so it is good for setting up event listeners
   //why we needed useEffect, and why we didnt set up event listeners without useEffect
@@ -563,15 +691,15 @@ const Carousel=()=>{
                   <div className='flex items-center w-fit h-fit mb-[10px] justify-between'>
                     <button 
                       onClick={() => decrementCount(task.id)}
-                      className='text-[1rem] text-red-500 bebas-neue-regular w-[30px] aspect-square mr-[10px] rounded-full border-[2px] border-red-500'
+                      className='text-[0.9rem] text-red-500 bebas-neue-regular w-[26px] aspect-square mr-[8px] rounded-full border-[2px] border-red-500'
                     >
-                      <i class="fa-solid fa-chevron-down"></i>
+                      <i className="fa-solid fa-chevron-down"></i>
                     </button>
                     <button 
                       onClick={() => incrementCount(task.id)}
-                      className='text-[1rem] text-blue-500 bebas-neue-regular w-[30px] aspect-square rounded-full border-blue-500 border-[2px] border-blue-500'
+                      className='text-[0.9rem] text-blue-500 bebas-neue-regular w-[26px] aspect-square rounded-full border-blue-500 border-[2px] border-blue-500'
                     >
-                      <i class="fa-solid fa-chevron-up"></i>
+                      <i className="fa-solid fa-chevron-up"></i>
                     </button>
                   </div>
               </div>
