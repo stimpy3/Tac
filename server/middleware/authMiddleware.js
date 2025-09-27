@@ -8,7 +8,9 @@ function authMiddleware(req, res, next) {
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     // console.log("Decoded JWT:", decoded);//<-- add this
-    req.user =  { id: decoded.userId };
+    // Support tokens that use either `userId`, `id`, or `_id` in the payload
+    const uid = decoded.userId || decoded.id || decoded._id;
+    req.user = { id: uid };
     next();
   } catch (err) {
     // console.error("JWT verification failed:", err);  //<-- add this

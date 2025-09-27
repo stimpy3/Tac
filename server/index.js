@@ -62,7 +62,8 @@ app.use(
 );
 
 // after your app.use(cors(...))
-app.options("/*\w", cors()); 
+// Allow preflight on all routes
+app.options("*", cors());
 // This allows preflight requests to pass through
 // Preflight requests are sent by the browser to check if the actual request is safe to send
 // It’s like saying “yes, you can talk to me” for all routes
@@ -93,18 +94,15 @@ app.use((req, res, next) => {
   res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
   next();
 });
-Request type = what kind of action the frontend is trying to do
-Examples: GET, POST, PUT, DELETE
-Also includes headers like Content-Type: application/json or Authorization: Bearer token
-CORS Access-Control-Allow-Methods is like saying:
-“Not only are you allowed to come in (origin), you are allowed to do these specific actions (GET, POST, DELETE).”
- */
-
-// MongoDB Connection
-mongoose
-  .connect(process.env.MONGO_URI)
-  .then(() => console.log("✅ Connected to MongoDB Atlas"))
-  .catch((err) => console.error("❌ MongoDB connection error:", err));
+// Request type = what kind of action the frontend is trying to do
+// Examples: GET, POST, PUT, DELETE
+// Also includes headers like Content-Type: application/json or Authorization: Bearer token
+// Ensure required CORS headers are present for preflight requests
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+  res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  next();
+});
 
 // ---------------- Routes ----------------
 
