@@ -105,6 +105,7 @@ const Carousel=()=>{
           category: d.category || 'other',
           icon: d.icon || '',
           color: d.color || '',
+          dailyCounts: d.dailyCounts || {},
         }));
         setTasks(mapped);
       } catch (err) {
@@ -127,19 +128,37 @@ const Carousel=()=>{
   };
 
   // Function to generate actual data based on problems solved
-  const generateActualData = (frequency, problemsSolved, elapsedDays) => {
+  const generateActualData = (frequency, problemsSolved, elapsedDays, dailyCounts) => {
     const data = [];
     for (let day = 0; day <= 30; day++) {
       // Calculate linear projected line: distribute weekly frequency across days
       const projected = Math.floor((day / 30) * frequency); 
-      
+      // For actual, look up dailyCounts using date key (YYYY-MM-DD) when available
+      let actual = null;
+      if (dailyCounts) {
+        // compute the date key corresponding to startDate + dayOffset
+        // The caller will provide the proper startDate derived day index (elapsedDays)
+        actual = day === elapsedDays ? (dailyCounts[getDateKeyForOffset(day)] || 0) : (day < elapsedDays ? 0 : null);
+      } else {
+        actual = day === elapsedDays ? problemsSolved : (day < elapsedDays ? 0 : null);
+      }
+
       data.push({
         day: day,
         projected: projected,
-        actual: day === elapsedDays ? problemsSolved : (day < elapsedDays ? 0 : null)
+        actual: actual
       });
     }
     return data;
+  };
+
+  // helper that returns YYYY-MM-DD for startDate + offset days
+  const getDateKeyForOffset = (offset) => {
+    // need startDate from the task; caller must override this when calling per-task
+    // We'll implement a per-task wrapper when rendering the chart below
+    const date = new Date();
+    date.setDate(date.getDate() + offset);
+    return date.toISOString().slice(0,10);
   };
 
 
@@ -613,30 +632,41 @@ const Carousel=()=>{
                 <ResponsiveContainer width="90%" height="90%">
                   {/*data={...} → the dataset used. Each object in your array needs keys(day, actual, projected)*/}
                   <LineChart
-                    data={generateActualData(
-                      task.frequency,
-                      task.problemsSolved,
-                      getElapsedDays(task.startDate)
-                    )}
+                    data={(() => {
+                      const dailyCounts = task.dailyCounts ? (task.dailyCounts instanceof Map ? Object.fromEntries(task.dailyCounts) : task.dailyCounts) : {};
+                      const start = task.startDate ? new Date(task.startDate) : new Date();
+                      start.setHours(0,0,0,0);
+                      const elapsed = getElapsedDays(task.startDate);
+                      const arr = [];
+                      for (let day = 0; day <= 30; day++) {
+                        const projected = Math.floor((day / 30) * task.frequency);
+                        const date = new Date(start);
+                        date.setDate(start.getDate() + day - 1); // day 1 -> startDate
+                        const key = date.toISOString().slice(0,10);
+                        const actual = day === elapsed ? (dailyCounts[key] || 0) : (day < elapsed ? 0 : null);
+                        arr.push({ day, projected, actual });
+                      }
+                      return arr;
+                    })()}
                     margin={{ top: 0, right: 40, bottom: 0, left: 0 }}
                   >{/*margin={{...}} → padding around the chart area.
                     Example:
                     top: 0 → no extra space at the top.
                     right: 40 → adds breathing space on right.
                     storkeDasharray="3 6" means 3px dash with 6px gap */}
-                    <CartesianGrid strokeDasharray="3 6" stroke="#323232ff" />
+                    <CartesianGrid strokeDasharray="#323232" stroke="#323232ff" />
                     {/*dataKey="day" → X-axis values will be taken from data.day*/}
                     <XAxis
                       dataKey="day"
-                      stroke="#818181ff" //color of Xaxis line
+                      stroke="#818181ff"
                       fontSize={10}
-                      tick={{ fill: '#818181ff' }}//to style tick labels, fill is text color of ticks
+                      tick={{ fill: '#818181ff' }}
                     />
                     <YAxis
                       stroke="#818181ff"
                       fontSize={10}
                       tick={{ fill: '#818181ff' }}
-                      interval={0} // Show all ticks
+                      interval={0}
                     />
                     <Tooltip
                      content={({ active, payload }) => {
@@ -649,7 +679,7 @@ const Carousel=()=>{
                                borderRadius: "8px",
                                color: "#F9FAFB",
                                padding: "3px 3px",
-                               fontSize: "1rem",   //smaller font size
+                               fontSize: "1rem",
                              }}
                            >
                              {payload.map((entry, index) => (
@@ -663,24 +693,10 @@ const Carousel=()=>{
                        return null;
                      }}/>
                     <Legend
-                      wrapperStyle={{
-                        fontSize: "0.8rem",
-                      }}
+                      wrapperStyle={{ fontSize: "0.8rem" }}
                       formatter={(value) => {
-                        if (value === "Projected") {
-                          return (
-                            <span style={{ color: "#1281efff" }}>
-                              Projected
-                            </span>
-                          );
-                        }
-                        if (value === "Actual") {
-                          return (
-                            <span style={{ color: "#680cb3" }}>
-                              Actual
-                            </span>
-                          );
-                        }
+                        if (value === "Projected") return <span style={{ color: "#1281efff" }}>Projected</span>;
+                        if (value === "Actual") return <span style={{ color: "#680cb3" }}>Actual</span>;
                         return value;
                       }}
                     />
@@ -693,31 +709,18 @@ const Carousel=()=>{
                       dot={(props) => {
                         const { cx, cy, payload } = props;
                         const day = payload.day;
-                        // Only show dots every 5 days
-                        if ([0, 5, 10, 15, 20, 25, 30].includes(day)) {
-                          return <circle cx={cx} cy={cy} r={3} fill="#1281efff" />;
-                        }
+                        if ([0,5,10,15,20,25,30].includes(day)) return <circle cx={cx} cy={cy} r={3} fill="#1281efff" />;
                         return null;
                       }}
                       name="Projected"
                     />
-                    <Line
-                      type="monotone"
-                      dataKey="actual"
-                      stroke="#680cb3"
-                      strokeWidth={3}
-                      dot={{ fill: "#680cb3", strokeWidth: 2, r: 3 }}
-                      name="Actual"
-                    />
+                    <Line type="monotone" dataKey="actual" stroke="#680cb3" strokeWidth={3} dot={{ fill: "#680cb3", strokeWidth: 2, r: 3 }} name="Actual" />
                   </LineChart>
                 </ResponsiveContainer>
-            </div>
+                </div>
             <div data-label='taskDescriptionContainer' className='p-[5px] h-[35%] rounded-lg bg-accentS2 dark:bg-daccentS2 w-full flex flex-col items-center justify-center'>
               <div className='w-full h-[70%]'>
-                  <p className='mt-[5px] flex items-center justify-start w-full bebas-neue-regular text-[1.5rem] h-fit 
-                  text-accentTxt dark:text-daccentTxt leading-none'>{task.name.length > 20 ? task.name.slice(0, 20) + "..."  : task.name}</p>
-                  <p className='mt-[5px] w-full inter text-[0.8rem] h-fit 
-                  text-accentTxt2 dark:text-daccentTxt  leading-none'>{task.description.length > 35 ? task.description.slice(0, 35) + "..."  : task.description}</p>
+                  <p className='mt-[5px] w-full inter text-[0.8rem] h-fit text-accentTxt2 dark:text-daccentTxt leading-none'>{task.description && task.description.length > 35 ? task.description.slice(0, 35) + '...' : task.description}</p>
               </div>
               <div className='flex items-center justify-between w-full h-[30%]'>
                   <div className='text-[1rem] bebas-neue-regular text-accentTxt2 dark:text-daccentTxt '>DAY: {getElapsedDays(task.startDate)}/30</div>

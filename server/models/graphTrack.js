@@ -7,6 +7,13 @@ const GraphTrackSchema = new mongoose.Schema(
 		description: { type: String, default: '' },
 		startDate: { type: Date, required: true },
 		frequency: { type: Number, required: true },
+		// store counts per day as YYYY-MM-DD -> number
+		dailyCounts: {
+			type: Map,
+			of: Number,
+			default: {},
+		},
+		// total across all days (kept in sync)
 		problemsSolved: { type: Number, default: 0 },
 		category: {
 			type: String,

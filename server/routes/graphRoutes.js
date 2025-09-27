@@ -59,11 +59,27 @@ router.patch('/:id/increment', authMiddleware, async (req, res) => {
 		const doc = await GraphTrack.findOne({ _id: id, user: userId });
 		if (!doc) return res.status(404).json({ message: 'Not found' });
 
-		doc.problemsSolved = (doc.problemsSolved || 0) + 1;
-		doc.lastModified = new Date();
-		await doc.save();
+		// compute elapsed days from startDate
+		const start = new Date(doc.startDate);
+		start.setHours(0,0,0,0);
+		const today = new Date();
+		today.setHours(0,0,0,0);
+		const diffDays = Math.floor((today - start) / (1000*60*60*24)) + 1; // day 1..N
+		if (diffDays > 30) return res.status(400).json({ message: 'Tracking period ended' });
 
-		res.json(doc);
+		const todayKey = new Date().toISOString().slice(0,10); // YYYY-MM-DD
+
+		// Atomic increment on the dailyCounts map and the problemsSolved total
+		const update = {
+			$inc: {
+				[`dailyCounts.${todayKey}`]: 1,
+				problemsSolved: 1,
+			},
+			$set: { lastModified: new Date() }
+		};
+
+		const updated = await GraphTrack.findOneAndUpdate({ _id: id, user: userId }, update, { new: true });
+		res.json(updated);
 	} catch (err) {
 		console.error('Increment failed:', err);
 		res.status(500).json({ message: 'Increment failed', error: err.message });
@@ -80,11 +96,32 @@ router.patch('/:id/decrement', authMiddleware, async (req, res) => {
 		const doc = await GraphTrack.findOne({ _id: id, user: userId });
 		if (!doc) return res.status(404).json({ message: 'Not found' });
 
-		doc.problemsSolved = Math.max(0, (doc.problemsSolved || 0) - 1);
-		doc.lastModified = new Date();
-		await doc.save();
+		// compute elapsed days from startDate
+		const start = new Date(doc.startDate);
+		start.setHours(0,0,0,0);
+		const today = new Date();
+		today.setHours(0,0,0,0);
+		const diffDays = Math.floor((today - start) / (1000*60*60*24)) + 1; // day 1..N
+		if (diffDays > 30) return res.status(400).json({ message: 'Tracking period ended' });
 
-		res.json(doc);
+		const todayKey = new Date().toISOString().slice(0,10); // YYYY-MM-DD
+
+		// Only decrement if today's count > 0 and problemsSolved > 0
+		const todaysCount = doc.dailyCounts?.get ? doc.dailyCounts.get(todayKey) || 0 : (doc.dailyCounts && doc.dailyCounts[todayKey]) || 0;
+		if (todaysCount <= 0) {
+			return res.status(400).json({ message: 'Nothing to decrement today' });
+		}
+
+		const update = {
+			$inc: {
+				[`dailyCounts.${todayKey}`]: -1,
+				problemsSolved: -1,
+			},
+			$set: { lastModified: new Date() }
+		};
+
+		const updated = await GraphTrack.findOneAndUpdate({ _id: id, user: userId }, update, { new: true });
+		res.json(updated);
 	} catch (err) {
 		console.error('Decrement failed:', err);
 		res.status(500).json({ message: 'Decrement failed', error: err.message });
