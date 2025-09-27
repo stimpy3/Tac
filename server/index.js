@@ -268,10 +268,10 @@ const scheduleRoutes = require("./routes/scheduleRoutes");
 app.use("/schedules", scheduleRoutes);
 //-------------------------------------------------
 
-//-----------------graph track Routes-----------------
-const graphRoutes = require("./routes/graphRoutes");
-app.use("/graphtracker", graphRoutes);
-//-------------------------------------------------
+// //-----------------graph track Routes-----------------
+// const graphRoutes = require("./routes/graphRoutes");
+// app.use("/graphtracker", graphRoutes);
+// //-------------------------------------------------
 
 // ---------------- Server ----------------
 // app.listen(3001, () => {
