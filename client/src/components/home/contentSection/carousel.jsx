@@ -1,6 +1,7 @@
 /* Virtaul DOM need when we have A real DOM
 Efficiency: Manipulating the real DOM is slow because the browser has to reflow
- and repaint the page after every update. This process can be time-consuming,
+  // return raw elapsed days (may be >30). Use this to determine expiration.
+  const getElapsedDaysRaw = (startDate) => {
   especially when updating multiple elements or complex UIs.
 
 Avoiding Unnecessary Re-renders: The Virtual DOM helps minimize unn              <select 
@@ -14,6 +15,14 @@ useState vs useRef
 useState: Displays the value on screen and triggers re-render when updated.
 Example: setCount(count + 1);
 
+  };
+
+  // Clamped elapsed days used in the UI (1..30)
+  const getElapsedDays = (startDate) => {
+    const raw = getElapsedDaysRaw(startDate);
+    if (!raw || raw < 1) return 1;
+    return Math.min(raw, 30);
+  };
 useRef: Stores the value silently without re-rendering.
 Example: refCount.current += 1;
 Use useRef() when you want to store something across renders...
@@ -620,12 +629,15 @@ const Carousel=()=>{
           <EmptyPlaceholder />
         </div>
       ) : ( //bg-[url('/gradient5.png')] shadow-purple-500/50 shadow-lg
-        tasks.map((task) => (
-          <div data-label='task' key={task.id} className="relative flex flex-col rounded-xl bg-accentM dark:bg-daccentM h-full aspect-[4/5] text-accentTxt dark:text-daccentTxt p-[10px] mr-[20px] bg-cover bg-no-repeat border-[1px] border-accentBorder2 dark:border-daccentBorder2 ">
+        tasks.map((task) => {
+          const raw = getElapsedDaysRaw(task.startDate);
+          const isExpired = raw > 30;
+          return (
+          <div data-label='task' key={task.id} className={"relative flex flex-col rounded-xl h-full aspect-[4/5] text-accentTxt dark:text-daccentTxt p-[10px] mr-[20px] bg-cover bg-no-repeat " + (isExpired ? 'border-[1px] border-gray-400 bg-gray-50 dark:bg-gray-800' : 'bg-accentM dark:bg-daccentM border-[1px] border-accentBorder2 dark:border-daccentBorder2')}>
             <div data-label='graphContainer' className='w-full h-[65%] flex items-center justify-center'>
                 <button 
                   onClick={() => removeTask(task.id)}
-                  className="absolute top-[10px] right-[10px] text-accentTxt dark:text-daccentTxt hover:text-red-500 transition-colors"
+                  className={"absolute top-[10px] right-[10px] " + (isExpired ? 'text-gray-400' : 'text-accentTxt dark:text-daccentTxt hover:text-red-500') + ' transition-colors'}
                 >
                   <X size={16} />
                 </button> 
@@ -727,21 +739,27 @@ const Carousel=()=>{
                   <div className='flex items-center w-fit h-fit mb-[10px] justify-between'>
                     <button 
                       onClick={() => decrementCount(task.id)}
-                      className='text-[0.9rem] text-red-500 bebas-neue-regular w-[26px] aspect-square mr-[8px] rounded-full border-[2px] border-red-500'
+                      disabled={isExpired}
+                      className={(isExpired ? 'text-gray-400 border-gray-400' : 'text-[0.9rem] text-red-500 border-red-500') + ' bebas-neue-regular w-[26px] aspect-square mr-[8px] rounded-full border-[2px]'}
                     >
-                      <i className="fa-solid fa-chevron-down"></i>
+                      <i className='fa-solid fa-chevron-down'></i>
                     </button>
                     <button 
                       onClick={() => incrementCount(task.id)}
-                      className='text-[0.9rem] text-blue-500 bebas-neue-regular w-[26px] aspect-square rounded-full border-blue-500 border-[2px] border-blue-500'
+                      disabled={isExpired}
+                      className={(isExpired ? 'text-gray-400 border-gray-400' : 'text-[0.9rem] text-blue-500 border-blue-500') + ' bebas-neue-regular w-[26px] aspect-square rounded-full border-[2px]'}
                     >
-                      <i className="fa-solid fa-chevron-up"></i>
+                      <i className='fa-solid fa-chevron-up'></i>
                     </button>
                   </div>
+                </div>
               </div>
-            </div>
+              {isExpired && (
+                <div className="absolute top-2 left-2 bg-gray-200 text-gray-700 dark:bg-gray-800 dark:text-gray-300 px-2 py-1 rounded text-[1.2rem] font-bold uppercase">EXPIRED</div>
+              )}
           </div>
-        ))
+          );
+        })
       )}
     </div>
   </div>
