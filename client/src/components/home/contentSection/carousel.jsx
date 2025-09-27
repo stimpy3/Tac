@@ -487,6 +487,18 @@ const Carousel=()=>{
     return Math.min(Math.max(diffDays, 1), 30); // Ensure minimum 1, maximum 30
    };
 
+  // Return raw elapsed days (may be > 30). Use this to determine expiration state.
+  const getElapsedDaysRaw = (startDate) => {
+    if (!startDate) return 1;
+    const start = new Date(startDate);
+    const today = new Date();
+    start.setHours(0, 0, 0, 0);
+    today.setHours(0, 0, 0, 0);
+    const diffTime = today - start;
+    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24)) + 1;
+    return diffDays;
+  };
+
   const renderTaskPopup = () => {
   if (showTask) {
     return (
