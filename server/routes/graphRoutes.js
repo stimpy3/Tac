@@ -35,6 +35,20 @@ router.post('/', authMiddleware, async (req, res) => {
 	}
 });
 
+// Get all graph tracks for the authenticated user
+router.get('/', authMiddleware, async (req, res) => {
+	try {
+		const userId = req.user?.id;
+		if (!userId) return res.status(401).json({ message: 'Unauthorized' });
+
+		const docs = await GraphTrack.find({ user: userId }).sort({ createdAt: -1 });
+		res.json(docs);
+	} catch (err) {
+		console.error('Failed to fetch graph tracks:', err);
+		res.status(500).json({ message: 'Failed to fetch graph tracks', error: err.message });
+	}
+});
+
 // Increment problemsSolved for a graph track
 router.patch('/:id/increment', authMiddleware, async (req, res) => {
 	try {

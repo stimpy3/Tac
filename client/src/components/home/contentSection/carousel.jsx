@@ -80,6 +80,39 @@ const Carousel=()=>{
   const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:3001";
   const token = typeof window !== 'undefined' ? localStorage.getItem('token') || '' : '';
 
+  // Load persisted tasks on mount
+  useEffect(() => {
+    (async () => {
+      try {
+        if (!token) return; // no token, skip fetching
+        const res = await fetch(`${BACKEND_URL}/graphtracker`, {
+          headers: {
+            'Content-Type': 'application/json',
+            ...(token ? { Authorization: `Bearer ${token}` } : {}),
+          }
+        });
+        if (!res.ok) throw new Error('Failed to fetch tasks');
+        const data = await res.json();
+        // Map server docs to local task shape
+        const mapped = data.map(d => ({
+          id: d._id || d.id,
+          name: d.name || '',
+          description: d.description || '',
+          lastMarkedDate: d.lastMarkedDate || null,
+          startDate: d.startDate ? new Date(d.startDate).toISOString().split('T')[0] : null,
+          frequency: d.frequency || 7,
+          problemsSolved: d.problemsSolved || 0,
+          category: d.category || 'other',
+          icon: d.icon || '',
+          color: d.color || '',
+        }));
+        setTasks(mapped);
+      } catch (err) {
+        console.error('Error loading persisted tasks', err);
+      }
+    })();
+  }, []);
+
   // Function to generate projected data
   const generateProjectedData = (frequency) => {
     const data = [];
