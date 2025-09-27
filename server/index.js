@@ -109,8 +109,8 @@ mongoose
 // ---------------- Routes ----------------
 
 //warmup route to prevent cold starts on Render
-app.get("/warmup", async (req,res)=>{
-  res.status(200).send("Server is awake");
+app.get("/ping", (req, res) => {
+  res.send("pong");
 });
 
 

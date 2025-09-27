@@ -14,10 +14,30 @@ gsap.registerPlugin(ScrollTrigger);//a plugin is add-on that extends the core fu
 //we'll have to define this for every component where we use scrollTrigger
 
 const LandingPage=()=>{
+  //ping server to keep it awake---------------------------------
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      // define async function inside setTimeout
+      const warmUpServer = async () => {
+        try {
+          await axios.get("https://stay-tac.netlify.app/ping");
+          console.log("Server warmed up!");
+        } catch (err) {
+          console.log("Ping failed:", err.message);
+        }
+      };
+      warmUpServer();
+    }, 1000); // 1 second delay
+
+    return () => clearTimeout(timeout);
+  }, []);
+  //-------------------------------------------------------------
+
     const navigate=useNavigate();
      const parallaxEnabled = useRef(false);
      const sectionRef = useRef(null);
      const textRef = useRef(null);
+
    
    useGSAP(()=>{
        gsap.from(".heading", {
