@@ -649,7 +649,7 @@ const handleMouseDown = (e) => {
         )}
 
         <div className='absolute inset-0' onClick={handleTaskModal}></div>
-        <div className='bg-accentS dark:bg-daccentS min-w-[450px] h-[70%] w-[40%] max-h-[400px] max-w-[700px] rounded-lg shadow-lg overflow-hidden relative z-10'>
+        <div className='bg-accentS dark:bg-daccentS h-[70%] min-w-[250px] w-[40%] max-w-[800px] max-w-[400px] rounded-lg shadow-lg overflow-hidden relative z-10'>
           <div className='bg-[url("/modalBG.png")] bg-cover bg-no-repeat px-[12px] h-[60px] flex items-center justify-between border-b-gray-500 dark:border-b-daccentBorder2 border-b-[1px]'>
             <div className='flex'>
               <div>
@@ -673,8 +673,8 @@ const handleMouseDown = (e) => {
               />
             </div>
 
-            <div className='flex justify-between'>
-              <div className='flex'>
+            <div className='flex-col justify-between'>
+              <div className='flex mb-[20px]'>
                 <label className="text-accentTxt dark:text-daccentTxt">Day:&nbsp;</label>
                 <select type="text" onChange={handleDayTemp} className="ml-[5px] text-accentTxt dark:text-daccentTxt bg-accentS dark:bg-daccentS2 max-h-[27px] p-[2px] border-[1px] rounded-md border-accentS3 dark:border-daccentBorder2">
                   <option>Monday</option>
