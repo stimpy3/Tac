@@ -379,69 +379,95 @@ const Carousel=()=>{
     }
    };
 
-   const incrementCount = (taskId) => {
-    // Optimistic UI: increment locally, then persist
-    const today = new Date().toDateString();
+  const incrementCount = (taskId) => {
+  const today = new Date();
+  today.setHours(0,0,0,0);
+  const key = today.toISOString().slice(0,10); // YYYY-MM-DD
 
-    // Snapshot for rollback
-    setTasks(prev => {
-      const snapshot = prev.map(t => ({ ...t }));
-      // apply optimistic update
-      const updated = prev.map(task => task.id === taskId ? { ...task, lastMarkedDate: today, problemsSolved: (task.problemsSolved || 0) + 1 } : task);
-
-      // Fire-and-forget async call (but handle rollback inside)
-      (async () => {
-        try {
-          // only call backend for persisted tasks (those without temp- prefix)
-          if (String(taskId).startsWith('temp-')) return;
-          const res = await fetch(`${BACKEND_URL}/graphtracker/${taskId}/increment`, {
-            method: 'PATCH',
-            headers: {
-              'Content-Type': 'application/json',
-              ...(token ? { Authorization: `Bearer ${token}` } : {}),
-            }
-          });
-          if (!res.ok) throw new Error('Increment failed');
-          // Optionally you could replace with server document if returned
-        } catch (err) {
-          console.error('Increment persist failed', err);
-          // rollback by restoring snapshot
-          setTasks(snapshot);
-        }
-      })();
-
-      return updated;
+  setTasks(prev => {
+    const snapshot = prev.map(t => ({ ...t }));
+    const updated = prev.map(task => {
+      if (task.id === taskId) {
+        const dailyCounts = task.dailyCounts 
+          ? (task.dailyCounts instanceof Map ? Object.fromEntries(task.dailyCounts) : { ...task.dailyCounts })
+          : {};
+        const current = dailyCounts[key] || 0;
+        return {
+          ...task,
+          lastMarkedDate: today.toDateString(),
+          problemsSolved: (task.problemsSolved || 0) + 1,
+          dailyCounts: { ...dailyCounts, [key]: current + 1 },
+        };
+      }
+      return task;
     });
-   };
+
+    (async () => {
+      try {
+        if (String(taskId).startsWith("temp-")) return;
+        const res = await fetch(`${BACKEND_URL}/graphtracker/${taskId}/increment`, {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+            ...(token ? { Authorization: `Bearer ${token}` } : {}),
+          },
+        });
+        if (!res.ok) throw new Error("Increment failed");
+      } catch (err) {
+        console.error("Increment persist failed", err);
+        setTasks(snapshot); // rollback
+      }
+    })();
+
+    return updated;
+  });
+};
+
 
    const decrementCount = (taskId) => {
-    // Optimistic UI: decrement locally, then persist
-    const today = new Date().toDateString();
+  const today = new Date();
+  today.setHours(0,0,0,0);
+  const key = today.toISOString().slice(0,10);
 
-    setTasks(prev => {
-      const snapshot = prev.map(t => ({ ...t }));
-      const updated = prev.map(task => task.id === taskId ? { ...task, lastMarkedDate: today, problemsSolved: Math.max(0, (task.problemsSolved || 0) - 1) } : task);
-
-      (async () => {
-        try {
-          if (String(taskId).startsWith('temp-')) return;
-          const res = await fetch(`${BACKEND_URL}/graphtracker/${taskId}/decrement`, {
-            method: 'PATCH',
-            headers: {
-              'Content-Type': 'application/json',
-              ...(token ? { Authorization: `Bearer ${token}` } : {}),
-            }
-          });
-          if (!res.ok) throw new Error('Decrement failed');
-        } catch (err) {
-          console.error('Decrement persist failed', err);
-          setTasks(snapshot);
-        }
-      })();
-
-      return updated;
+  setTasks(prev => {
+    const snapshot = prev.map(t => ({ ...t }));
+    const updated = prev.map(task => {
+      if (task.id === taskId) {
+        const dailyCounts = task.dailyCounts 
+          ? (task.dailyCounts instanceof Map ? Object.fromEntries(task.dailyCounts) : { ...task.dailyCounts })
+          : {};
+        const current = dailyCounts[key] || 0;
+        return {
+          ...task,
+          lastMarkedDate: today.toDateString(),
+          problemsSolved: Math.max(0, (task.problemsSolved || 0) - 1),
+          dailyCounts: { ...dailyCounts, [key]: Math.max(0, current - 1) },
+        };
+      }
+      return task;
     });
-   };
+
+    (async () => {
+      try {
+        if (String(taskId).startsWith("temp-")) return;
+        const res = await fetch(`${BACKEND_URL}/graphtracker/${taskId}/decrement`, {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+            ...(token ? { Authorization: `Bearer ${token}` } : {}),
+          },
+        });
+        if (!res.ok) throw new Error("Decrement failed");
+      } catch (err) {
+        console.error("Decrement persist failed", err);
+        setTasks(snapshot); // rollback
+      }
+    })();
+
+    return updated;
+  });
+};
+
 
    const removeTask = (taskId) => {
     // Optimistic UI: remove locally, then request delete on backend
