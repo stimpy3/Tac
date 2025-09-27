@@ -31,6 +31,15 @@ const LandingPage=()=>{
 
     return () => clearTimeout(timeout);
   }, []);
+  /*
+Why the 1 second delay?
+it’s more of a UX optimization than a technical requirement
+If the request fires immediately, it competes with rendering and other scripts.
+A small delay lets the page visually appear to the user before the network request starts.
+Avoid immediate spike
+On very slow networks, firing the request instantly can make the page feel “busy” or freeze slightly.
+Waiting 1s spreads the load a bit.
+   */
   //-------------------------------------------------------------
 
     const navigate=useNavigate();
