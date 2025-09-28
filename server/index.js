@@ -63,7 +63,7 @@ app.use(cors({
 
 // after your app.use(cors(...))
 // Allow preflight on all routes
-app.options("*", cors());
+app.options('/{*splat}', cors());
 // This allows preflight requests to pass through
 // Preflight requests are sent by the browser to check if the actual request is safe to send
 // It’s like saying “yes, you can talk to me” for all routes
@@ -224,11 +224,10 @@ app.post("/verify-token", (req, res) => {
   }
 });
 //-----------------Deadline Routes-----------------
-// Mount the router here
+// // Mount the router here
 const deadlineRoutes = require("./routes/deadlineRoutes.js");
-console.log("deadlineRoutes:", deadlineRoutes);//remove this later
 app.use("/deadlines", deadlineRoutes);
-// Now:
+// // Now:
 // POST   /api/deadlines
 // GET    /api/deadlines
 // DELETE /api/deadlines/:id
@@ -236,14 +235,12 @@ app.use("/deadlines", deadlineRoutes);
 
 //-----------------Schedule Routes-----------------
 const scheduleRoutes = require("./routes/scheduleRoutes");
-console.log("scheduleRoutes:", scheduleRoutes);//remove this later
 app.use("/schedules", scheduleRoutes);
 //-------------------------------------------------
 
 //-----------------Graph tracker Routes-----------------
 // Mount the existing graphRoutes to handle task/graph tracking
 const graphRoutes = require("./routes/graphRoutes");
-console.log("graphRoutes:", graphRoutes);//remove this later
 app.use("/graphtracker", graphRoutes);
 //-------------------------------------------------
 
