@@ -765,8 +765,11 @@ const Carousel=()=>{
                 </ResponsiveContainer>
                 </div>
             <div data-label='taskDescriptionContainer' className='p-[5px] h-[35%] rounded-lg bg-accentS2 dark:bg-daccentS2 w-full flex flex-col items-center justify-center'>
-              <div className='w-full h-[70%]'>
-                  <p className='mt-[5px] w-full inter text-[0.8rem] h-fit text-accentTxt2 dark:text-daccentTxt leading-none'>{task.description && task.description.length > 35 ? task.description.slice(0, 35) + '...' : task.description}</p>
+              <div className='w-full h-[20%]'>
+                  <p className='mt-[5px] w-full lato text-[1rem] h-fit text-accentTxt2 dark:text-daccentTxt leading-none'>{task.name && task.name.length > 20 ? task.name.slice(0, 20) + '...' : task.name}</p>
+              </div>
+              <div className='w-full h-[50%]'>
+                  <p className='mt-[5px] w-full inter text-[0.7rem] h-fit text-accentTxt2 dark:text-daccentTxt leading-none'>{task.description && task.description.length > 35 ? task.description.slice(0, 35) + '...' : task.description}</p>
               </div>
               <div className='flex items-center justify-between w-full h-[30%]'>
                   <div className='text-[1rem] bebas-neue-regular text-accentTxt2 dark:text-daccentTxt '>DAY: {getElapsedDays(task.startDate)}/30</div>
