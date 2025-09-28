@@ -683,18 +683,19 @@ const Carousel=()=>{
                       const start = task.startDate ? new Date(task.startDate) : new Date();
                       start.setHours(0,0,0,0);
                       const elapsed = getElapsedDays(task.startDate);
-                      let lastVal = 0;
+                      let cumulative = 0;
                       const arr = [];
                       for (let day = 0; day <= 30; day++) {
                         const date = new Date(start);
                         date.setDate(start.getDate() + day - 1);
                         const key = date.toISOString().slice(0, 10);
-                        
-                        const val = dailyCounts[key] !== undefined ? dailyCounts[key] : lastVal;
-                        lastVal = val;
-                        
+                      
+                        const todayCount = dailyCounts[key] || 0;
+                        cumulative += todayCount;
+                      
                         const projected = Math.floor((day / 30) * task.frequency);
-                        arr.push({ day, projected, actual: val });
+                      
+                        arr.push({ day, projected, actual: cumulative });
                       }
                       return arr;
                     })()}
