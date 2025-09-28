@@ -226,6 +226,7 @@ app.post("/verify-token", (req, res) => {
 //-----------------Deadline Routes-----------------
 // Mount the router here
 const deadlineRoutes = require("./routes/deadlineRoutes.js");
+console.log("deadlineRoutes:", deadlineRoutes);//remove this later
 app.use("/deadlines", deadlineRoutes);
 // Now:
 // POST   /api/deadlines
@@ -235,12 +236,14 @@ app.use("/deadlines", deadlineRoutes);
 
 //-----------------Schedule Routes-----------------
 const scheduleRoutes = require("./routes/scheduleRoutes");
+console.log("scheduleRoutes:", scheduleRoutes);//remove this later
 app.use("/schedules", scheduleRoutes);
 //-------------------------------------------------
 
 //-----------------Graph tracker Routes-----------------
 // Mount the existing graphRoutes to handle task/graph tracking
 const graphRoutes = require("./routes/graphRoutes");
+console.log("graphRoutes:", graphRoutes);//remove this later
 app.use("/graphtracker", graphRoutes);
 //-------------------------------------------------
 
