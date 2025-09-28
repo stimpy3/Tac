@@ -104,6 +104,12 @@ app.use((req, res, next) => {
   next();
 });*/
 
+// MongoDB Connection
+mongoose
+  .connect(process.env.MONGO_URI)
+  .then(() => console.log("✅ Connected to MongoDB Atlas"))
+  .catch((err) => console.error("❌ MongoDB connection error:", err));
+
 // ---------------- Routes ----------------
 
 //warmup route to prevent cold starts on Render
