@@ -388,9 +388,7 @@ const Carousel=()=>{
     const snapshot = prev.map(t => ({ ...t }));
     const updated = prev.map(task => {
       if (task.id === taskId) {
-        const dailyCounts = task.dailyCounts 
-          ? (task.dailyCounts instanceof Map ? Object.fromEntries(task.dailyCounts) : { ...task.dailyCounts })
-          : {};
+        const dailyCounts = task.dailyCounts || {};
         const current = dailyCounts[key] || 0;
         return {
           ...task,
@@ -433,9 +431,7 @@ const Carousel=()=>{
     const snapshot = prev.map(t => ({ ...t }));
     const updated = prev.map(task => {
       if (task.id === taskId) {
-        const dailyCounts = task.dailyCounts 
-          ? (task.dailyCounts instanceof Map ? Object.fromEntries(task.dailyCounts) : { ...task.dailyCounts })
-          : {};
+        const dailyCounts = task.dailyCounts || {};
         const current = dailyCounts[key] || 0;
         return {
           ...task,
