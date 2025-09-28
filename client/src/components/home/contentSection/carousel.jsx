@@ -682,20 +682,22 @@ const Carousel=()=>{
                       const dailyCounts = task.dailyCounts ? (task.dailyCounts instanceof Map ? Object.fromEntries(task.dailyCounts) : task.dailyCounts) : {};
                       const start = task.startDate ? new Date(task.startDate) : new Date();
                       start.setHours(0,0,0,0);
-                      const elapsed = getElapsedDays(task.startDate);
+                      const elapsed = getElapsedDays(task.startDate);  
                       let cumulative = 0;
                       const arr = [];
-                      for (let day = 0; day <= 30; day++) {
-                        const date = new Date(start);
-                        date.setDate(start.getDate() + day - 1);
-                        const key = date.toISOString().slice(0, 10);
                       
-                        const todayCount = dailyCounts[key] || 0;
+                      for (let day = 0; day < elapsed; day++) {
+                        const date = new Date(task.startDate);
+                        date.setHours(0,0,0,0);
+                        date.setDate(date.getDate() + day);
+                        const key = date.toISOString().slice(0,10);
+                      
+                        const todayCount = task.dailyCounts?.[key] || 0;
                         cumulative += todayCount;
                       
-                        const projected = Math.floor((day / 30) * task.frequency);
+                        const projected = Math.floor(((day + 1) / task.frequency) * task.frequency);
                       
-                        arr.push({ day, projected, actual: cumulative });
+                        arr.push({ day: day + 1, projected, actual: cumulative });
                       }
                       return arr;
                     })()}
