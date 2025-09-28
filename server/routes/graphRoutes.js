@@ -64,12 +64,12 @@ router.patch('/:id/increment', authMiddleware, async (req, res) => {
 		start.setHours(0,0,0,0);
 		const today = new Date();
 		today.setHours(0,0,0,0);
-		const diffDays = Math.floor((today - start) / (1000*60*60*24)) + 1; // day 1..N
+		const diffDays = Math.floor((today - start) / (1000*60*60*24)) + 1;
 		if (diffDays > 30) return res.status(400).json({ message: 'Tracking period ended' });
 
-		const todayKey = new Date().toISOString().slice(0,10); // YYYY-MM-DD
+		const todayKey = today.toISOString().slice(0,10); // YYYY-MM-DD
 
-		// Atomic increment on the dailyCounts map and the problemsSolved total
+		// Atomic increment on the dailyCounts object and problemsSolved
 		const update = {
 			$inc: {
 				[`dailyCounts.${todayKey}`]: 1,
@@ -78,7 +78,12 @@ router.patch('/:id/increment', authMiddleware, async (req, res) => {
 			$set: { lastModified: new Date() }
 		};
 
-		const updated = await GraphTrack.findOneAndUpdate({ _id: id, user: userId }, update, { new: true });
+		const updated = await GraphTrack.findOneAndUpdate(
+			{ _id: id, user: userId },
+			update,
+			{ new: true, upsert: true } // optional: ensures dailyCounts[todayKey] is created
+		);
+
 		res.json(updated);
 	} catch (err) {
 		console.error('Increment failed:', err);
@@ -104,14 +109,15 @@ router.patch('/:id/decrement', authMiddleware, async (req, res) => {
 		const diffDays = Math.floor((today - start) / (1000*60*60*24)) + 1; // day 1..N
 		if (diffDays > 30) return res.status(400).json({ message: 'Tracking period ended' });
 
-		const todayKey = new Date().toISOString().slice(0,10); // YYYY-MM-DD
+		const todayKey = today.toISOString().slice(0,10); // YYYY-MM-DD
 
 		// Only decrement if today's count > 0 and problemsSolved > 0
-		const todaysCount = doc.dailyCounts?.get ? doc.dailyCounts.get(todayKey) || 0 : (doc.dailyCounts && doc.dailyCounts[todayKey]) || 0;
+		const todaysCount = doc.dailyCounts[todayKey] || 0;
 		if (todaysCount <= 0) {
 			return res.status(400).json({ message: 'Nothing to decrement today' });
 		}
 
+		// Atomic decrement on the dailyCounts object and problemsSolved
 		const update = {
 			$inc: {
 				[`dailyCounts.${todayKey}`]: -1,
@@ -120,13 +126,19 @@ router.patch('/:id/decrement', authMiddleware, async (req, res) => {
 			$set: { lastModified: new Date() }
 		};
 
-		const updated = await GraphTrack.findOneAndUpdate({ _id: id, user: userId }, update, { new: true });
-		res.json(updated);
+		const updated = await GraphTrack.findOneAndUpdate(
+			{ _id: id, user: userId },
+			update,
+			{ new: true }
+		);
+
+		res.json(updated); // <-- missing in your snippet
 	} catch (err) {
 		console.error('Decrement failed:', err);
 		res.status(500).json({ message: 'Decrement failed', error: err.message });
 	}
 });
+
 
 // Delete a graph track
 router.delete('/:id', authMiddleware, async (req, res) => {
