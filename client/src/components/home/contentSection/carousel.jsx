@@ -687,9 +687,12 @@ const Carousel=()=>{
                       for (let day = 0; day <= 30; day++) {
                         const projected = Math.floor((day / 30) * task.frequency);
                         const date = new Date(start);
-                        date.setDate(start.getDate() + day - 1); // day 1 -> startDate
-                        const key = date.toISOString().slice(0,10);
-                        const actual = day === elapsed ? (dailyCounts[key] || 0) : (day < elapsed ? 0 : null);
+                        date.setDate(start.getDate() + day - 1);
+                        const key = date.toISOString().slice(0, 10);
+                        
+                        // Use stored value, or null if no entry yet
+                        const actual = dailyCounts[key] !== undefined ? dailyCounts[key] : null;
+                      
                         arr.push({ day, projected, actual });
                       }
                       return arr;
@@ -802,5 +805,4 @@ const Carousel=()=>{
   </div>
 );
 };
-
 export default Carousel;
