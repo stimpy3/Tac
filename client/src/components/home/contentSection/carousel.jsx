@@ -678,29 +678,41 @@ const Carousel=()=>{
                 <ResponsiveContainer width="90%" height="90%">
                   {/*data={...} → the dataset used. Each object in your array needs keys(day, actual, projected)*/}
                   <LineChart
-                    data={(() => {
-                      const dailyCounts = task.dailyCounts ? (task.dailyCounts instanceof Map ? Object.fromEntries(task.dailyCounts) : task.dailyCounts) : {};
-                      const start = task.startDate ? new Date(task.startDate) : new Date();
-                      start.setHours(0,0,0,0);
-                      const elapsed = getElapsedDays(task.startDate);  
-                      let cumulative = 0;
-                      const arr = [];
-                      
-                      for (let day = 0; day < elapsed; day++) {
-                        const date = new Date(task.startDate);
-                        date.setHours(0,0,0,0);
-                        date.setDate(date.getDate() + day);
-                        const key = date.toISOString().slice(0,10);
-                      
-                        const todayCount = task.dailyCounts?.[key] || 0;
-                        cumulative += todayCount;
-                      
-                        const projected = Math.floor(((day + 1) / task.frequency) * task.frequency);
-                      
-                        arr.push({ day: day + 1, projected, actual: cumulative });
-                      }
-                      return arr;
-                    })()}
+                     data={(() => {
+                     const dailyCounts = task.dailyCounts
+                       ? (task.dailyCounts instanceof Map ? Object.fromEntries(task.dailyCounts) : task.dailyCounts)
+                       : {};
+                   
+                     const start = task.startDate ? new Date(task.startDate) : new Date();
+                     start.setHours(0,0,0,0);
+                   
+                     const elapsed = getElapsedDays(task.startDate); // how many days have passed
+                     let cumulative = 0;
+                     const arr = [];
+                   
+                     // Loop full 30 days to build projected line
+                     for (let day = 0; day < 30; day++) {
+                       const date = new Date(start);
+                       date.setDate(start.getDate() + day);
+                       const key = date.toISOString().slice(0, 10);
+                   
+                       // cumulative only if within elapsed days
+                       if (day < elapsed) {
+                         cumulative += dailyCounts[key] || 0;
+                       }
+                   
+                       const projected = Math.floor(((day + 1) / 30) * task.frequency);
+                   
+                       // actual = cumulative for elapsed days, null for future
+                       arr.push({
+                         day: day + 1,
+                         projected,
+                         actual: day < elapsed ? cumulative : null,
+                       });
+                     }
+                   
+                     return arr;
+                   })()}
                     margin={{ top: 0, right: 40, bottom: 0, left: 0 }}
                   >{/*margin={{...}} → padding around the chart area.
                     Example:
